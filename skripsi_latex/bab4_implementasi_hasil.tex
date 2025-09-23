@@ -102,6 +102,71 @@ Pada Gambar~\ref{fig:tree-output} ditunjukkan hasil observasi struktur direktori
   \caption{Contoh visualisasi hasil awal untuk metrik efisiensi.}
   \label{fig:grafik-hasil}
 \end{figure}
+
+\section{Tabel Skenario Pengujian}
+Tabel~\ref{tab:skenario-uji} merangkum skenario uji yang digunakan untuk mengevaluasi Paicode.
+
+\begin{longtable}{@{}p{0.26\textwidth}p{0.52\textwidth}p{0.16\textwidth}@{}}
+  \caption{Skenario Pengujian Paicode}\label{tab:skenario-uji}\\
+  \toprule
+  \textbf{Skenario} & \textbf{Deskripsi} & \textbf{Artefak Bukti} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Skenario} & \textbf{Deskripsi} & \textbf{Artefak Bukti} \\
+  \midrule
+  \endhead
+  Pembuatan Proyek & Agen membuat struktur proyek Python sederhana (direktori, file, \texttt{README}) & SS: \texttt{TREE} \\
+  Pembacaan Kode & Agen menampilkan isi file sumber dan menjelaskan ringkas & SS: panel \texttt{READ} \\
+  Modifikasi Terarah & Agen menerapkan perubahan kecil pada fungsi (\textit{diff}-based) & SS: \texttt{MODIFY} + diff \\
+  Refactoring Ringan & Agen memecah fungsi panjang menjadi beberapa fungsi kecil & SS: diff + build \\
+  Dokumentasi & Agen menulis docstring/README singkat & SS: panel \texttt{WRITE} \\
+  \bottomrule
+\end{longtable}
+
+\section{Tabel Metrik Evaluasi}
+Tabel~\ref{tab:metrik-evaluasi} mendeskripsikan metrik dan cara pengukurannya.
+
+\begin{longtable}{@{}p{0.24\textwidth}p{0.56\textwidth}p{0.16\textwidth}@{}}
+  \caption{Metrik Evaluasi dan Definisi Operasional}\label{tab:metrik-evaluasi}\\
+  \toprule
+  \textbf{Metrik} & \textbf{Definisi} & \textbf{Satuan} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Metrik} & \textbf{Definisi} & \textbf{Satuan} \\
+  \midrule
+  \endhead
+  Waktu & Durasi dari awal perintah sampai hasil akhir pada setiap skenario & detik \\
+  Langkah & Jumlah aksi agen (\texttt{READ}, \texttt{WRITE}, dsb.) per skenario & langkah \\
+  Keberhasilan Build/Run & Status eksekusi program/kompilasi setelah perubahan & biner/rasio \\
+  Ukuran Perubahan & Banyaknya baris yang ditambah/ubah/hapus berdasarkan \textit{diff} & baris \\
+  Kepatuhan Path & Tidak ada akses ke direktori sensitif; validasi path terpenuhi & biner/rasio \\
+  \bottomrule
+\end{longtable}
+
+\section{Tabel Konfigurasi Lingkungan}
+Tabel~\ref{tab:konfigurasi} menampilkan konfigurasi lingkungan yang digunakan selama pengujian.
+
+\begin{longtable}{@{}p{0.30\textwidth}p{0.64\textwidth}@{}}
+  \caption{Konfigurasi Lingkungan Uji}\label{tab:konfigurasi}\\
+  \toprule
+  \textbf{Komponen} & \textbf{Spesifikasi} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Komponen} & \textbf{Spesifikasi} \\
+  \midrule
+  \endhead
+  Sistem Operasi & Ubuntu (Linux) \\
+  Python & \texttt{\textgreater= 3.9} (contoh: 3.11) \\
+  Manajer Dependensi & Poetry; titik masuk CLI pada \texttt{pyproject.toml} \\
+  LLM Provider & Gemini melalui \texttt{google-generativeai} (API) \\
+  TUI & \texttt{rich} untuk panel dan penyorotan sintaks \\
+  LaTeX & TeX Live; kompilasi via Makefile \\
+  Perangkat Keras & CPU x86\_64; RAM minimal 8 GB (contoh) \\
+  \bottomrule
+\end{longtable}
 \section{Contoh Sesi}
 Cuplikan berikut menggambarkan pembuatan proyek sederhana dan pembacaan isi berkas.
 
