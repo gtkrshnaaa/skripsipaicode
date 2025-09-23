@@ -100,11 +100,19 @@
 % --- Abstract placeholders ---
 \chapter*{Abstrak}
 \addcontentsline{toc}{chapter}{Abstrak}
-Tuliskan abstrak dalam bahasa Indonesia di sini.
+Penelitian ini mengusulkan \textbf{Paicode}, sebuah agen AI berbasis Command Line Interface (CLI) untuk membantu proses pengembangan perangkat lunak secara interaktif. Sistem menerapkan prinsip \textit{local-first} dengan kebijakan keamanan jalur, serta memanfaatkan layanan LLM (Gemini) hanya untuk kebutuhan inferensi. Himpunan perintah yang disediakan (mis. \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}) memungkinkan agen mengobservasi proyek, memanipulasi berkas, dan memodifikasi kode secara terarah.
+
+Metode yang digunakan adalah \textit{Research and Development} (R\&D) dengan pendekatan \textit{prototyping} iteratif. Evaluasi awal dilakukan melalui skenario tugas representatif, dengan metrik efisiensi (waktu/ langkah), ketepatan hasil (kompilasi/ eksekusi), serta kepatuhan keamanan jalur. Hasil menunjukkan bahwa agen \textit{stateful} dengan pembatasan perubahan berbasis \textit{diff} memudahkan pengembangan bertahap sambil menekan risiko penimpaan berkas.
+
+\textbf{Kata kunci}: agentic AI, CLI, local-first, LLM, pengembangan perangkat lunak.
 
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
-Write the abstract in English here.
+This thesis presents \textbf{Paicode}, an agentic AI for Command Line Interface (CLI) that assists software development through interactive, stateful workflows. The system follows a \textit{local-first} design with path-security policies, and leverages an external LLM (Gemini) solely for inference. A compact set of commands (e.g., \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}) enables the agent to observe the project, manipulate files, and apply targeted code modifications.
+
+We adopt a Research and Development approach with iterative prototyping. The initial evaluation uses representative programming scenarios and measures efficiency (time/steps), correctness (build/run), and security compliance. Results indicate that a stateful agent with diff-based change constraints facilitates incremental development while reducing the risk of unintended overwrites.
+
+\textbf{Keywords}: agentic AI, CLI, local-first, LLM, software engineering.
 
 % --- Table of contents & lists ---
 \tableofcontents

@@ -38,5 +38,41 @@ Kontribusi penelitian ini ditempatkan pada ranah agentic AI untuk pengembangan p
   \item \textbf{Keterulangan eksperimen}: penggunaan Poetry dan Makefile memudahkan replikasi lingkungan dan dokumentasi langkah.
 \end{itemize}
 
+\section{Rencana Gambar Tinjauan Pustaka}
+Bagian ini mendeskripsikan rencana gambar yang akan disertakan untuk mendukung narasi pada Bab~\ref{chap:tinjauan}. Gambar bersifat ilustratif/konseptual dan akan diganti dengan gambar final sesuai ketersediaan.
+
+% Figure 2.1: Konsep arsitektur agentic AI di CLI
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig2-1-arsitektur-agentic-cli.png`\\
+  (Diagram blok komponen: CLI, Agen, LLM, FS; alur data tingkat tinggi)}}
+  \caption{Konsep arsitektur agentic AI di lingkungan CLI dengan prinsip \textit{local-first}.}
+  \label{fig:arsitektur-agentic-cli}
+\end{figure}
+
+Pada Gambar~\ref{fig:arsitektur-agentic-cli} ditunjukkan pemetaan komponen utama (CLI, Agen, LLM, dan sistem berkas) beserta aliran data tingkat tinggi.
+
+% Figure 2.2: Model interaksi stateful/feedback loop
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig2-2-state-loop.png`\\
+  (Skema loop: input pengguna → rencana → eksekusi alat → hasil → memori)}}
+  \caption{Model interaksi \textit{stateful} dan \textit{feedback loop} pada sesi agen.}
+  \label{fig:state-feedback-loop}
+\end{figure}
+
+Pada Gambar~\ref{fig:state-feedback-loop} divisualisasikan hubungan antara masukan pengguna, rencana aksi, eksekusi alat, dan pembaruan konteks.
+
+% Figure 2.3: Komparasi singkat alat terkait (skema konseptual)
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig2-3-komparasi-tools.png`\\
+  (Tabel/diagram perbandingan: editor extension vs cloud vs local-first CLI)}}
+  \caption{Ilustrasi komparasi konseptual antara pendekatan ekstensi editor, layanan daring, dan local-first CLI.}
+  \label{fig:komparasi-tools}
+\end{figure}
+
+Pada Gambar~\ref{fig:komparasi-tools} ditunjukkan perbedaan fokus dan pertukaran (trade-off) tingkat tinggi antar pendekatan.
+
 % Example citation usage (keep, then replace with real keys):
 % Menurut \citet{goodfellow2016deep}, ... atau penelitian terkait \citep{somepaper2020}.

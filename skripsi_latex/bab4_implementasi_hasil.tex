@@ -3,13 +3,131 @@
 \label{chap:implementasi}
 
 \section{Implementasi Paicode}
-Uraikan proses instalasi (\texttt{poetry install}), konfigurasi API key (\texttt{poetry run pai config --set <KEY>}), dan cara menjalankan (\texttt{poetry run pai}).
+Implementasi dilakukan menggunakan Python dengan manajemen dependensi Poetry. Berkas \texttt{pyproject.toml} mendefinisikan paket yang dibutuhkan beserta titik masuk CLI. Langkah instalasi dan konfigurasi sebagai berikut.
 
-\section{Contoh Sesi Interaktif}
-Berikan contoh sesi terminal, output TREE/LIST, dan pembacaan/penulisan/\texttt{MODIFY} file.
+\subsection{Instalasi}
+\begin{enumerate}
+  \item Pastikan Python (\texttt{\textgreater= 3.9}) dan Poetry terpasang.
+  \item Masuk ke direktori \texttt{paicode/} dan jalankan:
+\end{enumerate}
 
-\section{Evaluasi}
-Jelaskan skenario uji, metrik evaluasi, dan bandingkan dengan proses manual atau alat lain.
+\begin{lstlisting}[language=bash,caption={Instalasi dependensi dengan Poetry}]
+poetry install
+\end{lstlisting}
+
+\subsection{Konfigurasi API Key}
+Paicode memerlukan API key Gemini untuk akses LLM. Kunci disimpan secara aman pada \texttt{~/.config/pai-code/credentials} dengan izin berkas 600.
+
+\begin{lstlisting}[language=bash,caption={Set dan verifikasi API key Gemini}]
+poetry run pai config --set <API_KEY_GEMINI>
+poetry run pai config --show
+\end{lstlisting}
+
+\subsection{Menjalankan Agen}
+Sesi interaktif dapat dimulai langsung:
+
+\begin{lstlisting}[language=bash,caption={Menjalankan sesi agen interaktif}]
+poetry run pai
+\end{lstlisting}
+
+\section{Alur Interaksi}
+Alur kerja pada sesi interaktif meliputi: (i) pengguna memberikan tujuan tingkat tinggi; (ii) agen mengobservasi struktur proyek menggunakan perintah \texttt{TREE}/\texttt{LIST\_PATH}; (iii) agen membaca/menulis/memodifikasi berkas; (iv) hasil dievaluasi dan menjadi konteks untuk langkah berikutnya. Kebijakan keamanan jalur mencegah akses ke direktori sensitif seperti \texttt{.git}, \texttt{venv}, dan \texttt{.env}.
+
+\section{Rencana Gambar Implementasi}
+Bagian ini merinci rencana gambar/screenshot yang akan ditambahkan untuk memperkuat penjelasan implementasi dan hasil.
+
+% Figure 4.1: Tampilan awal sesi agen di terminal
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig4-1-sesi-awal-cli.png`\\
+  (Screenshot terminal: pembukaan sesi agen, panel "Interactive Auto Mode")}}
+  \caption{Tampilan awal sesi agen di terminal.}
+  \label{fig:sesi-awal-cli}
+\end{figure}
+
+Pada Gambar~\ref{fig:sesi-awal-cli} diperlihatkan antarmuka awal sesi agen yang akan menjadi konteks interaksi.
+
+% Figure 4.2: Perintah TREE menampilkan struktur direktori
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig4-2-tree-output.png`\\
+  (Screenshot hasil perintah TREE pada proyek uji)}}
+  \caption{Output perintah \texttt{TREE} untuk observasi struktur proyek.}
+  \label{fig:tree-output}
+\end{figure}
+
+Pada Gambar~\ref{fig:tree-output} ditunjukkan hasil observasi struktur direktori yang digunakan agen sebagai dasar perencanaan aksi.
+
+% Figure 4.3: Perintah LIST_PATH menampilkan daftar path
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig4-3-list-path.png`\\
+  (Screenshot hasil perintah LIST_PATH dengan format baris per baris)}}
+  \caption{Output perintah \texttt{LIST\_PATH} untuk daftar path mesin-baca.}
+  \label{fig:list-path}
+\end{figure}
+
+% Figure 4.4: Panel pembacaan berkas (READ) dengan penyorotan sintaks
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig4-4-read-panel.png`\\
+  (Panel kode dengan line number dan syntax highlighting saat READ)}}
+  \caption{Panel pembacaan berkas dengan penyorotan sintaks.}
+  \label{fig:read-panel}
+\end{figure}
+
+% Figure 4.5: Modifikasi terarah (MODIFY) beserta ringkasan diff
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig4-5-modify-diff.png`\\
+  (Cuplikan hasil MODIFY yang menampilkan ringkasan diff/lines changed)}}
+  \caption{Contoh hasil perintah \texttt{MODIFY} dengan batasan perubahan berbasis \textit{diff}.}
+  \label{fig:modify-diff}
+\end{figure}
+
+% Figure 4.6: Diagram alur evaluasi dan metrik
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig4-6-evaluasi-metrik.png`\\
+  (Diagram alur evaluasi: skenario → eksekusi → pencatatan metrik → analisis)}}
+  \caption{Diagram alur evaluasi dan metrik yang dikumpulkan.}
+  \label{fig:evaluasi-metrik}
+\end{figure}
+
+% Figure 4.7: Visualisasi hasil (grafik waktu/langkah)
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig4-7-grafik-hasil.png`\\
+  (Grafik batang/garis: perbandingan waktu dan jumlah langkah antar skenario)}}
+  \caption{Contoh visualisasi hasil awal untuk metrik efisiensi.}
+  \label{fig:grafik-hasil}
+\end{figure}
+\section{Contoh Sesi}
+Cuplikan berikut menggambarkan pembuatan proyek sederhana dan pembacaan isi berkas.
+
+\begin{lstlisting}[language=bash,caption={Contoh interaksi singkat}]
+$ pai
+> buatkan proyek python sederhana: BMI Calculator
+# Agen mengeksekusi: MKDIR, TOUCH, WRITE
+> tampilkan struktur
+# Agen mengeksekusi: TREE
+> tampilkan isi sumber kode
+# Agen mengeksekusi: READ
+\end{lstlisting}
 
 % Example of including code from the repository (adjust path if needed):
-% \lstinputlisting[language=Python, caption={Contoh kode agent}, label={lst:agent}]{../paicode/paicode/agent.py}
+% \lstinputlisting[language=Python, caption={Cuplikan kode agent}, label={lst:agent}]{../paicode/paicode/agent.py}
+
+\section{Evaluasi}
+Evaluasi dilakukan melalui skenario tugas representatif yang mencakup pembuatan struktur proyek, penulisan berkas sumber, pembacaan, dan modifikasi terarah. Metrik yang diukur meliputi:
+
+\begin{itemize}
+  \item Waktu penyelesaian tugas.
+  \item Jumlah langkah/komando yang diperlukan.
+  \item Keberhasilan kompilasi/eksekusi kode hasil modifikasi.
+  \item Kepatuhan terhadap kebijakan keamanan jalur (kegagalan akses jalur sensitif).
+\end{itemize}
+
+Hasil awal menunjukkan bahwa pendekatan agen \textit{stateful} dengan batasan perubahan berbasis \textit{diff} memudahkan penulisan dan pengembangan bertahap sambil menekan risiko penimpaan berkas yang tidak diinginkan. Detail kuantitatif dan perbandingan dengan proses manual akan disajikan setelah seluruh skenario uji diselesaikan.
+
+% (reserved for future detailed session transcripts and extended results)
