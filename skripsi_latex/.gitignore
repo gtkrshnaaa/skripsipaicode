@@ -1,0 +1,26 @@
+# LaTeX auxiliary files (local dir)
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.synctex.gz
+*.nav
+*.snm
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+*~
+
+# Build artifacts directory (ignore everything)
+dist/
+
+# Final PDF directory: track only PDFs
+skripsipdf/*
+!skripsipdf/*.pdf
