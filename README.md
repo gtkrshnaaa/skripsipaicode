@@ -47,7 +47,7 @@ sudo apt install -y \
 
 ### Bab I – Pendahuluan
 
-* **Latar belakang** → alasan dibuatnya paicode, permasalahan coding manual, relevansi dengan AI agent, CLI, dan konsep local-first coding assistant.
+* **Latar belakang** → alasan dibuatnya paicode, permasalahan coding manual, relevansi dengan AI agent dan CLI, serta penegasan bahwa Paicode melakukan **operasi berkas tingkat-aplikasi di workspace proyek** dan integrasi **LLM via API** (dengan guardrail \_path security_ dan perubahan berbasis \_diff_).
 * **Rumusan masalah** → contoh: bagaimana merancang dan mengimplementasikan agentic AI berbasis CLI yang dapat membantu proses coding secara interaktif.
 * **Batasan masalah** → contoh: hanya mendukung Python/Unix environment, bergantung pada LLM eksternal, belum support multi-user.
 * **Tujuan penelitian**.
@@ -55,7 +55,7 @@ sudo apt install -y \
 
 ### Bab II – Tinjauan Pustaka
 
-* **Teori dasar**: Command Line Interface, AI Agent, LLM, local-first software, Poetry.
+* **Teori dasar**: Command Line Interface, AI Agent, LLM, \_path security\_, perubahan berbasis \_diff\_, Poetry.
 * **Penelitian terkait**: ringkasan jurnal/skripsi tentang AI coding assistant atau agentic AI.
 * **Posisi penelitian**: bandingkan paicode dengan penelitian/alat yang sudah ada.
 
@@ -81,6 +81,28 @@ sudo apt install -y \
 * Source code paicode di folder `paicode/` menjadi objek utama penelitian.
 * Potongan kode penting disisipkan dalam skripsi menggunakan LaTeX `lstlisting`.
 * Struktur project bisa ditampilkan dengan `verbatim` atau `tree`.
+
+## Quickstart Paicode (Singkat)
+
+Untuk penggunaan aplikasi Paicode, lihat panduan lengkap di `paicode/README.md`. Ringkasan langkah:
+
+```bash
+# Instal dependensi (dari root repo)
+cd paicode
+poetry install
+
+# Set API key Gemini (sekali saja)
+poetry run pai config --set YOUR_API_KEY
+
+# Mulai sesi interaktif agen
+poetry run pai
+```
+
+Catatan penting:
+
+- Paicode menjalankan **operasi berkas tingkat-aplikasi di workspace proyek**, bukan pengelola file system OS.
+- Inferensi dilakukan oleh **LLM eksternal via API**; patuhi kebijakan privasi penyedia.
+- Diterapkan **path security** (blokir path sensitif) dan **perubahan berbasis diff** untuk mengurangi risiko penimpaan besar yang tidak diinginkan.
 
 ## Alur Kerja Pembuatan Skripsi
 
