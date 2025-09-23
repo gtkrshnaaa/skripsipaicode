@@ -10,7 +10,7 @@ Berdasarkan implementasi dan evaluasi awal, beberapa poin kesimpulan dapat diran
 \begin{enumerate}
   \item Integrasi agen \textit{stateful} di lingkungan CLI efektif dalam mempercepat beberapa tugas rekayasa perangkat lunak berulang (pembuatan struktur proyek, pembuatan dan pembacaan berkas, serta modifikasi terarah) dengan tetap menjaga keterlacakan langkah.
   \item Mekanisme pembatasan perubahan berbasis \textit{diff} pada perintah \texttt{MODIFY} membantu mengurangi risiko penimpaan besar yang tidak diinginkan, sehingga sejalan dengan prinsip perubahan minimal.
-  \item Kebijakan keamanan jalur berhasil memblokir akses ke direktori sensitif (mis. \texttt{.git}, \texttt{venv}, \texttt{.env}) dan mencegah \textit{path traversal}, mendukung aspek privasi dan kendali lokal.
+  \item Kebijakan keamanan path berhasil memblokir akses ke direktori sensitif (mis. \texttt{.git}, \texttt{venv}, \texttt{.env}) dan mencegah \textit{path traversal}, mendukung aspek privasi dan kendali lokal.
   \item Pemakaian Poetry, Makefile, dan LaTeX mendukung keterulangan eksperimen serta dokumentasi terstruktur untuk keperluan akademik.
 \end{enumerate}
 
