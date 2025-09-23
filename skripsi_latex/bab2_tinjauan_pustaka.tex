@@ -3,7 +3,7 @@
 \label{chap:tinjauan}
 
 \section{Teori Dasar}
-Bagian ini membahas konsep yang menjadi landasan penelitian: \textit{Command Line Interface} (CLI), agen kecerdasan buatan (AI Agent), \textit{Large Language Model} (LLM), paradigma \textit{local-first}, serta perangkat bantu yang digunakan seperti Poetry untuk manajemen dependensi dan \texttt{rich} untuk antarmuka terminal.
+Bagian ini membahas konsep yang menjadi landasan penelitian: \textit{Command Line Interface} (CLI), agen kecerdasan buatan (AI Agent), \textit{Large Language Model} (LLM), arsitektur dan kebijakan data (integrasi LLM melalui API dan implikasi privasi), serta perangkat bantu yang digunakan seperti Poetry untuk manajemen dependensi dan \texttt{rich} untuk antarmuka terminal.
 
 \subsection{Command Line Interface (CLI)}
 CLI adalah antarmuka berbasis teks yang memungkinkan pengguna berinteraksi dengan sistem melalui perintah. Kelebihan CLI meliputi otomasi yang mudah, konsumsi sumber daya yang rendah, dan integrasi sederhana dengan alat lain melalui skrip. Dalam konteks pengembangan perangkat lunak, CLI memfasilitasi alur kerja yang ringkas dan dapat direproduksi.
@@ -46,7 +46,7 @@ Bagian ini mendeskripsikan rencana gambar yang akan disertakan untuk mendukung n
   \centering
   \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig2-1-arsitektur-agentic-cli.png`\\
   (Diagram blok komponen: CLI, Agen, LLM, FS; alur data tingkat tinggi)}}
-  \caption{Konsep arsitektur agentic AI di lingkungan CLI dengan prinsip \textit{local-first}.}
+  \caption{Konsep arsitektur agentic AI di lingkungan CLI dengan inferensi LLM melalui API.}
   \label{fig:arsitektur-agentic-cli}
 \end{figure}
 
@@ -67,8 +67,8 @@ Pada Gambar~\ref{fig:state-feedback-loop} divisualisasikan hubungan antara masuk
 \begin{figure}[htbp]
   \centering
   \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig2-3-komparasi-tools.png`\\
-  (Tabel/diagram perbandingan: editor extension vs cloud vs local-first CLI)}}
-  \caption{Ilustrasi komparasi konseptual antara pendekatan ekstensi editor, layanan daring, dan local-first CLI.}
+  (Tabel/diagram perbandingan: editor extension vs layanan cloud vs CLI + LLM via API)}}
+  \caption{Ilustrasi komparasi konseptual antara pendekatan ekstensi editor, layanan daring, dan CLI dengan integrasi LLM via API.}
   \label{fig:komparasi-tools}
 \end{figure}
 

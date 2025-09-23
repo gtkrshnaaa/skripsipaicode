@@ -3,7 +3,7 @@
 \label{chap:kesimpulan}
 
 \section{Kesimpulan}
-Penelitian ini menghasilkan prototipe \textbf{Paicode}, sebuah agen AI berbasis CLI yang mendukung proses pengembangan perangkat lunak secara interaktif dengan memanfaatkan LLM eksternal. Sistem dirancang dengan prinsip \textit{local-first} dan dilengkapi kebijakan keamanan jalur untuk mencegah akses ke direktori sensitif. Himpunan perintah yang disediakan (\texttt{MKDIR}, \texttt{TOUCH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{RM}, \texttt{MV}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{FINISH}) memungkinkan agen untuk mengobservasi, memanipulasi, dan memodifikasi berkas secara terarah.
+Penelitian ini menghasilkan prototipe \textbf{Paicode}, sebuah agen AI berbasis CLI yang mendukung proses pengembangan perangkat lunak secara interaktif dengan memanfaatkan LLM eksternal melalui API. Sistem beroperasi pada terminal lokal dan melakukan \textbf{operasi berkas tingkat-aplikasi di ruang kerja proyek}, dilengkapi kebijakan \textit{path security} untuk mencegah akses ke direktori sensitif. Himpunan perintah yang disediakan (\texttt{MKDIR}, \texttt{TOUCH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{RM}, \texttt{MV}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{FINISH}) memungkinkan agen untuk mengobservasi, memanipulasi, dan memodifikasi berkas secara terarah.
 
 Berdasarkan implementasi dan evaluasi awal, beberapa poin kesimpulan dapat dirangkum sebagai berikut:
 
@@ -21,7 +21,7 @@ Beberapa saran pengembangan lanjutan yang dapat dilakukan antara lain:
 
 \begin{itemize}
   \item \textbf{Dukungan multi-LLM}: menambahkan opsi pemilihan model dan penyedia LLM alternatif sesuai kebutuhan (akurasi/biaya/latensi).
-  \item \textbf{Integrasi editor}: menyediakan jembatan ringan ke IDE (mis. VS Code) tanpa mengorbankan sifat \textit{local-first}, misalnya melalui ekstensi yang memanggil agen CLI.
+  \item \textbf{Integrasi editor}: menyediakan jembatan ringan ke IDE (mis. VS Code) yang memanggil agen CLI, sambil tetap menegaskan bahwa inferensi LLM dilakukan via API sesuai kebijakan penyedia.
   \item \textbf{Peningkatan keamanan}: memperluas kebijakan \textit{allow/deny list} jalur, menambah konfirmasi eksplisit untuk operasi berisiko, dan memperketat validasi konten sebelum penulisan berkas.
   \item \textbf{Memori jangka panjang}: menambahkan ringkasan sesi dan penyimpanan konteks terkurasi agar agen dapat mempelajari preferensi proyek pengguna secara berkelanjutan.
   \item \textbf{Evaluasi kuantitatif}: melakukan pengujian terstandardisasi dengan skenario lebih beragam, termasuk proyek nyata berskala kecil-menengah, untuk memperoleh gambaran dampak produktivitas yang lebih komprehensif.
