@@ -12,11 +12,11 @@ Arsitektur Paicode dirancang modular dan berlapis, dengan pembagian tanggung jaw
   \item \textbf{Antarmuka CLI (\texttt{cli.py})}: titik masuk perintah \texttt{pai} dan pengelola argumen (subperintah \texttt{auto}, \texttt{config}). Secara default, CLI memanggil sesi interaktif agen.
   \item \textbf{Agen (\texttt{agent.py})}: menyusun prompt, mengelola memori percakapan, dan mengeksekusi rencana aksi hasil LLM. Menyediakan perintah: \texttt{MKDIR}, \texttt{TOUCH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{RM}, \texttt{MV}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{FINISH}.
   \item \textbf{Jembatan LLM (\texttt{llm.py})}: menangani konfigurasi API Gemini dan penyederhanaan hasil keluaran.
-  \item \textbf{Gerbang Sistem Berkas (\texttt{fs.py})}: menyediakan operasi berkas dengan kebijakan keamanan (\textit{path security}: validasi \textit{path}, blokir direktori sensitif), serta mekanisme \textit{diff}-aware untuk \texttt{MODIFY}.
+  \item \textbf{Pengatur Workspace (\texttt{workspace.py})}: bertindak sebagai \emph{workspace controller} yang menyediakan fungsi-fungsi terpusat untuk menjalankan operasi tingkat-aplikasi pada ruang kerja proyek (membaca/menulis, membuat/menghapus/memindahkan, menampilkan pohon/list path, dan modifikasi berbasis \textit{diff}). Sebelum aksi dieksekusi, modul ini menegakkan kebijakan \textit{path security} (normalisasi dan verifikasi akar, serta deny-list direktori sensitif). Seluruh operasi dibatasi pada workspace proyek secara terkontrol.
   \item \textbf{Tampilan Terminal (\texttt{ui.py})}: penyajian hasil eksekusi menggunakan \texttt{rich} (panel, warna, penomoran baris).
 \end{itemize}
 
-Alur data tipikal: masukan pengguna (CLI) → konstruksi prompt (Agen) → panggilan LLM → rencana aksi → eksekusi tindakan (FS/UI) → pelaporan dan pencatatan konteks sebagai memori percakapan.
+Alur data tipikal: masukan pengguna (CLI) → konstruksi prompt (Agen) → panggilan LLM → rencana aksi → eksekusi tindakan (Workspace/UI) → pelaporan dan pencatatan konteks sebagai memori percakapan.
 
 \section{Visualisasi Metodologi}
 Bagian ini menyajikan visualisasi konsep menggunakan tabel dan daftar terstruktur berbasis LaTeX.
@@ -33,9 +33,9 @@ Bagian ini menyajikan visualisasi konsep menggunakan tabel dan daftar terstruktu
   \midrule
   \endhead
   CLI (\texttt{cli.py}) & Titik masuk perintah, parsing argumen; memanggil sesi agen. Bergantung pada modul \texttt{agent} dan \texttt{config}. \\
-  Agen (\texttt{agent.py}) & Penyusun prompt, eksekusi rencana aksi, memori percakapan; memanggil \texttt{llm}, \texttt{fs}, \texttt{ui}. \\
+  Agen (\texttt{agent.py}) & Penyusun prompt, eksekusi rencana aksi, memori percakapan; memanggil \texttt{llm}, \texttt{workspace}, \texttt{ui}. \\
   LLM Bridge (\texttt{llm.py}) & Integrasi Gemini API (\texttt{google-generativeai}); mengambil API key dari \texttt{config}. \\
-  File System Gateway (\texttt{fs.py}) & Operasi berkas tingkat-aplikasi, validasi \textit{path}, blokir direktori sensitif, \textit{diff}-aware modify. \\
+  Pengatur Workspace (\texttt{workspace.py}) & Bertindak sebagai \emph{workspace controller} yang menyediakan fungsi-fungsi operasi workspace (baca/tulis, buat/hapus/pindah, tree/list path, dan modifikasi berbasis \textit{diff}) dengan penegakan \textit{path security} (normalisasi, verifikasi akar, dan deny-list). Seluruh operasi dibatasi pada workspace proyek, bukan driver filesystem OS. \\
   Terminal UI (\texttt{ui.py}) & Komponen TUI berbasis \texttt{rich}: panel, tema, syntax highlighting. \\
   \bottomrule
 \end{longtable}
@@ -58,7 +58,7 @@ Pada Tabel~\ref{tab:diagram-modul} ditunjukkan komponen utama dan interkoneksiny
   3 & Agen & Menyusun prompt dengan memori percakapan (\emph{conversation history}). \\
   4 & LLM & Menghasilkan rencana aksi (urutan perintah) berdasarkan prompt. \\
   5 & Agen & Mengeksekusi rencana: \texttt{TREE}/\texttt{LIST\_PATH}/\texttt{READ}/\texttt{WRITE}/\texttt{MODIFY}/dst. \\
-  6 & FS/UI & Menjalankan operasi berkas (dengan \textit{path security} dan \textit{diff}-aware) dan menampilkan hasil di terminal. \\
+  6 & Workspace/UI & Menjalankan operasi berkas (dengan \textit{path security} dan \textit{diff}-aware) dan menampilkan hasil di terminal. \\
   7 & Agen & Mencatat hasil (\texttt{System Response}) sebagai memori untuk langkah berikutnya (\emph{stateful}). \\
   8 & Pengguna & Memberikan instruksi lanjutan; siklus berulang sampai \texttt{FINISH}. \\
   \bottomrule
@@ -112,7 +112,7 @@ Prosedur penelitian dan evaluasi dirancang sebagai berikut:
 
 \begin{enumerate}
   \item \textbf{Perancangan}: mendefinisikan skenario penggunaan, himpunan perintah agen, dan kebijakan keamanan \textit{path}.
-  \item \textbf{Implementasi}: membangun modul-modul inti (CLI, Agen, LLM, FS, UI) berikut mekanisme \textit{diff}-aware untuk pembatasan perubahan.
+  \item \textbf{Implementasi}: membangun modul-modul inti (CLI, Agen, LLM, Workspace, UI) berikut mekanisme \textit{diff}-aware untuk pembatasan perubahan.
   \item \textbf{Eksperimen}: menjalankan serangkaian skenario pemrograman (mis. pembuatan struktur proyek, pembuatan/ pembacaan/ modifikasi berkas, refaktorisasi sederhana) dalam sesi interaktif.
   \item \textbf{Pengumpulan Data}: merekam waktu penyelesaian tugas, jumlah langkah perintah, tingkat keberhasilan eksekusi, dan catatan kesalahan.
   \item \textbf{Evaluasi}: membandingkan hasil dengan proses manual atau alat pembanding bila relevan, menggunakan metrik: (i) efisiensi (waktu dan langkah), (ii) ketepatan hasil (kompilasi/eksekusi kode), (iii) keamanan (kegagalan akses \textit{path} sensitif), dan (iv) pengalaman pengguna (keterbacaan output).
