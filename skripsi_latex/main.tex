@@ -1,0 +1,129 @@
+% Main LaTeX file for the thesis
+% All comments are in English as per coding convention, but content is Indonesian.
+
+\documentclass[12pt,a4paper]{report}
+
+% --- Packages ---
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{csquotes}
+\usepackage{nameref}
+% Bibliography using BibTeX (simple and Ubuntu-friendly)
+\usepackage[numbers]{natbib}
+
+% --- Page setup ---
+\geometry{a4paper, margin=1in}
+\onehalfspacing
+
+% --- Hyperref setup ---
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue,
+  pdfauthor={Nama Mahasiswa},
+  pdftitle={Judul Skripsi}
+}
+
+% --- Listings (code) setup ---
+\definecolor{codebg}{RGB}{245,245,245}
+\lstdefinestyle{code}{
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  stringstyle=\color{teal},
+  commentstyle=\color{gray},
+  numbers=left,
+  numberstyle=\tiny, 
+  stepnumber=1,
+  numbersep=8pt,
+  showstringspaces=false,
+  tabsize=2,
+  breaklines=true,
+  frame=single,
+  framerule=0.3pt
+}
+\lstset{style=code}
+
+% --- Chapter format (optional, cleaner look) ---
+\titleformat{\chapter}[display]
+  {\bfseries\Large}
+  {\filright\MakeUppercase{Bab}~\thechapter}
+  {1ex}
+  {\titlerule\vspace{1ex}\filright}
+
+% --- Document meta (edit these) ---
+\newcommand{\JudulSkripsi}{Paicode: Agentic AI berbasis CLI untuk membantu proses coding secara interaktif ditenagai LLM eksternal via API}
+\newcommand{\NamaMahasiswa}{I PUTU GEDE GILANG TEJA KRISHNA}
+\newcommand{\NIM}{225410001}
+\newcommand{\Prodi}{INFORMATIKA}
+\newcommand{\Fakultas}{FAKULTAS TEKNOLOGI INFORMASI}
+\newcommand{\Universitas}{UNIVERSITAS TEKNOLOGI DIGITAL INDONESIA}
+\newcommand{\Tahun}{2025}
+\newcommand{\TahunAngkatan}{2022}
+
+\begin{document}
+
+% --- Cover (very simple placeholder) ---
+\begin{titlepage}
+  \centering
+  {\Large \textbf{\JudulSkripsi}\\[2cm]}
+  {\large \NamaMahasiswa\\\NIM\\[2cm]}
+  {\Prodi\\\Fakultas\\\Universitas\\Angkatan~\TahunAngkatan\\[2cm]}
+  {\Tahun}
+\end{titlepage}
+
+% --- Front matter: roman page numbering ---
+\pagenumbering{roman}
+
+% --- Approval and preliminary pages (placeholders) ---
+\include{front_pengesahan}
+\include{front_pernyataan}
+\include{front_kata_pengantar}
+\include{front_ucapan_terima_kasih}
+
+% --- Abstract placeholders ---
+\chapter*{Abstrak}
+\addcontentsline{toc}{chapter}{Abstrak}
+Tuliskan abstrak dalam bahasa Indonesia di sini.
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+Write the abstract in English here.
+
+% --- Table of contents & lists ---
+\tableofcontents
+\listoffigures
+\listoftables
+
+% --- Switch to arabic numbering for main content ---
+\cleardoublepage
+\pagenumbering{arabic}
+
+% --- Chapters ---
+\include{bab1_pendahuluan}
+\include{bab2_tinjauan_pustaka}
+\include{bab3_metodologi}
+\include{bab4_implementasi_hasil}
+\include{bab5_kesimpulan_saran}
+
+% --- Bibliography ---
+\bibliographystyle{plainnat} % change to preferred style if needed
+\bibliography{daftar_pustaka}
+
+\end{document}
