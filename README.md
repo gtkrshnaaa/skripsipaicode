@@ -62,7 +62,7 @@ sudo apt install -y \
 ### Bab III – Metodologi Penelitian
 
 * **Metode pengembangan sistem** → tentukan model (prototyping, waterfall, agile, research & development).
-* **Arsitektur paicode** → jelaskan modul `agent.py`, `llm.py`, `fs.py`, `cli.py`. Bisa gunakan diagram alur atau class diagram.
+* **Arsitektur paicode** → jelaskan modul `agent.py`, `llm.py`, `workspace.py`, `cli.py`. Bisa gunakan diagram alur atau class diagram.
 * **Tools yang digunakan** → Python, Poetry, Git, LLM API.
 
 ### Bab IV – Implementasi dan Hasil
