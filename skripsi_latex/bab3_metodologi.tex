@@ -12,7 +12,7 @@ Arsitektur Paicode dirancang modular dan berlapis, dengan pembagian tanggung jaw
   \item \textbf{Antarmuka CLI (\texttt{cli.py})}: titik masuk perintah \texttt{pai} dan pengelola argumen (subperintah \texttt{auto}, \texttt{config}). Secara default, CLI memanggil sesi interaktif agen.
   \item \textbf{Agen (\texttt{agent.py})}: menyusun prompt, mengelola memori percakapan, dan mengeksekusi rencana aksi hasil LLM. Menyediakan perintah: \texttt{MKDIR}, \texttt{TOUCH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{RM}, \texttt{MV}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{FINISH}.
   \item \textbf{Jembatan LLM (\texttt{llm.py})}: menangani konfigurasi API Gemini dan penyederhanaan hasil keluaran.
-  \item \textbf{Gerbang Sistem Berkas (\texttt{fs.py})}: menyediakan operasi berkas dengan kebijakan keamanan (\textit{path security}: validasi jalur, blokir direktori sensitif), serta mekanisme \textit{diff}-aware untuk \texttt{MODIFY}.
+  \item \textbf{Gerbang Sistem Berkas (\texttt{fs.py})}: menyediakan operasi berkas dengan kebijakan keamanan (\textit{path security}: validasi \textit{path}, blokir direktori sensitif), serta mekanisme \textit{diff}-aware untuk \texttt{MODIFY}.
   \item \textbf{Tampilan Terminal (\texttt{ui.py})}: penyajian hasil eksekusi menggunakan \texttt{rich} (panel, warna, penomoran baris).
 \end{itemize}
 
@@ -52,7 +52,7 @@ Pada Gambar~\ref{fig:sequence-session} divisualisasikan aliran pesan yang terjad
   \label{fig:policy-keamanan}
 \end{figure}
 
-Pada Gambar~\ref{fig:policy-keamanan} diperlihatkan langkah-langkah validasi jalur sebagai pengaman operasi berkas.
+Pada Gambar~\ref{fig:policy-keamanan} diperlihatkan langkah-langkah validasi \textit{path} sebagai pengaman operasi berkas proyek.
 
 \section{Alat dan Lingkungan}
 Lingkungan dan alat yang digunakan:
@@ -71,10 +71,10 @@ Lingkungan dan alat yang digunakan:
 Prosedur penelitian dan evaluasi dirancang sebagai berikut:
 
 \begin{enumerate}
-  \item \textbf{Perancangan}: mendefinisikan skenario penggunaan, himpunan perintah agen, dan kebijakan keamanan jalur.
+  \item \textbf{Perancangan}: mendefinisikan skenario penggunaan, himpunan perintah agen, dan kebijakan keamanan \textit{path}.
   \item \textbf{Implementasi}: membangun modul-modul inti (CLI, Agen, LLM, FS, UI) berikut mekanisme \textit{diff}-aware untuk pembatasan perubahan.
   \item \textbf{Eksperimen}: menjalankan serangkaian skenario pemrograman (mis. pembuatan struktur proyek, pembuatan/ pembacaan/ modifikasi berkas, refaktorisasi sederhana) dalam sesi interaktif.
   \item \textbf{Pengumpulan Data}: merekam waktu penyelesaian tugas, jumlah langkah perintah, tingkat keberhasilan eksekusi, dan catatan kesalahan.
-  \item \textbf{Evaluasi}: membandingkan hasil dengan proses manual atau alat pembanding bila relevan, menggunakan metrik: (i) efisiensi (waktu dan langkah), (ii) ketepatan hasil (kompilasi/eksekusi kode), (iii) keamanan (kegagalan akses jalur sensitif), dan (iv) pengalaman pengguna (keterbacaan output).
+  \item \textbf{Evaluasi}: membandingkan hasil dengan proses manual atau alat pembanding bila relevan, menggunakan metrik: (i) efisiensi (waktu dan langkah), (ii) ketepatan hasil (kompilasi/eksekusi kode), (iii) keamanan (kegagalan akses \textit{path} sensitif), dan (iv) pengalaman pengguna (keterbacaan output).
   \item \textbf{Analisis}: mengidentifikasi kelebihan, kekurangan, dan peluang peningkatan (mis. dukungan multi-LLM, integrasi editor, perluasan kebijakan keamanan).
 \end{enumerate}

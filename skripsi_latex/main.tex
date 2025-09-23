@@ -96,9 +96,9 @@
 \addcontentsline{toc}{chapter}{Abstrak}
 Penelitian ini mengusulkan \textbf{Paicode}, sebuah agen AI berbasis Command Line Interface (CLI) untuk membantu proses pengembangan perangkat lunak secara interaktif. Sistem berjalan pada lingkungan terminal lokal dan melakukan \textbf{operasi berkas tingkat-aplikasi di ruang kerja proyek (project workspace)}; namun \textbf{mengirimkan cuplikan kode/konteks ke layanan LLM (Gemini) melalui API} untuk keperluan inferensi. Oleh karena itu, aspek privasi dan kerahasiaan kode \textbf{bergantung pada kebijakan penyedia API}, sedangkan pengamanan lokal difokuskan pada kebijakan \textit{path security}. Himpunan perintah yang disediakan (mis. \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}) memungkinkan agen mengobservasi proyek, memanipulasi berkas, dan memodifikasi kode secara terarah.
 
-Metode yang digunakan adalah \textit{Research and Development} (R\&D) dengan pendekatan \textit{prototyping} iteratif. Evaluasi awal dilakukan melalui skenario tugas representatif, dengan metrik efisiensi (waktu/ langkah), ketepatan hasil (kompilasi/ eksekusi), serta kepatuhan keamanan jalur. Hasil menunjukkan bahwa agen \textit{stateful} dengan pembatasan perubahan berbasis \textit{diff} memudahkan pengembangan bertahap sambil menekan risiko penimpaan berkas.
+Metode yang digunakan adalah \textit{Research and Development} (R\&D) dengan pendekatan \textit{prototyping} iteratif. Evaluasi awal dilakukan melalui skenario tugas representatif, dengan metrik efisiensi (waktu/ langkah), ketepatan hasil (kompilasi/ eksekusi), serta kepatuhan keamanan \textit{path}. Hasil menunjukkan bahwa agen \textit{stateful} dengan pembatasan perubahan berbasis \textit{diff} memudahkan pengembangan bertahap sambil menekan risiko penimpaan berkas.
 
-\textbf{Kata kunci}: agentic AI, CLI, LLM, API, keamanan jalur, pengembangan perangkat lunak.
+\textbf{Kata kunci}: agentic AI, CLI, LLM, API, keamanan \textit{path}, pengembangan perangkat lunak.
 
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}

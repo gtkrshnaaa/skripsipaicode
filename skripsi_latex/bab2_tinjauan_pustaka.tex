@@ -14,8 +14,17 @@ AI Agent dalam penelitian ini dipahami sebagai sistem yang mampu mengobservasi l
 \subsection{Large Language Model (LLM)}
 LLM merupakan model generatif berskala besar yang mampu memahami instruksi dan menghasilkan teks atau kode. Pada penelitian ini digunakan API Gemini sebagai penyedia LLM untuk menghasilkan konten baru (\texttt{WRITE}) dan menerapkan perubahan terarah (\texttt{MODIFY}) berdasarkan deskripsi. Prinsip kehati-hatian diterapkan dengan mekanisme pembatasan perubahan berbasis \textit{diff} sehingga modifikasi tidak berskala besar tanpa kontrol \cite{brown2020gpt3,openai2023gpt4,gemini2023,touvron2023llama,llama2_2023,schick2023toolformer,yao2023react}.
 
+\subsection{Perbedaan LLM dan Agen AI}
+\label{subsec:llm-vs-agent}
+Pada skripsi ini penting untuk membedakan \textit{Large Language Model} (LLM) dan \textit{Agen AI}:
+\begin{itemize}
+  \item \textbf{LLM}: model generatif yang menghasilkan keluaran berbasis teks/kode dari masukan. LLM \emph{tidak} menjalankan aksi pada berkas secara langsung; ia hanya memberikan saran/hasil teks.
+  \item \textbf{Agen AI}: komponen perangkat lunak yang \emph{mengatur alur kerja} (merencanakan, memanggil LLM, dan mengeksekusi aksi nyata). Pada konteks ini, agen mengontrol perintah CLI untuk melakukan \textbf{operasi berkas tingkat-aplikasi pada workspace proyek}.
+  \item \textbf{Hubungan}: agen memanfaatkan LLM untuk penalaran/generasi, lalu menerjemahkan hasilnya menjadi aksi yang terkontrol. Pengamanan lokal ditegakkan melalui \textit{path security} (keamanan \textit{path}) dan pembatasan perubahan berbasis \textit{diff}.
+\end{itemize}
+
 \subsection{Arsitektur dan Kebijakan Data}
-Paicode dijalankan pada terminal lokal dan melakukan tindakan langsung pada sistem berkas. Akan tetapi, untuk kebutuhan inferensi, cuplikan kode atau konteks \textbf{dikirim ke layanan LLM melalui API}. Implikasinya, privasi dan kerahasiaan kode \textbf{bergantung pada kebijakan penyedia API}. Pengamanan di sisi lokal tetap diterapkan melalui kebijakan keamanan jalur serta pembatasan perubahan berbasis \textit{diff} agar operasi berkas lebih terkendali.
+Paicode dijalankan pada terminal lokal dan melakukan tindakan langsung pada \textbf{berkas proyek di workspace}. Akan tetapi, untuk kebutuhan inferensi, cuplikan kode atau konteks \textbf{dikirim ke layanan LLM melalui API}. Implikasinya, privasi dan kerahasiaan kode \textbf{bergantung pada kebijakan penyedia API}. Pengamanan di sisi lokal diterapkan melalui kebijakan \textit{path security} (keamanan \textit{path}) serta pembatasan perubahan berbasis \textit{diff} agar operasi berkas lebih terkendali.
 
 \subsection{Manajemen Dependensi dengan Poetry}
 Poetry menyediakan manajemen dependensi dan kemasan proyek Python yang deterministik. Berkas \texttt{pyproject.toml} mendeskripsikan dependensi dan titik masuk CLI (\texttt{pai}). Pendekatan ini memudahkan replikasi lingkungan dan distribusi alat.
@@ -33,7 +42,7 @@ Kontribusi penelitian ini ditempatkan pada ranah agentic AI untuk pengembangan p
 
 \begin{itemize}
   \item \textbf{CLI lokal dengan integrasi LLM via API}: agen berjalan di terminal, tindakan langsung tercermin di sistem berkas; sementara inferensi dilakukan oleh LLM eksternal sehingga kebijakan data mengikuti penyedia API.
-  \item \textbf{Keamanan berkas}: kebijakan pelarangan akses jalur sensitif dan validasi jalur mencegah \textit{path traversal} dan operasi berisiko.
+  \item \textbf{Keamanan berkas}: kebijakan pelarangan akses \textit{path} sensitif dan validasi \textit{path} mencegah \textit{path traversal} dan operasi berisiko.
   \item \textbf{Modifikasi terarah}: perintah \texttt{MODIFY} memanfaatkan \textit{diff} untuk membatasi ruang perubahan, mendukung prinsip perubahan minimal.
   \item \textbf{Keterulangan eksperimen}: penggunaan Poetry dan Makefile memudahkan replikasi lingkungan dan dokumentasi langkah.
 \end{itemize}

@@ -31,7 +31,7 @@ poetry run pai
 \end{lstlisting}
 
 \section{Alur Interaksi}
-Alur kerja pada sesi interaktif meliputi: (i) pengguna memberikan tujuan tingkat tinggi; (ii) agen mengobservasi struktur proyek menggunakan perintah \texttt{TREE}/\texttt{LIST\_PATH}; (iii) agen membaca/menulis/memodifikasi berkas; (iv) hasil dievaluasi dan menjadi konteks untuk langkah berikutnya. Kebijakan keamanan jalur mencegah akses ke direktori sensitif seperti \texttt{.git}, \texttt{venv}, dan \texttt{.env}.
+Alur kerja pada sesi interaktif meliputi: (i) pengguna memberikan tujuan tingkat tinggi; (ii) agen mengobservasi struktur proyek menggunakan perintah \texttt{TREE}/\texttt{LIST\_PATH}; (iii) agen membaca/menulis/memodifikasi berkas; (iv) hasil dievaluasi dan menjadi konteks untuk langkah berikutnya. Kebijakan keamanan \textit{path} mencegah akses ke direktori sensitif seperti \texttt{.git}, \texttt{venv}, dan \texttt{.env}.
 
 \section{Rencana Gambar Implementasi}
 Bagian ini merinci rencana gambar/screenshot yang akan ditambahkan untuk memperkuat penjelasan implementasi dan hasil.
@@ -190,7 +190,7 @@ Evaluasi dilakukan melalui skenario tugas representatif yang mencakup pembuatan 
   \item Waktu penyelesaian tugas.
   \item Jumlah langkah/komando yang diperlukan.
   \item Keberhasilan kompilasi/eksekusi kode hasil modifikasi.
-  \item Kepatuhan terhadap kebijakan keamanan jalur (kegagalan akses jalur sensitif).
+  \item Kepatuhan terhadap kebijakan keamanan \textit{path} (kegagalan akses \textit{path} sensitif).
 \end{itemize}
 
 Hasil awal menunjukkan bahwa pendekatan agen \textit{stateful} dengan batasan perubahan berbasis \textit{diff} memudahkan penulisan dan pengembangan bertahap sambil menekan risiko penimpaan berkas yang tidak diinginkan. Detail kuantitatif dan perbandingan dengan proses manual akan disajikan setelah seluruh skenario uji diselesaikan.
