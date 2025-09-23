@@ -18,41 +18,81 @@ Arsitektur Paicode dirancang modular dan berlapis, dengan pembagian tanggung jaw
 
 Alur data tipikal: masukan pengguna (CLI) → konstruksi prompt (Agen) → panggilan LLM → rencana aksi → eksekusi tindakan (FS/UI) → pelaporan dan pencatatan konteks sebagai memori percakapan.
 
-\section{Rencana Gambar Metodologi}
-Bagian ini memuat rencana gambar untuk memperjelas metode dan arsitektur pada Bab~\ref{chap:metodologi}. Placeholder akan diganti dengan gambar final sesuai hasil perancangan.
+\section{Visualisasi Metodologi}
+Bagian ini menyajikan visualisasi konsep menggunakan tabel dan daftar terstruktur berbasis LaTeX.
 
-% Figure 3.1: Diagram modul dan dependensi
-\begin{figure}[htbp]
-  \centering
-  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig3-1-diagram-modul.png`\\
-  (Diagram modul/komponen: CLI, Agent, LLM, FS, UI; hubungan dependensi)}}
-  \caption{Diagram modul dan dependensi komponen Paicode.}
-  \label{fig:diagram-modul}
-\end{figure}
+% Tabel 3.1: Diagram modul dan dependensi
+\begin{longtable}{@{}p{0.26\textwidth}p{0.68\textwidth}@{}}
+  \caption{Modul dan Dependensi Komponen Paicode}\label{tab:diagram-modul}\\
+  \toprule
+  \textbf{Komponen} & \textbf{Deskripsi dan Dependensi Utama} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Komponen} & \textbf{Deskripsi dan Dependensi Utama} \\
+  \midrule
+  \endhead
+  CLI (\texttt{cli.py}) & Titik masuk perintah, parsing argumen; memanggil sesi agen. Bergantung pada modul \texttt{agent} dan \texttt{config}. \\
+  Agen (\texttt{agent.py}) & Penyusun prompt, eksekusi rencana aksi, memori percakapan; memanggil \texttt{llm}, \texttt{fs}, \texttt{ui}. \\
+  LLM Bridge (\texttt{llm.py}) & Integrasi Gemini API (\texttt{google-generativeai}); mengambil API key dari \texttt{config}. \\
+  File System Gateway (\texttt{fs.py}) & Operasi berkas tingkat-aplikasi, validasi \textit{path}, blokir direktori sensitif, \textit{diff}-aware modify. \\
+  Terminal UI (\texttt{ui.py}) & Komponen TUI berbasis \texttt{rich}: panel, tema, syntax highlighting. \\
+  \bottomrule
+\end{longtable}
 
-Pada Gambar~\ref{fig:diagram-modul} ditunjukkan komponen utama dan interkoneksinya, sebagai acuan implementasi.
+Pada Tabel~\ref{tab:diagram-modul} ditunjukkan komponen utama dan interkoneksinya, sebagai acuan implementasi.
 
-% Figure 3.2: Urutan interaksi (sequence diagram) sesi agen
-\begin{figure}[htbp]
-  \centering
-  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig3-2-sequence-session.png`\\
-  (Sequence diagram: user → CLI → Agent → LLM → FS/UI → kembali ke user)}}
-  \caption{Urutan interaksi sesi agen dari masukan pengguna hingga hasil.}
-  \label{fig:sequence-session}
-\end{figure}
+% Tabel 3.2: Urutan interaksi (sequence) sesi agen
+\begin{longtable}{@{}p{0.06\textwidth}p{0.18\textwidth}p{0.70\textwidth}@{}}
+  \caption{Urutan Interaksi Sesi Agen (Stateful Feedback Loop)}\label{tab:sequence-session}\\
+  \toprule
+  \textbf{No} & \textbf{Pelaku} & \textbf{Aksi/Peristiwa} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{No} & \textbf{Pelaku} & \textbf{Aksi/Peristiwa} \\
+  \midrule
+  \endhead
+  1 & Pengguna & Memberikan tujuan/permintaan tingkat tinggi di terminal. \\
+  2 & CLI & Meneruskan masukan ke agen; menyiapkan konteks sesi. \\
+  3 & Agen & Menyusun prompt dengan memori percakapan (\emph{conversation history}). \\
+  4 & LLM & Menghasilkan rencana aksi (urutan perintah) berdasarkan prompt. \\
+  5 & Agen & Mengeksekusi rencana: \texttt{TREE}/\texttt{LIST\_PATH}/\texttt{READ}/\texttt{WRITE}/\texttt{MODIFY}/dst. \\
+  6 & FS/UI & Menjalankan operasi berkas (dengan \textit{path security} dan \textit{diff}-aware) dan menampilkan hasil di terminal. \\
+  7 & Agen & Mencatat hasil (\texttt{System Response}) sebagai memori untuk langkah berikutnya (\emph{stateful}). \\
+  8 & Pengguna & Memberikan instruksi lanjutan; siklus berulang sampai \texttt{FINISH}. \\
+  \bottomrule
+\end{longtable}
 
-Pada Gambar~\ref{fig:sequence-session} divisualisasikan aliran pesan yang terjadi selama satu putaran iterasi agen.
+Pada Tabel~\ref{tab:sequence-session} divisualisasikan aliran pesan yang terjadi selama satu putaran iterasi agen.
 
-% Figure 3.3: Alur kebijakan keamanan path
-\begin{figure}[htbp]
-  \centering
-  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig3-3-policy-keamanan.png`\\
-  (Flowchart validasi path: normalisasi → verifikasi root → deny-list direktori sensitif)}}
-  \caption{Alur kebijakan keamanan path (path security) pada berkas proyek.}
-  \label{fig:policy-keamanan}
-\end{figure}
+% Tabel/Daftar 3.3: Alur kebijakan keamanan path
+\paragraph{Alur Kebijakan Keamanan \textit{Path}.} Langkah-langkah validasi \textit{path} diringkas berikut:
+\begin{enumerate}[label=\arabic*.]
+  \item Normalisasi \textit{path} target (\texttt{os.path.normpath}).
+  \item Resolusi \textit{real path} relatif terhadap akar proyek; pastikan tetap berada di dalam akar proyek.
+  \item Pemeriksaan \emph{deny-list} direktori/berkas sensitif: \texttt{.env}, \texttt{.git}, \texttt{venv}, \texttt{\_\_pycache\_\_}, \texttt{.pai\_history}, \texttt{.idea}, \texttt{.vscode}.
+  \item Jika salah satu pemeriksaan gagal: batalkan operasi dan tampilkan pesan kesalahan.
+\end{enumerate}
 
-Pada Gambar~\ref{fig:policy-keamanan} diperlihatkan langkah-langkah validasi \textit{path} sebagai pengaman operasi berkas proyek.
+\begin{longtable}{@{}p{0.20\textwidth}p{0.74\textwidth}@{}}
+  \caption{Rangkuman Validasi Keamanan \textit{Path}}\label{tab:policy-keamanan}\\
+  \toprule
+  \textbf{Tahap} & \textbf{Detail Pemeriksaan} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Tahap} & \textbf{Detail Pemeriksaan} \\
+  \midrule
+  \endhead
+  Normalisasi & Gunakan fungsi normalisasi untuk menyingkirkan segmen berlebih (mis. \texttt{..}, duplikasi pemisah). \\
+  Verifikasi Root & Gabungkan terhadap akar proyek, lakukan \texttt{realpath}, dan validasi prefiks tetap di dalam akar proyek. \\
+  Deny-list & Tolak bila salah satu segmen \textit{path} termasuk daftar sensitif (.env, .git, venv, dll.). \\
+  Penanganan Error & Batalkan operasi dan tampilkan pesan kesalahan yang informatif melalui TUI. \\
+  \bottomrule
+\end{longtable}
+
+Pada Tabel~\ref{tab:policy-keamanan} diperlihatkan langkah-langkah validasi \textit{path} sebagai pengaman operasi berkas proyek.
 
 \section{Alat dan Lingkungan}
 Lingkungan dan alat yang digunakan:
@@ -61,7 +101,7 @@ Lingkungan dan alat yang digunakan:
   \item Sistem operasi: Ubuntu (Linux).
   \item Bahasa pemrograman: Python (\texttt{\textgreater= 3.9}).
   \item Manajer dependensi/kemasan: Poetry; titik masuk CLI didefinisikan pada \texttt{pyproject.toml}.
-  \item LLM: Google Gemini melalui paket \texttt{google-generativeai}.
+  \item LLM: Google Gemini (model \texttt{gemini-2.5-flash}) melalui paket \texttt{google-generativeai}.
   \item TUI: \texttt{rich} untuk panel, warna, dan penyorotan sintaks.
   \item LaTeX: TeX Live (\texttt{texlive-latex-recommended}, \texttt{texlive-latex-extra}, dsb.) dan Makefile untuk kompilasi naskah.
   \item Kendali versi: Git dan GitHub.
