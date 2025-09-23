@@ -3,6 +3,22 @@ import shutil
 import difflib
 from . import ui
 
+"""
+workspace.py
+------------
+This module acts as the workspace controller for Pai Code. It centralizes
+application-level operations on the project's workspace, such as reading,
+writing, listing, tree visualization, moving, removing, creating files and
+directories, as well as applying diff-aware modifications. In order to protect
+the workspace, it enforces path-security policies (path normalization, root
+verification, and deny-listing sensitive paths) before executing any action.
+
+All functions defined in this module are the provided primitives to manipulate
+and manage files within the project workspace in a controlled, secure manner.
+All operations are constrained strictly within the project root determined at
+runtime (workspace scope), ensuring controlled manipulation of project files.
+"""
+
 PROJECT_ROOT = os.path.abspath(os.getcwd())
 
 # List of sensitive files and directories to be blocked

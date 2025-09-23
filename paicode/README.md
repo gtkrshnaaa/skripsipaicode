@@ -28,7 +28,7 @@ paicode/          <-- Project Root
 │   ├── agent.py      # The agent's core logic and prompt engineering
 │   ├── cli.py        # The main conversational CLI entry point
 │   ├── config.py     # Secure API key management
-│   ├── fs.py         # Project-file operations gateway and path-security layer
+│   ├── workspace.py # Workspace operations gateway: application-level file ops, path-security, diff-aware modify
 │   ├── llm.py        # Bridge to the Large Language Model
 │   └── ui.py         # Rich TUI components
 │
@@ -95,7 +95,7 @@ The setup process is simple and integrated with Poetry.
 Security is a core design principle of Pai Code.
 
   * **Secure Key Storage:** Your API key is never stored in the project directory. It is placed in a `.config` folder in your home directory with `600` file permissions, meaning only your user account can access it.
-  * **Sensitive Path Blocking (Path Security):** The agent enforces a policy to block access to sensitive files and directories like `.env`, `.git`, `venv/`, and IDE-specific folders. This is implemented by a centralized path-security gateway that inspects every file operation.
+  * **Sensitive Path Blocking (Path Security):** The agent enforces a policy to block access to sensitive files and directories like `.env`, `.git`, `venv/`, and IDE-specific folders. This is implemented by a centralized workspace gateway (`workspace.py`) that inspects every application-level file operation in the project workspace.
 
 -----
 
@@ -286,7 +286,7 @@ A typical interaction follows this stateful data flow:
 2.  `agent.py` constructs a detailed **prompt**, including relevant conversation history.
 3.  `llm.py` sends this prompt to the **Gemini API**.
 4.  The LLM returns a structured **action plan** (a sequence of commands).
-5.  `agent.py` executes this plan, calling functions in `fs.py`.
+5.  `agent.py` executes this plan, calling functions in `workspace.py`.
 6.  The results (e.g., file contents from `READ`, lists from `LIST_PATH`) are **displayed to the user and recorded in the session log.**
 7.  This enriched log becomes the context for the next turn, creating a **stateful memory loop** that allows the agent to learn from its actions.
 
@@ -294,7 +294,7 @@ A typical interaction follows this stateful data flow:
 
 As a developer, you can easily extend Pai's internal capabilities:
 
-  * **Add New Agent Commands:** Add a command to `VALID_COMMANDS` in `agent.py`, create a corresponding function in `fs.py`, and add the handling logic in `_generate_execution_renderables`. This gives the agent a new tool to use in its planning.
+  * **Add New Agent Commands:** Add a command to `VALID_COMMANDS` in `agent.py`, create a corresponding function in `workspace.py`, and add the handling logic in `_generate_execution_renderables`. This gives the agent a new tool to use in its planning.
   * **Tune the Agent's Persona:** The core personality and reasoning process of the agent lives in the `prompt` variable in `agent.py`. By modifying this prompt, you can change its behavior, specialize it for a specific framework, or alter its programming style.
 
 ### **Technology Stack**
