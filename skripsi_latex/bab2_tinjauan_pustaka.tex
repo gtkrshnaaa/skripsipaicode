@@ -3,13 +3,40 @@
 \label{chap:tinjauan}
 
 \section{Teori Dasar}
-Bahas konsep-konsep: Command Line Interface (CLI), AI Agent, Large Language Model (LLM), local-first software, manajemen dependensi (Poetry), dan Rich TUI.
+Bagian ini membahas konsep yang menjadi landasan penelitian: \textit{Command Line Interface} (CLI), agen kecerdasan buatan (AI Agent), \textit{Large Language Model} (LLM), paradigma \textit{local-first}, serta perangkat bantu yang digunakan seperti Poetry untuk manajemen dependensi dan \texttt{rich} untuk antarmuka terminal.
+
+\subsection{Command Line Interface (CLI)}
+CLI adalah antarmuka berbasis teks yang memungkinkan pengguna berinteraksi dengan sistem melalui perintah. Kelebihan CLI meliputi otomasi yang mudah, konsumsi sumber daya yang rendah, dan integrasi sederhana dengan alat lain melalui skrip. Dalam konteks pengembangan perangkat lunak, CLI memfasilitasi alur kerja yang ringkas dan dapat direproduksi.
+
+\subsection{AI Agent}
+AI Agent dalam penelitian ini dipahami sebagai sistem yang mampu mengobservasi lingkungan (struktur proyek dan isi berkas), merencanakan tindakan (mis. membuat, membaca, memodifikasi berkas), serta mengevaluasi hasil untuk langkah berikutnya. Agen bersifat \textit{stateful} karena mempertahankan konteks percakapan dan hasil eksekusi sebagai memori kerja, sehingga dapat bertindak secara lebih \textit{proactive}.
+
+\subsection{Large Language Model (LLM)}
+LLM merupakan model generatif berskala besar yang mampu memahami instruksi dan menghasilkan teks atau kode. Pada penelitian ini digunakan API Gemini sebagai penyedia LLM untuk menghasilkan konten baru (\texttt{WRITE}) dan menerapkan perubahan terarah (\texttt{MODIFY}) berdasarkan deskripsi. Prinsip kehati-hatian diterapkan dengan mekanisme pembatasan perubahan berbasis \textit{diff} sehingga modifikasi tidak berskala besar tanpa kontrol \cite{vaswani2017attention,goodfellow2016deep}.
+
+\subsection{Local-First Software}
+Paradigma \textit{local-first} menempatkan mesin pengguna sebagai pusat kendali: file, struktur proyek, dan logik eksekusi utama berada secara lokal. Panggilan ke layanan eksternal (LLM) dilakukan seminimal mungkin dan tidak menyimpan konteks proyek di luar mesin pengguna. Pendekatan ini relevan untuk kebutuhan privasi, kepemilikan data, dan ketahanan terhadap jaringan.
+
+\subsection{Manajemen Dependensi dengan Poetry}
+Poetry menyediakan manajemen dependensi dan kemasan proyek Python yang deterministik. Berkas \texttt{pyproject.toml} mendeskripsikan dependensi dan titik masuk CLI (\texttt{pai}). Pendekatan ini memudahkan replikasi lingkungan dan distribusi alat.
+
+\subsection{Antarmuka Terminal dengan \texttt{rich}}
+Paket \texttt{rich} dimanfaatkan untuk menyajikan hasil eksekusi secara terstruktur dan mudah dibaca (panel, warna, penyorotan sintaks). Penyajian output yang jelas mendukung pengalaman interaktif dan penelusuran hasil tindakan agen.
 
 \section{Penelitian Terkait}
-Ringkas penelitian/alat terkait AI coding assistant atau agentic AI. Bandingkan pendekatan dan hasil.
+Berbagai alat bantu pengembangan perangkat lunak berbasis LLM telah diusulkan dan dikomersialisasi, antara lain asisten kode terintegrasi editor, agen otomatis untuk \textit{refactoring}, serta sistem tanya-jawab dokumentasi. Umumnya solusi tersebut beroperasi sebagai ekstensi editor atau layanan daring, sehingga kuat pada integrasi IDE namun bergantung pada antarmuka tertentu dan memproses konteks di luar mesin pengguna.
+
+Sebaliknya, pendekatan \textit{local-first} pada Paicode menempatkan agen di lingkungan CLI dan beroperasi langsung pada sistem berkas. Perintah agen disederhanakan ke dalam himpunan tindakan yang eksplisit (\texttt{MKDIR}, \texttt{TOUCH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{RM}, \texttt{MV}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{FINISH}) dengan \textit{policy} keamanan jalur. Penelitian terkait menunjukkan bahwa interaksi \textit{stateful} berbasis rencana aksi meningkatkan kualitas hasil pada tugas-tugas rekayasa perangkat lunak yang iteratif, sementara \textit{guardrail} sederhana (seperti pembatasan \textit{diff}) dapat menekan risiko penimpaan berkas secara tidak disengaja.
 
 \section{Posisi Penelitian}
-Posisikan kontribusi paicode dibandingkan karya-karya sebelumnya.
+Kontribusi penelitian ini ditempatkan pada ranah agentic AI untuk pengembangan perangkat lunak dengan karakteristik sebagai berikut:
+
+\begin{itemize}
+  \item \textbf{Local-first CLI}: agen berjalan di terminal, tindakan langsung tercermin di sistem berkas, dan tidak bergantung pada editor tertentu.
+  \item \textbf{Keamanan berkas}: kebijakan pelarangan akses jalur sensitif dan validasi jalur mencegah \textit{path traversal} dan operasi berisiko.
+  \item \textbf{Modifikasi terarah}: perintah \texttt{MODIFY} memanfaatkan \textit{diff} untuk membatasi ruang perubahan, mendukung prinsip perubahan minimal.
+  \item \textbf{Keterulangan eksperimen}: penggunaan Poetry dan Makefile memudahkan replikasi lingkungan dan dokumentasi langkah.
+\end{itemize}
 
 % Example citation usage (keep, then replace with real keys):
 % Menurut \citet{goodfellow2016deep}, ... atau penelitian terkait \citep{somepaper2020}.

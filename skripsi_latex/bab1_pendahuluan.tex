@@ -4,16 +4,45 @@
 \label{chap:pendahuluan}
 
 \section{Latar Belakang}
-Uraikan permasalahan, motivasi, dan konteks penelitian. Soroti kebutuhan akan asisten coding berbasis CLI yang agentic dan stateful, serta aspek local-first dan privasi.
+Perkembangan \textit{Large Language Model} (LLM) telah mendorong lahirnya beragam asisten pemrograman yang mampu membantu pengembang perangkat lunak dalam menulis, meninjau, dan memodifikasi kode. Meskipun demikian, sebagian besar asisten tersebut beroperasi sebagai ekstensi editor atau layanan berbasis \textit{cloud} yang menyimpan, memproses, atau melatih dari data pengguna. Kondisi ini menimbulkan kekhawatiran terkait privasi, kendali atas data, serta ketergantungan pada antarmuka tertentu.
+
+Di sisi lain, \textit{Command Line Interface} (CLI) tetap menjadi lingkungan kerja yang penting bagi banyak pengembang karena sifatnya yang ringan, dapat diotomasi, dan mudah diintegrasikan dengan beragam alat. Integrasi kemampuan agen cerdas yang \textit{stateful} dan \textit{proactive} ke dalam CLI berpotensi mempercepat proses pengembangan perangkat lunak tanpa mengorbankan prinsip \textit{local-first}. Pendekatan \textit{local-first} memusatkan kendali pada mesin pengguna sehingga interaksi, konteks, dan perubahan berkas terjadi secara lokal, sementara panggilan LLM eksternal hanya dilakukan sebatas kebutuhan inferensi \cite{vaswani2017attention,goodfellow2016deep}.
+
+Penelitian ini menghadirkan \textbf{Paicode}, sebuah agen AI berbasis CLI yang dirancang untuk membantu proses pengembangan perangkat lunak secara interaktif. Paicode mampu: (i) mengobservasi struktur proyek (\texttt{TREE}, \texttt{LIST\_PATH}); (ii) membaca dan menulis berkas (\texttt{READ}, \texttt{WRITE}); (iii) memodifikasi kode secara terarah dengan batasan perubahan berbasis diff (\texttt{MODIFY}); serta (iv) menegakkan kebijakan keamanan sistem berkas (memblokir akses ke direktori sensitif seperti \texttt{.git}, \texttt{venv}, dan \texttt{.env}). Sistem diimplementasikan pada lingkungan Ubuntu dengan bahasa pemrograman Python, pengelolaan dependensi melalui Poetry, dan menggunakan API Gemini sebagai LLM.
 
 \section{Rumusan Masalah}
-Rumuskan pertanyaan penelitian terkait perancangan dan implementasi agentic AI berbasis CLI yang membantu proses coding.
+Berdasarkan latar belakang tersebut, rumusan masalah yang diajukan adalah sebagai berikut:
+
+\begin{enumerate}
+  \item Bagaimana merancang arsitektur agen AI berbasis CLI yang \textit{stateful}, \textit{proactive}, dan menjunjung prinsip \textit{local-first} untuk mendukung proses pengembangan perangkat lunak?
+  \item Bagaimana mengintegrasikan kemampuan observasi proyek, manipulasi berkas, serta modifikasi kode terarah berbasis deskripsi pengguna dengan pengamanan terhadap jalur dan direktori sensitif?
+  \item Bagaimana mengevaluasi efektivitas Paicode dalam membantu tugas-tugas pemrograman dibandingkan proses manual atau alat pembanding yang relevan?
+\end{enumerate}
 
 \section{Batasan Masalah}
-Jelaskan batasan (mis. fokus pada Python/Unix, ketergantungan API LLM, belum mendukung multi-user, dsb.).
+Agar fokus penelitian terjaga dan implementasi dapat dilakukan secara terukur, batasan-batasan berikut ditetapkan:
+
+\begin{itemize}
+  \item Lingkungan target adalah sistem operasi Ubuntu (Linux) dengan antarmuka CLI.
+  \item Bahasa pemrograman utama adalah Python; contoh dan skenario uji berfokus pada ekosistem Python/Unix.
+  \item Layanan LLM eksternal menggunakan API Gemini; kualitas respons bergantung pada model dan tidak menjadi ruang lingkup untuk dioptimasi ulang.
+  \item Dukungan multi-pengguna, kolaborasi real-time, dan integrasi langsung dengan editor tidak dibahas pada versi ini.
+  \item Aspek visual seperti diagram dan ilustrasi antarmuka ditunda pada tahap akhir; fokus laporan adalah narasi dan hasil teknis.
+\end{itemize}
 
 \section{Tujuan Penelitian}
-Jelaskan tujuan umum dan khusus penelitian.
+Tujuan penelitian ini adalah membangun dan mengevaluasi sebuah agen AI berbasis CLI yang dapat membantu pengembang dalam proses pemrograman secara interaktif. Secara khusus, penelitian menargetkan:
+
+\begin{enumerate}
+  \item Merancang arsitektur Paicode yang mencakup modul agen, jembatan LLM, antarmuka CLI, lapisan keamanan sistem berkas, serta komponen tampilan terminal.
+  \item Mengimplementasikan kemampuan observasi proyek, manipulasi berkas, dan modifikasi kode terarah dengan mekanisme \textit{patch/diff} untuk membatasi ruang perubahan.
+  \item Menyusun prosedur evaluasi dengan skenario tugas pemrograman yang representatif dan mengukur peningkatan produktivitas atau kualitas hasil.
+\end{enumerate}
 
 \section{Manfaat Penelitian}
-Paparkan manfaat akademis dan praktis.
+Manfaat yang diharapkan dari penelitian ini meliputi:
+
+\begin{itemize}
+  \item \textbf{Akademis:} menyediakan studi kasus dan arsitektur rujukan untuk pengembangan agen AI \textit{local-first} di lingkungan CLI, serta memperkaya literatur mengenai integrasi LLM dalam alur kerja rekayasa perangkat lunak.
+  \item \textbf{Praktis:} menghadirkan alat bantu yang \textit{privacy-aware} dan mudah diintegrasikan dengan berbagai IDE karena beroperasi langsung pada sistem berkas; memfasilitasi pembuatan struktur proyek, pembacaan, dan modifikasi kode secara cepat dan terarah.
+\end{itemize}
