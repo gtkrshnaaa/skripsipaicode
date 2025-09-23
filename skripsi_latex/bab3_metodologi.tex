@@ -12,7 +12,7 @@ Arsitektur Paicode dirancang modular dan berlapis, dengan pembagian tanggung jaw
   \item \textbf{Antarmuka CLI (\texttt{cli.py})}: titik masuk perintah \texttt{pai} dan pengelola argumen (subperintah \texttt{auto}, \texttt{config}). Secara default, CLI memanggil sesi interaktif agen.
   \item \textbf{Agen (\texttt{agent.py})}: menyusun prompt, mengelola memori percakapan, dan mengeksekusi rencana aksi hasil LLM. Menyediakan perintah: \texttt{MKDIR}, \texttt{TOUCH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{RM}, \texttt{MV}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{FINISH}.
   \item \textbf{Jembatan LLM (\texttt{llm.py})}: menangani konfigurasi API Gemini dan penyederhanaan hasil keluaran.
-  \item \textbf{Gerbang Sistem Berkas (\texttt{fs.py})}: menyediakan operasi berkas dengan kebijakan keamanan (validasi jalur, blokir direktori sensitif), serta mekanisme \textit{diff}-aware untuk \texttt{MODIFY}.
+  \item \textbf{Gerbang Sistem Berkas (\texttt{fs.py})}: menyediakan operasi berkas dengan kebijakan keamanan (\textit{path security}: validasi jalur, blokir direktori sensitif), serta mekanisme \textit{diff}-aware untuk \texttt{MODIFY}.
   \item \textbf{Tampilan Terminal (\texttt{ui.py})}: penyajian hasil eksekusi menggunakan \texttt{rich} (panel, warna, penomoran baris).
 \end{itemize}
 

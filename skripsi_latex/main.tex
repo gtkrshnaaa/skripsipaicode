@@ -94,19 +94,19 @@
 % --- Abstract placeholders ---
 \chapter*{Abstrak}
 \addcontentsline{toc}{chapter}{Abstrak}
-Penelitian ini mengusulkan \textbf{Paicode}, sebuah agen AI berbasis Command Line Interface (CLI) untuk membantu proses pengembangan perangkat lunak secara interaktif. Sistem menerapkan prinsip \textit{local-first} dengan kebijakan keamanan jalur, serta memanfaatkan layanan LLM (Gemini) hanya untuk kebutuhan inferensi. Himpunan perintah yang disediakan (mis. \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}) memungkinkan agen mengobservasi proyek, memanipulasi berkas, dan memodifikasi kode secara terarah.
+Penelitian ini mengusulkan \textbf{Paicode}, sebuah agen AI berbasis Command Line Interface (CLI) untuk membantu proses pengembangan perangkat lunak secara interaktif. Sistem berjalan pada lingkungan terminal lokal dan mengeksekusi tindakan langsung pada file system (sistem berkas), tetapi \textbf{mengirimkan cuplikan kode/konteks ke layanan LLM (Gemini) melalui API} untuk keperluan inferensi. Oleh karena itu, aspek privasi dan kerahasiaan kode \textbf{bergantung pada kebijakan penyedia API}, sedangkan pengamanan lokal difokuskan pada kebijakan \textit{path security}. Himpunan perintah yang disediakan (mis. \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}) memungkinkan agen mengobservasi proyek, memanipulasi berkas, dan memodifikasi kode secara terarah.
 
 Metode yang digunakan adalah \textit{Research and Development} (R\&D) dengan pendekatan \textit{prototyping} iteratif. Evaluasi awal dilakukan melalui skenario tugas representatif, dengan metrik efisiensi (waktu/ langkah), ketepatan hasil (kompilasi/ eksekusi), serta kepatuhan keamanan jalur. Hasil menunjukkan bahwa agen \textit{stateful} dengan pembatasan perubahan berbasis \textit{diff} memudahkan pengembangan bertahap sambil menekan risiko penimpaan berkas.
 
-\textbf{Kata kunci}: agentic AI, CLI, local-first, LLM, pengembangan perangkat lunak.
+\textbf{Kata kunci}: agentic AI, CLI, LLM, API, keamanan jalur, pengembangan perangkat lunak.
 
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
-This thesis presents \textbf{Paicode}, an agentic AI for Command Line Interface (CLI) that assists software development through interactive, stateful workflows. The system follows a \textit{local-first} design with path-security policies, and leverages an external LLM (Gemini) solely for inference. A compact set of commands (e.g., \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}) enables the agent to observe the project, manipulate files, and apply targeted code modifications.
+This thesis presents \textbf{Paicode}, an agentic AI for the Command Line Interface (CLI) that assists software development through interactive, stateful workflows. The system runs on a local terminal and performs actions on the local file system, while \textbf{sending code/context snippets to an external LLM (Gemini) via API} for inference. Consequently, privacy and confidentiality \textbf{depend on the provider's policy}, whereas local safeguards focus on path-security policies. A compact set of commands (e.g., \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}) enables the agent to observe the project, manipulate files, and apply targeted code modifications.
 
-We adopt a Research and Development approach with iterative prototyping. The initial evaluation uses representative programming scenarios and measures efficiency (time/steps), correctness (build/run), and security compliance. Results indicate that a stateful agent with diff-based change constraints facilitates incremental development while reducing the risk of unintended overwrites.
+We adopt a Research and Development approach with iterative prototyping. The initial evaluation uses representative programming scenarios and measures efficiency (time/steps), correctness (build/run), and security compliance. Results indicate that a stateful agent with \textit{diff}-based change constraints facilitates incremental development while reducing the risk of unintended overwrites.
 
-\textbf{Keywords}: agentic AI, CLI, local-first, LLM, software engineering.
+\textbf{Keywords}: agentic AI, CLI, LLM, API, path security, software engineering.
 
 % --- Table of contents & lists ---
 \chapter*{Daftar Singkatan}
@@ -116,6 +116,10 @@ We adopt a Research and Development approach with iterative prototyping. The ini
 \chapter*{Daftar Simbol}
 \addcontentsline{toc}{chapter}{Daftar Simbol}
 \input{front_daftar_simbol}
+
+\chapter*{Daftar Istilah}
+\addcontentsline{toc}{chapter}{Daftar Istilah}
+\input{front_daftar_istilah}
 
 \tableofcontents
 \listoffigures
