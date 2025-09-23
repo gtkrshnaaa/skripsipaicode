@@ -31,7 +31,7 @@ poetry run pai
 \end{lstlisting}
 
 \section{Alur Interaksi}
-Alur kerja pada sesi interaktif meliputi: (i) pengguna memberikan tujuan tingkat tinggi; (ii) agen mengobservasi struktur proyek menggunakan perintah \texttt{TREE}/\texttt{LIST\_PATH}; (iii) agen membaca/menulis/memodifikasi berkas; (iv) hasil dievaluasi dan menjadi konteks untuk langkah berikutnya. Kebijakan keamanan \textit{path} mencegah akses ke direktori sensitif seperti \texttt{.git}, \texttt{venv}, dan \texttt{.env}.
+Alur kerja pada sesi interaktif meliputi: (i) pengguna memberikan tujuan tingkat tinggi; (ii) agen mengobservasi struktur proyek menggunakan perintah \texttt{TREE}, \texttt{LIST\_PATH}; (iii) agen membaca, menulis, dan memodifikasi berkas; (iv) hasil dievaluasi dan menjadi konteks untuk langkah berikutnya. Operasi berkas dieksekusi melalui \textbf{Workspace Controller} (\texttt{workspace.py}) dengan penegakan kebijakan \textit{path security} yang mencegah akses ke direktori sensitif seperti \texttt{.git}, \texttt{venv}, dan \texttt{.env}.
 
 \section{Rencana Gambar Implementasi}
 Bagian ini merinci rencana gambar/screenshot yang akan ditambahkan untuk memperkuat penjelasan implementasi dan hasil.

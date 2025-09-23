@@ -22,7 +22,7 @@ Alur data tipikal: masukan pengguna (CLI) → konstruksi prompt (Agen) → pangg
 Bagian ini menyajikan visualisasi konsep menggunakan tabel dan daftar terstruktur berbasis LaTeX.
 
 % Tabel 3.1: Diagram modul dan dependensi
-\begin{longtable}{@{}p{0.26\textwidth}p{0.68\textwidth}@{}}
+\begin{longtable}{@{}p{0.25\textwidth}p{0.70\textwidth}@{}}
   \caption{Modul dan Dependensi Komponen Paicode}\label{tab:diagram-modul}\\
   \toprule
   \textbf{Komponen} & \textbf{Deskripsi dan Dependensi Utama} \\
@@ -57,7 +57,7 @@ Pada Tabel~\ref{tab:diagram-modul} ditunjukkan komponen utama dan interkoneksiny
   2 & CLI & Meneruskan masukan ke agen; menyiapkan konteks sesi. \\
   3 & Agen & Menyusun prompt dengan memori percakapan (\emph{conversation history}). \\
   4 & LLM & Menghasilkan rencana aksi (urutan perintah) berdasarkan prompt. \\
-  5 & Agen & Mengeksekusi rencana: \texttt{TREE}/\texttt{LIST\_PATH}/\texttt{READ}/\texttt{WRITE}/\texttt{MODIFY}/dst. \\
+  5 & Agen & Mengeksekusi rencana: \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, dst. \\
   6 & Workspace/UI & Menjalankan operasi berkas (dengan \textit{path security} dan \textit{diff}-aware) dan menampilkan hasil di terminal. \\
   7 & Agen & Mencatat hasil (\texttt{System Response}) sebagai memori untuk langkah berikutnya (\emph{stateful}). \\
   8 & Pengguna & Memberikan instruksi lanjutan; siklus berulang sampai \texttt{FINISH}. \\

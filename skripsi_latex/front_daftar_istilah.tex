@@ -5,8 +5,11 @@
 \textbf{LLM} & Large Language Model; model bahasa berskala besar untuk inferensi teks/kode. \\
 \textbf{API} & Application Programming Interface; antarmuka pemrograman untuk mengakses layanan (mis. LLM). \\
 \textbf{control/data flow} & Pola arus kontrol dan data antar komponen dalam arsitektur sistem yang menggambarkan urutan eksekusi dan pertukaran informasi. \\
+\textbf{workspace controller} & Modul pengatur workspace yang memusatkan fungsi-fungsi operasi tingkat-aplikasi pada workspace proyek, termasuk validasi \textit{path}, pelarangan \textit{path} sensitif, dan modifikasi berbasis \textit{diff}. \\
 \textbf{path} & Jalur berkas/direktori pada workspace proyek (contoh: \texttt{/home/user/project/main.py}). \\
 \textbf{path security} & Kebijakan keamanan terkait path: normalisasi, validasi root, dan blokir direktori sensitif untuk mencegah akses yang tidak sah. \\
+\textbf{path traversal} & Teknik atau upaya mengakses direktori/berkas di luar cakupan yang diizinkan dengan memanipulasi path (mis. menggunakan segmen \texttt{..}). \\
+\textbf{deny-list} & Daftar path/pola yang dilarang untuk diakses atau dimodifikasi (mis. \texttt{.env}, \texttt{.git}, \texttt{venv/}, \texttt{\_\_pycache\_\_/}, \texttt{.vscode/}). \\
 \textbf{project files (berkas proyek)} & Berkas-berkas aplikasi dalam workspace proyek yang dapat dibaca/ditulis/dimodifikasi oleh Paicode (mis. kode sumber, konfigurasi proyek, README). \\
 \textbf{diff} & Representasi perubahan antar versi berkas (baris ditambah/diubah/dihapus). \\
 \textbf{stateful} & Menjaga konteks/riwayat interaksi agar mempengaruhi langkah berikutnya. \\
