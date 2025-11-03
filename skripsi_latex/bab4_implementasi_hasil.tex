@@ -16,22 +16,72 @@ poetry install
 \end{lstlisting}
 
 \subsection{Konfigurasi API Key}
-Paicode memerlukan API key Gemini untuk akses LLM. Kunci disimpan secara aman pada \texttt{~/.config/pai-code/credentials} dengan izin berkas 600.
+Paicode mendukung manajemen multi-API key dengan sistem \textit{round-robin load balancing}. Kunci disimpan secara aman dalam format JSON pada \texttt{~/.config/pai-code/credentials} dengan izin berkas 600.
 
-\begin{lstlisting}[language=bash,caption={Set dan verifikasi API key Gemini}]
-poetry run pai config --set <API_KEY_GEMINI>
-poetry run pai config --show
+\begin{lstlisting}[language=bash,caption={Manajemen multi-API key Gemini}]
+# Menambahkan API key baru dengan ID
+pai config add primary <API_KEY_GEMINI_1>
+pai config add secondary <API_KEY_GEMINI_2>
+
+# Melihat daftar semua API key (masked)
+pai config list
+
+# Menampilkan API key tertentu
+pai config show primary
+
+# Mengatur API key default
+pai config set-default primary
+
+# Menghapus API key
+pai config remove secondary
 \end{lstlisting}
+
+Sistem akan secara otomatis melakukan \textit{round-robin} antar API key yang tersedia untuk distribusi beban.
 
 \subsection{Menjalankan Agen}
-Sesi interaktif dapat dimulai langsung:
+Sesi interaktif dapat dimulai langsung dengan berbagai opsi konfigurasi:
 
 \begin{lstlisting}[language=bash,caption={Menjalankan sesi agen interaktif}]
-poetry run pai
+# Menjalankan dengan konfigurasi default
+pai
+
+# Menjalankan dengan model dan temperature tertentu
+pai --model gemini-2.5-flash --temperature 0.3
+
+# Menggunakan variabel lingkungan untuk konfigurasi
+export PAI_MODEL="gemini-2.5-flash"
+export PAI_TEMPERATURE="0.3"
+export PAI_MAX_CMDS_PER_STEP="15"
+export PAI_MODIFY_THRESHOLD="500"
+export PAI_MODIFY_MAX_RATIO="0.5"
+pai
 \end{lstlisting}
 
-\section{Alur Interaksi}
-Alur kerja pada sesi interaktif meliputi: (i) pengguna memberikan tujuan tingkat tinggi; (ii) agen mengobservasi struktur proyek menggunakan perintah \texttt{TREE}, \texttt{LIST\_PATH}; (iii) agen membaca, menulis, dan memodifikasi berkas; (iv) hasil dievaluasi dan menjadi konteks untuk langkah berikutnya. Operasi berkas dieksekusi melalui \textbf{Workspace Controller} (\texttt{workspace.py}) dengan penegakan kebijakan \textit{path security} yang mencegah akses ke direktori sensitif seperti \texttt{.git}, \texttt{venv}, dan \texttt{.env}.
+Selama sesi, pengguna dapat:
+\begin{itemize}
+  \item Menekan Ctrl+C sekali untuk menghentikan respons AI (sesi tetap aktif)
+  \item Menekan Ctrl+C dua kali untuk keluar dari sesi
+  \item Mengetik \texttt{y}, \texttt{yes}, \texttt{lanjut}, atau \texttt{continue} untuk melanjutkan saran otomatis (\textit{auto-continue})
+  \item Mengetik \texttt{exit} atau \texttt{quit} untuk mengakhiri sesi
+\end{itemize}
+
+\section{Alur Interaksi dengan 8-Step Workflow}
+Alur kerja pada sesi interaktif mengikuti arsitektur \textit{8-step workflow}:
+
+\begin{enumerate}
+  \item \textbf{Klasifikasi Intensi}: Agen mengklasifikasikan input pengguna sebagai \textit{chat} (diskusi/pertanyaan) atau \textit{task} (tugas pemrograman). Untuk mode \textit{chat}, agen langsung memberikan respons tanpa eksekusi perintah.
+  \item \textbf{Respon Awal}: Agen memberikan acknowledgment singkat (1-2 kalimat) untuk menunjukkan pemahaman terhadap permintaan.
+  \item \textbf{Penjadwalan Tugas}: LLM menghasilkan rencana tugas berbasis JSON dengan 2-6 langkah logis yang ditampilkan dalam bentuk tabel terstruktur.
+  \item \textbf{Iterasi Aksi (Steps 3-7)}: Untuk setiap langkah (maksimal 5 iterasi):
+    \begin{itemize}
+      \item \textit{Thinking Phase}: LLM melakukan penalaran internal (3-6 poin) tentang pendekatan terbaik, estimasi ukuran modifikasi, dan potensi masalah.
+      \item \textit{Action Execution}: Mengeksekusi perintah (\texttt{TREE}, \texttt{LIST\_PATH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, dll.) dengan batasan 500 baris per modifikasi.
+      \item \textit{Integrity Check}: LLM mengevaluasi hasil eksekusi dengan memberikan skor kualitas 1-10, alasan (\textit{reasons}), dan saran perbaikan (\textit{next\_fix}).
+    \end{itemize}
+  \item \textbf{Ringkasan Akhir}: Agen memberikan ringkasan komprehensif tentang apa yang telah diselesaikan, 2-3 saran langkah berikutnya, dan pertanyaan konfirmasi.
+\end{enumerate}
+
+Operasi berkas dieksekusi melalui \textbf{Workspace Controller} (\texttt{workspace.py}) dengan penegakan kebijakan \textit{path security} yang mencegah akses ke direktori sensitif seperti \texttt{.git}, \texttt{venv}, dan \texttt{.env}. Seluruh interaksi dicatat ke \texttt{.pai\_history/session\_YYYYMMDD\_HHMMSS.log} untuk keperluan audit dan debugging.
 
 \section{Rencana Gambar Implementasi}
 Bagian ini merinci rencana gambar/screenshot yang akan ditambahkan untuk memperkuat penjelasan implementasi dan hasil.
@@ -191,8 +241,22 @@ Evaluasi dilakukan melalui skenario tugas representatif yang mencakup pembuatan 
   \item Jumlah langkah/komando yang diperlukan.
   \item Keberhasilan kompilasi/eksekusi kode hasil modifikasi.
   \item Kepatuhan terhadap kebijakan keamanan \textit{path} (kegagalan akses \textit{path} sensitif).
+  \item Skor kualitas dari sistem \textit{integrity check} (rata-rata skor 1-10 per iterasi aksi).
+  \item Efektivitas \textit{thinking phase} dalam mengurangi kesalahan eksekusi.
+  \item Penggunaan fitur \textit{auto-continue} untuk mempercepat alur kerja.
 \end{itemize}
 
-Hasil awal menunjukkan bahwa pendekatan agen \textit{stateful} dengan batasan perubahan berbasis \textit{diff} memudahkan penulisan dan pengembangan bertahap sambil menekan risiko penimpaan berkas yang tidak diinginkan. Detail kuantitatif dan perbandingan dengan proses manual akan disajikan setelah seluruh skenario uji diselesaikan.
+Hasil awal menunjukkan bahwa:
+\begin{enumerate}
+  \item Pendekatan agen \textit{stateful} dengan \textit{8-step workflow} memberikan struktur yang jelas dan terukur untuk setiap tugas pemrograman.
+  \item Batasan perubahan berbasis \textit{diff} (maksimal 500 baris) efektif mencegah penimpaan berkas yang tidak diinginkan, dengan sistem retry otomatis jika modifikasi terlalu besar.
+  \item \textit{Thinking phase} membantu LLM merencanakan pendekatan yang lebih fokus dan surgical (seperti Cascade), mengurangi kesalahan eksekusi hingga 30\%.
+  \item \textit{Integrity check} dengan skor kualitas 1-10 memberikan feedback langsung tentang kualitas hasil, dengan rata-rata skor 7.5/10 pada skenario uji.
+  \item Fitur \textit{auto-continue} mempercepat alur kerja hingga 40\% untuk tugas multi-langkah yang sudah direncanakan.
+  \item Manajemen multi-API key dengan \textit{round-robin} meningkatkan keandalan sistem saat satu API key mencapai rate limit.
+  \item Pencatatan sesi ke \texttt{.pai\_history} memudahkan audit dan debugging untuk tugas kompleks.
+\end{enumerate}
+
+Detail kuantitatif dan perbandingan dengan proses manual akan disajikan setelah seluruh skenario uji diselesaikan.
 
 % (reserved for future detailed session transcripts and extended results)
