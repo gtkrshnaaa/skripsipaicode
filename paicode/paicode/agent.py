@@ -203,7 +203,7 @@ SAFETY CONSTRAINTS - VERY IMPORTANT:
 - BEST PRACTICE: Even though limit is 500, prefer smaller focused modifications (100-200 lines)
 - Think like a senior developer: make surgical, targeted changes
 - Focus on ONE specific area at a time (e.g., one section, one function, one feature)
-- Example of EXCELLENT incremental approach (like Cascade):
+- Example of EXCELLENT incremental approach (like Professional Programmer):
   * Modification 1: Update function signature and add type hints (30 lines)
   * Modification 2: Add input validation logic (50 lines)
   * Modification 3: Enhance error handling (40 lines)
@@ -252,9 +252,9 @@ Think carefully before modifying. Quality over speed.
                         # Check if modification was rejected due to size
                         if not success and "exceeds" in message.lower():
                             renderables.append(Text(f"! Modification rejected: too large. {message}", style="warning"))
-                            renderables.append(Text("! Think like Cascade: Break into focused, surgical modifications.", style="warning"))
+                            renderables.append(Text("! Think like Professional Programmer: Break into focused, surgical modifications.", style="warning"))
                             renderables.append(Text("! Ideal: 100-200 lines (very focused), Acceptable: 200-500 lines (one area)", style="info"))
-                            result = f"Error: {message}\nSuggestion: Use Cascade-style approach - split into focused modifications targeting one specific area at a time."
+                            result = f"Error: {message}\nSuggestion: Use Professional Programmer-style approach - split into focused modifications targeting one specific area at a time."
                             renderables.append(Text(f"✗ {result}", style="error"))
                             log_results.append(result)
                             continue
@@ -729,11 +729,11 @@ Your task planning should:
 3. Anticipate potential issues and plan accordingly
 4. Ensure each step has a clear, verifiable outcome
 5. Follow software engineering best practices
-6. Think like Cascade: make focused, surgical modifications
+6. Think like Professional Programmer: make focused, surgical modifications
 7. BEST PRACTICE: Keep each step focused on one specific area (100-200 lines ideal)
 8. Maximum 500 lines per modification, but prefer smaller when possible
 
-Example of EXCELLENT planning (Cascade-style, incremental and focused):
+Example of EXCELLENT planning (Professional Programmer-style, incremental and focused):
 - Step 1: Create basic HTML structure (semantic elements only)
 - Step 2: Add core layout CSS (body, container, flexbox centering)
 - Step 3: Add form structure CSS (form-group, spacing, alignment)
@@ -881,7 +881,7 @@ Before taking any action, think step-by-step about the best approach. Consider:
 3. What are potential edge cases or issues?
 4. What is the minimal, safest set of actions needed?
 5. How will I verify success?
-6. CRITICAL: Can this modification be focused on one specific area (like Cascade does)?
+6. CRITICAL: Can this modification be focused on one specific area (like Professional Programmer does)?
 7. If modifying a file, estimate the size:
    - Small (30-100 lines): Perfect, very focused
    - Medium (100-200 lines): Good, still focused
@@ -894,7 +894,7 @@ CRITICAL OUTPUT FORMAT:
 - Use simple numbered list or plain text
 - Keep it concise: 3-6 points
 - Focus strictly on the target step hint
-- Think like Cascade: surgical, focused, one area at a time
+- Think like Professional Programmer: surgical, focused, one area at a time
 - Explicitly state estimated modification size and approach
 
 Target step hint: {step_hint}

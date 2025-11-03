@@ -282,7 +282,7 @@ def apply_modification_with_patch(file_path: str, original_content: str, new_con
         message = (
             f"Warning: Modification for '{file_path}' rejected. "
             f"Change too large: {changed_lines_count} lines (~{ratio:.1%}) exceeds threshold {env_threshold} and ratio {max_ratio:.0%}.\n"
-            f"SOLUTION: Think like Cascade - break this into focused, surgical modifications:\n"
+            f"SOLUTION: Think like Professional Programmer - break this into focused, surgical modifications:\n"
             f"  - Focus on ONE specific area/feature at a time\n"
             f"  - Ideal: 100-200 lines per modification (very focused)\n"
             f"  - Acceptable: 200-500 lines (still focused on one area)\n"
