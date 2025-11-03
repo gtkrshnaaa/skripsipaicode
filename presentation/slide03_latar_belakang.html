@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Latar Belakang — Paicode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bgdom: '#E4E5FE',
+              primary: '#2C32C5',
+              accent2: '#E9C537',
+              ink: '#252525'
+            },
+            fontFamily: {
+              display: ['Unbounded','system-ui','sans-serif'],
+              sans: ['Inter','ui-sans-serif','system-ui']
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #E4E5FE;
+        background-image:
+          radial-gradient(circle at 20% 10%, rgba(44,50,197,0.10) 0, rgba(44,50,197,0.0) 40%),
+          radial-gradient(circle at 80% 0%, rgba(233,197,55,0.14) 0, rgba(233,197,55,0.0) 35%),
+          repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px),
+          repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px);
+      }
+    </style>
+  </head>
+  <body class="font-sans text-ink">
+    <main class="min-h-screen grid place-items-center px-6 py-10">
+      <section class="w-full max-w-6xl rounded-3xl bg-white/70 border border-ink/10 shadow-lg p-10">
+        <div class="mb-6">
+          <span class="inline-flex items-center rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-semibold">Slide 3/16 • Pendahuluan</span>
+        </div>
+        
+        <h1 class="font-display font-extrabold text-5xl tracking-tight text-ink mb-6">Latar Belakang</h1>
+        
+        <div class="space-y-5 text-ink/90 leading-relaxed">
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mt-1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <p><strong>Perkembangan LLM</strong> telah mendorong lahirnya beragam asisten pemrograman, namun sebagian besar beroperasi sebagai ekstensi editor atau layanan cloud yang menimbulkan kekhawatiran terkait <strong>privasi dan kendali data</strong>.</p>
+          </div>
+          
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mt-1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <p><strong>CLI tetap penting</strong> bagi banyak pengembang karena sifatnya yang ringan, dapat diotomasi, dan mudah diintegrasikan dengan beragam alat.</p>
+          </div>
+          
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mt-1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <p>Integrasi <strong>agen cerdas stateful dan proactive</strong> ke dalam CLI berpotensi mempercepat proses pengembangan perangkat lunak.</p>
+          </div>
+          
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-accent2/60 flex items-center justify-center mt-1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </div>
+            <p><strong>Paicode</strong> berjalan pada terminal lokal dan mengeksekusi tindakan langsung pada berkas proyek di workspace, namun mengirimkan cuplikan kode/konteks ke layanan LLM melalui API untuk inferensi.</p>
+          </div>
+        </div>
+        
+        <div class="mt-8 rounded-2xl bg-bgdom p-6 border border-ink/10">
+          <h3 class="font-semibold text-ink mb-3">Aspek Keamanan</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <div class="font-semibold text-primary mb-1">🔒 Lokal</div>
+              <p class="text-ink/70">Path security, deny-list, pembatasan diff (max 500 baris)</p>
+            </div>
+            <div>
+              <div class="font-semibold text-primary mb-1">☁️ API</div>
+              <p class="text-ink/70">Privasi bergantung pada kebijakan penyedia (Gemini)</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="slide02_agenda.html" class="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 19L9 12l7-7"/></svg>
+            Sebelumnya
+          </a>
+          <a href="slide04_rumusan_masalah.html" class="inline-flex items-center gap-2 rounded-full bg-accent2 text-ink px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <span>Berikutnya</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7-11-7Z"/></svg>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <div class="fixed bottom-4 inset-x-0 flex justify-center">
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-4 py-2 border border-ink/10 text-sm text-ink">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Tekan → untuk lanjut • Tekan ← untuk kembali
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') window.location.href = 'slide02_agenda.html';
+        if (e.key === 'ArrowRight') window.location.href = 'slide04_rumusan_masalah.html';
+      });
+    </script>
+  </body>
+</html>

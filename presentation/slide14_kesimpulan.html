@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kesimpulan — Paicode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bgdom: '#E4E5FE',
+              primary: '#2C32C5',
+              accent2: '#E9C537',
+              ink: '#252525'
+            },
+            fontFamily: {
+              display: ['Unbounded','system-ui','sans-serif'],
+              sans: ['Inter','ui-sans-serif','system-ui']
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #E4E5FE;
+        background-image:
+          radial-gradient(circle at 20% 10%, rgba(44,50,197,0.10) 0, rgba(44,50,197,0.0) 40%),
+          radial-gradient(circle at 80% 0%, rgba(233,197,55,0.14) 0, rgba(233,197,55,0.0) 35%),
+          repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px),
+          repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px);
+      }
+    </style>
+  </head>
+  <body class="font-sans text-ink">
+    <main class="min-h-screen grid place-items-center px-6 py-10">
+      <section class="w-full max-w-6xl rounded-3xl bg-white/70 border border-ink/10 shadow-lg p-10">
+        <div class="mb-6">
+          <span class="inline-flex items-center rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-semibold">Slide 14/16 • Penutup</span>
+        </div>
+        
+        <h1 class="font-display font-extrabold text-5xl tracking-tight text-ink mb-6">Kesimpulan</h1>
+        
+        <div class="space-y-4">
+          <div class="rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 p-5 border border-primary/30">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">✓</div>
+              <p class="text-ink/90"><strong>Arsitektur 8-step workflow</strong> memberikan struktur yang jelas, terukur, dan dapat diaudit untuk setiap tugas pemrograman.</p>
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 p-5 border border-primary/30">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">✓</div>
+              <p class="text-ink/90"><strong>Thinking phase</strong> membantu LLM merencanakan pendekatan yang lebih fokus dan surgical, mengurangi kesalahan eksekusi hingga <strong>30%</strong>.</p>
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 p-5 border border-primary/30">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">✓</div>
+              <p class="text-ink/90"><strong>Integrity check</strong> pasca-eksekusi dengan skor kualitas 1-10 memberikan feedback langsung, rata-rata skor <strong>7.5/10</strong>.</p>
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 p-5 border border-primary/30">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">✓</div>
+              <p class="text-ink/90"><strong>Pembatasan diff</strong> (max 500 baris) efektif mencegah penimpaan berkas yang tidak diinginkan, dengan sistem retry otomatis.</p>
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 p-5 border border-primary/30">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">✓</div>
+              <p class="text-ink/90"><strong>Multi-API key</strong> dengan round-robin meningkatkan keandalan sistem dan mengurangi downtime akibat rate limiting.</p>
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 p-5 border border-primary/30">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">✓</div>
+              <p class="text-ink/90"><strong>Auto-continue</strong> mempercepat alur kerja hingga <strong>40%</strong> untuk tugas multi-langkah yang sudah direncanakan.</p>
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 p-5 border border-primary/30">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">✓</div>
+              <p class="text-ink/90"><strong>Path security</strong> berhasil memblokir akses ke direktori sensitif (.git, venv, .env) dan mencegah path traversal.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-6 rounded-2xl bg-accent2/10 p-6 border border-accent2/30">
+          <h3 class="font-semibold text-ink mb-3">🎯 Kontribusi Penelitian</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <div class="font-semibold text-primary mb-1">Akademis</div>
+              <p class="text-ink/70">Arsitektur rujukan untuk agen AI berbasis CLI dengan 8-step workflow dan integrity check</p>
+            </div>
+            <div>
+              <div class="font-semibold text-primary mb-1">Praktis</div>
+              <p class="text-ink/70">Alat bantu yang privacy-aware dan mudah diintegrasikan dengan berbagai IDE</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="slide13_hasil_evaluasi.html" class="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 19L9 12l7-7"/></svg>
+            Sebelumnya
+          </a>
+          <a href="slide15_saran.html" class="inline-flex items-center gap-2 rounded-full bg-accent2 text-ink px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <span>Berikutnya</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7-11-7Z"/></svg>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <div class="fixed bottom-4 inset-x-0 flex justify-center">
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-4 py-2 border border-ink/10 text-sm text-ink">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Tekan → untuk lanjut • Tekan ← untuk kembali
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') window.location.href = 'slide13_hasil_evaluasi.html';
+        if (e.key === 'ArrowRight') window.location.href = 'slide15_saran.html';
+      });
+    </script>
+  </body>
+</html>

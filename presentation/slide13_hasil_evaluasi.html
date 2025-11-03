@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hasil Evaluasi — Paicode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bgdom: '#E4E5FE',
+              primary: '#2C32C5',
+              accent2: '#E9C537',
+              ink: '#252525'
+            },
+            fontFamily: {
+              display: ['Unbounded','system-ui','sans-serif'],
+              sans: ['Inter','ui-sans-serif','system-ui']
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #E4E5FE;
+        background-image:
+          radial-gradient(circle at 20% 10%, rgba(44,50,197,0.10) 0, rgba(44,50,197,0.0) 40%),
+          radial-gradient(circle at 80% 0%, rgba(233,197,55,0.14) 0, rgba(233,197,55,0.0) 35%),
+          repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px),
+          repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px);
+      }
+    </style>
+  </head>
+  <body class="font-sans text-ink">
+    <main class="min-h-screen grid place-items-center px-6 py-10">
+      <section class="w-full max-w-6xl rounded-3xl bg-white/70 border border-ink/10 shadow-lg p-10">
+        <div class="mb-6">
+          <span class="inline-flex items-center rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-semibold">Slide 13/16 • Hasil ⭐ KUNCI</span>
+        </div>
+        
+        <h1 class="font-display font-extrabold text-5xl tracking-tight text-ink mb-2">Hasil Evaluasi</h1>
+        <p class="text-ink/70 mb-6">Metrik kuantitatif dari skenario pengujian</p>
+        
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="rounded-2xl bg-gradient-to-br from-green-50 to-green-100 p-6 border border-green-300">
+            <div class="text-4xl font-bold text-green-700 mb-1">30%</div>
+            <div class="text-sm font-semibold text-green-900">Pengurangan Error</div>
+            <p class="text-xs text-green-700 mt-2">Thinking phase membantu LLM merencanakan pendekatan yang lebih fokus dan surgical</p>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 p-6 border border-blue-300">
+            <div class="text-4xl font-bold text-blue-700 mb-1">40%</div>
+            <div class="text-sm font-semibold text-blue-900">Percepatan Workflow</div>
+            <p class="text-xs text-blue-700 mt-2">Auto-continue mempercepat alur kerja untuk tugas multi-langkah yang sudah direncanakan</p>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 p-6 border border-purple-300">
+            <div class="text-4xl font-bold text-purple-700 mb-1">7.5/10</div>
+            <div class="text-sm font-semibold text-purple-900">Rata-rata Skor Kualitas</div>
+            <p class="text-xs text-purple-700 mt-2">Integrity check memberikan feedback langsung tentang kualitas hasil eksekusi</p>
+          </div>
+        </div>
+        
+        <!-- Detailed Results -->
+        <div class="space-y-4">
+          <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+            <h3 class="font-semibold text-ink mb-3 flex items-center gap-2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              8-Step Workflow
+            </h3>
+            <p class="text-sm text-ink/80">Memberikan struktur yang <strong>jelas, terukur, dan dapat diaudit</strong> untuk setiap tugas pemrograman. Setiap langkah memiliki tujuan spesifik dan output yang terverifikasi.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+            <h3 class="font-semibold text-ink mb-3 flex items-center gap-2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Pembatasan Diff (Max 500 Baris)
+            </h3>
+            <p class="text-sm text-ink/80">Efektif mencegah penimpaan berkas yang tidak diinginkan, dengan <strong>sistem retry otomatis</strong> jika modifikasi terlalu besar. Mendorong perubahan yang fokus dan minimal.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+            <h3 class="font-semibold text-ink mb-3 flex items-center gap-2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Multi-API Key dengan Round-Robin
+            </h3>
+            <p class="text-sm text-ink/80">Meningkatkan <strong>keandalan sistem</strong> dan mengurangi downtime akibat rate limiting. Load balancing otomatis antar API key yang tersedia.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+            <h3 class="font-semibold text-ink mb-3 flex items-center gap-2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Session Logging & Interrupt Handling
+            </h3>
+            <p class="text-sm text-ink/80">Pencatatan sesi ke <code class="bg-ink/10 px-1 rounded">.pai_history</code> memudahkan <strong>audit dan debugging</strong>. Ctrl+C untuk menghentikan respons AI tanpa keluar dari sesi meningkatkan kontrol pengguna.</p>
+          </div>
+        </div>
+        
+        <!-- Comparison Table -->
+        <div class="mt-6 rounded-2xl bg-gradient-to-r from-accent2/10 to-accent2/5 p-5 border border-accent2/30">
+          <h3 class="font-semibold text-ink mb-3">📊 Perbandingan dengan Proses Manual</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-ink/20">
+                  <th class="text-left py-2 px-3 font-semibold">Metrik</th>
+                  <th class="text-center py-2 px-3 font-semibold">Manual</th>
+                  <th class="text-center py-2 px-3 font-semibold">Paicode</th>
+                  <th class="text-center py-2 px-3 font-semibold">Peningkatan</th>
+                </tr>
+              </thead>
+              <tbody class="text-ink/80">
+                <tr class="border-b border-ink/10">
+                  <td class="py-2 px-3">Waktu setup proyek</td>
+                  <td class="text-center py-2 px-3">~15 menit</td>
+                  <td class="text-center py-2 px-3">~5 menit</td>
+                  <td class="text-center py-2 px-3 text-green-700 font-semibold">67% lebih cepat</td>
+                </tr>
+                <tr class="border-b border-ink/10">
+                  <td class="py-2 px-3">Kesalahan eksekusi</td>
+                  <td class="text-center py-2 px-3">Baseline</td>
+                  <td class="text-center py-2 px-3">-30%</td>
+                  <td class="text-center py-2 px-3 text-green-700 font-semibold">30% lebih sedikit</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3">Workflow multi-langkah</td>
+                  <td class="text-center py-2 px-3">Baseline</td>
+                  <td class="text-center py-2 px-3">+40%</td>
+                  <td class="text-center py-2 px-3 text-green-700 font-semibold">40% lebih cepat</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="slide12_demo.html" class="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 19L9 12l7-7"/></svg>
+            Sebelumnya
+          </a>
+          <a href="slide14_kesimpulan.html" class="inline-flex items-center gap-2 rounded-full bg-accent2 text-ink px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <span>Berikutnya</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7-11-7Z"/></svg>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <div class="fixed bottom-4 inset-x-0 flex justify-center">
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-4 py-2 border border-ink/10 text-sm text-ink">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Tekan → untuk lanjut • Tekan ← untuk kembali
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') window.location.href = 'slide12_demo.html';
+        if (e.key === 'ArrowRight') window.location.href = 'slide14_kesimpulan.html';
+      });
+    </script>
+  </body>
+</html>

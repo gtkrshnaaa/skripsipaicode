@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Implementasi — Paicode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bgdom: '#E4E5FE',
+              primary: '#2C32C5',
+              accent2: '#E9C537',
+              ink: '#252525'
+            },
+            fontFamily: {
+              display: ['Unbounded','system-ui','sans-serif'],
+              sans: ['Inter','ui-sans-serif','system-ui']
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #E4E5FE;
+        background-image:
+          radial-gradient(circle at 20% 10%, rgba(44,50,197,0.10) 0, rgba(44,50,197,0.0) 40%),
+          radial-gradient(circle at 80% 0%, rgba(233,197,55,0.14) 0, rgba(233,197,55,0.0) 35%),
+          repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px),
+          repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px);
+      }
+    </style>
+  </head>
+  <body class="font-sans text-ink">
+    <main class="min-h-screen grid place-items-center px-6 py-10">
+      <section class="w-full max-w-6xl rounded-3xl bg-white/70 border border-ink/10 shadow-lg p-10">
+        <div class="mb-6">
+          <span class="inline-flex items-center rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-semibold">Slide 11/16 • Implementasi</span>
+        </div>
+        
+        <h1 class="font-display font-extrabold text-5xl tracking-tight text-ink mb-6">Implementasi</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+            <h3 class="font-semibold text-primary mb-2">💻 Teknologi</h3>
+            <ul class="space-y-1 text-sm text-ink/80">
+              <li>• <strong>Python</strong> ≥ 3.10</li>
+              <li>• <strong>Setuptools</strong> untuk packaging</li>
+              <li>• <strong>Gemini API</strong> (google-generativeai ≥ 0.5.4)</li>
+              <li>• <strong>Rich</strong> ≥ 13.7.1 untuk TUI</li>
+              <li>• <strong>prompt_toolkit</strong> (opsional)</li>
+              <li>• <strong>Pygments</strong> ≥ 2.16.0</li>
+              <li>• <strong>python-dotenv</strong> ≥ 1.0.1</li>
+            </ul>
+          </div>
+          
+          <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+            <h3 class="font-semibold text-primary mb-2">📦 Instalasi</h3>
+            <div class="space-y-2">
+              <div class="bg-ink/5 p-3 rounded-lg font-mono text-xs">
+                <div class="text-ink/60"># Clone repository</div>
+                <div>git clone &lt;repo&gt;</div>
+                <div>cd paicode</div>
+              </div>
+              <div class="bg-ink/5 p-3 rounded-lg font-mono text-xs">
+                <div class="text-ink/60"># Install dengan make</div>
+                <div>make install</div>
+                <div>make install-cli</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 p-5 border border-primary/30">
+            <h3 class="font-semibold text-ink mb-2">🔑 Konfigurasi API Key</h3>
+            <div class="bg-ink/5 p-3 rounded-lg font-mono text-xs space-y-1">
+              <div class="text-ink/60"># Tambah API key</div>
+              <div>pai config add primary &lt;KEY_1&gt;</div>
+              <div>pai config add secondary &lt;KEY_2&gt;</div>
+              <div class="mt-2 text-ink/60"># Set default</div>
+              <div>pai config set-default primary</div>
+              <div class="mt-2 text-ink/60"># List semua key</div>
+              <div>pai config list</div>
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-r from-accent2/10 to-accent2/5 p-5 border border-accent2/30">
+            <h3 class="font-semibold text-ink mb-2">🚀 Menjalankan</h3>
+            <div class="bg-ink/5 p-3 rounded-lg font-mono text-xs space-y-1">
+              <div class="text-ink/60"># Default</div>
+              <div>pai</div>
+              <div class="mt-2 text-ink/60"># Dengan opsi</div>
+              <div>pai --model gemini-2.5-flash \</div>
+              <div>    --temperature 0.3</div>
+              <div class="mt-2 text-ink/60"># Dengan env vars</div>
+              <div>export PAI_MODEL="gemini-2.5-flash"</div>
+              <div>export PAI_MODIFY_THRESHOLD="500"</div>
+              <div>pai</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-6 rounded-2xl bg-bgdom p-5 border border-ink/10">
+          <h3 class="font-semibold text-ink mb-3">📋 Perintah yang Tersedia</h3>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs font-mono">
+            <code class="bg-primary/10 text-primary px-2 py-1 rounded text-center">MKDIR</code>
+            <code class="bg-primary/10 text-primary px-2 py-1 rounded text-center">TOUCH</code>
+            <code class="bg-primary/10 text-primary px-2 py-1 rounded text-center">READ</code>
+            <code class="bg-primary/10 text-primary px-2 py-1 rounded text-center">WRITE</code>
+            <code class="bg-primary/10 text-primary px-2 py-1 rounded text-center">MODIFY</code>
+            <code class="bg-primary/10 text-primary px-2 py-1 rounded text-center">RM</code>
+            <code class="bg-primary/10 text-primary px-2 py-1 rounded text-center">MV</code>
+            <code class="bg-primary/10 text-primary px-2 py-1 rounded text-center">TREE</code>
+            <code class="bg-primary/10 text-primary px-2 py-1 rounded text-center">LIST_PATH</code>
+            <code class="bg-primary/10 text-primary px-2 py-1 rounded text-center">FINISH</code>
+          </div>
+        </div>
+        
+        <div class="mt-6 rounded-2xl bg-blue-50 p-5 border border-blue-300">
+          <h3 class="font-semibold text-blue-900 mb-2">💡 Tips Penggunaan</h3>
+          <ul class="space-y-1 text-sm text-blue-800">
+            <li>• <strong>Ctrl+C sekali</strong>: stop respons AI (sesi tetap aktif)</li>
+            <li>• <strong>Ctrl+C dua kali</strong>: keluar dari sesi</li>
+            <li>• Ketik <code class="bg-blue-200 px-1 rounded">y/yes/lanjut</code> untuk auto-continue</li>
+            <li>• Ketik <code class="bg-blue-200 px-1 rounded">exit/quit</code> untuk mengakhiri</li>
+            <li>• Session log tersimpan di <code class="bg-blue-200 px-1 rounded">.pai_history/</code></li>
+          </ul>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="slide10_path_security.html" class="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 19L9 12l7-7"/></svg>
+            Sebelumnya
+          </a>
+          <a href="slide12_demo.html" class="inline-flex items-center gap-2 rounded-full bg-accent2 text-ink px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <span>Berikutnya</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7-11-7Z"/></svg>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <div class="fixed bottom-4 inset-x-0 flex justify-center">
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-4 py-2 border border-ink/10 text-sm text-ink">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Tekan → untuk lanjut • Tekan ← untuk kembali
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') window.location.href = 'slide10_path_security.html';
+        if (e.key === 'ArrowRight') window.location.href = 'slide12_demo.html';
+      });
+    </script>
+  </body>
+</html>

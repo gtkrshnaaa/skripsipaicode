@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Saran Pengembangan — Paicode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bgdom: '#E4E5FE',
+              primary: '#2C32C5',
+              accent2: '#E9C537',
+              ink: '#252525'
+            },
+            fontFamily: {
+              display: ['Unbounded','system-ui','sans-serif'],
+              sans: ['Inter','ui-sans-serif','system-ui']
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #E4E5FE;
+        background-image:
+          radial-gradient(circle at 20% 10%, rgba(44,50,197,0.10) 0, rgba(44,50,197,0.0) 40%),
+          radial-gradient(circle at 80% 0%, rgba(233,197,55,0.14) 0, rgba(233,197,55,0.0) 35%),
+          repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px),
+          repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px);
+      }
+    </style>
+  </head>
+  <body class="font-sans text-ink">
+    <main class="min-h-screen grid place-items-center px-6 py-10">
+      <section class="w-full max-w-6xl rounded-3xl bg-white/70 border border-ink/10 shadow-lg p-10">
+        <div class="mb-6">
+          <span class="inline-flex items-center rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-semibold">Slide 15/16 • Penutup</span>
+        </div>
+        
+        <h1 class="font-display font-extrabold text-5xl tracking-tight text-ink mb-6">Saran Pengembangan Lanjutan</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 p-5 border border-blue-300">
+            <h3 class="font-bold text-blue-900 mb-2">🌐 Dukungan Multi-LLM</h3>
+            <p class="text-sm text-blue-800">Menambahkan opsi pemilihan model dan penyedia LLM alternatif (OpenAI GPT, Anthropic Claude, Llama, dll.) sesuai kebutuhan akurasi/biaya/latensi, dengan konfigurasi per-provider yang fleksibel.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 p-5 border border-purple-300">
+            <h3 class="font-bold text-purple-900 mb-2">⚡ Optimasi Thinking Phase</h3>
+            <p class="text-sm text-purple-800">Mengembangkan mekanisme caching untuk hasil penalaran yang serupa, mengurangi waktu respons untuk tugas berulang.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-green-50 to-green-100 p-5 border border-green-300">
+            <h3 class="font-bold text-green-900 mb-2">🧪 Peningkatan Integrity Check</h3>
+            <p class="text-sm text-green-800">Menambahkan automated testing (unit test, integration test) sebagai bagian dari integrity check untuk verifikasi kualitas yang lebih objektif.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-yellow-50 to-yellow-100 p-5 border border-yellow-300">
+            <h3 class="font-bold text-yellow-900 mb-2">🔌 Integrasi Editor</h3>
+            <p class="text-sm text-yellow-800">Menyediakan jembatan ringan ke IDE (mis. VS Code extension, Neovim plugin) yang memanggil agen CLI, sambil tetap menegaskan bahwa inferensi LLM dilakukan via API.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-red-50 to-red-100 p-5 border border-red-300">
+            <h3 class="font-bold text-red-900 mb-2">🔒 Peningkatan Keamanan</h3>
+            <p class="text-sm text-red-800">Memperluas kebijakan allow/deny list path, menambah konfirmasi eksplisit untuk operasi berisiko (mis. RM), dan memperketat validasi konten sebelum penulisan berkas.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-indigo-50 to-indigo-100 p-5 border border-indigo-300">
+            <h3 class="font-bold text-indigo-900 mb-2">🧠 Memori Jangka Panjang</h3>
+            <p class="text-sm text-indigo-800">Menambahkan ringkasan sesi dan penyimpanan konteks terkurasi (vector database) agar agen dapat mempelajari preferensi proyek pengguna secara berkelanjutan.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-pink-50 to-pink-100 p-5 border border-pink-300">
+            <h3 class="font-bold text-pink-900 mb-2">👥 Fitur Kolaborasi</h3>
+            <p class="text-sm text-pink-800">Menambahkan dukungan untuk sesi multi-user dengan shared context, memungkinkan tim untuk bekerja bersama dengan agen.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-teal-50 to-teal-100 p-5 border border-teal-300">
+            <h3 class="font-bold text-teal-900 mb-2">📊 Adaptive Threshold</h3>
+            <p class="text-sm text-teal-800">Mengembangkan sistem yang secara otomatis menyesuaikan threshold modifikasi (PAI_MODIFY_THRESHOLD) berdasarkan ukuran file dan kompleksitas perubahan.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100 p-5 border border-orange-300">
+            <h3 class="font-bold text-orange-900 mb-2">📈 Evaluasi Kuantitatif</h3>
+            <p class="text-sm text-orange-800">Melakukan pengujian terstandardisasi dengan skenario lebih beragam, termasuk proyek nyata berskala kecil-menengah, untuk memperoleh gambaran dampak produktivitas yang lebih komprehensif.</p>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-cyan-50 to-cyan-100 p-5 border border-cyan-300">
+            <h3 class="font-bold text-cyan-900 mb-2">📱 Dashboard Monitoring</h3>
+            <p class="text-sm text-cyan-800">Menambahkan dashboard web untuk memantau penggunaan API key, statistik sesi, skor kualitas rata-rata, dan metrik performa lainnya.</p>
+          </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="slide14_kesimpulan.html" class="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 19L9 12l7-7"/></svg>
+            Sebelumnya
+          </a>
+          <a href="slide16_penutup.html" class="inline-flex items-center gap-2 rounded-full bg-accent2 text-ink px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <span>Berikutnya</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7-11-7Z"/></svg>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <div class="fixed bottom-4 inset-x-0 flex justify-center">
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-4 py-2 border border-ink/10 text-sm text-ink">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Tekan → untuk lanjut • Tekan ← untuk kembali
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') window.location.href = 'slide14_kesimpulan.html';
+        if (e.key === 'ArrowRight') window.location.href = 'slide16_penutup.html';
+      });
+    </script>
+  </body>
+</html>

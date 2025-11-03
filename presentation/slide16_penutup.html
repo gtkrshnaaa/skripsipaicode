@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Terima Kasih — Paicode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bgdom: '#E4E5FE',
+              primary: '#2C32C5',
+              accent2: '#E9C537',
+              ink: '#252525'
+            },
+            fontFamily: {
+              display: ['Unbounded','system-ui','sans-serif'],
+              sans: ['Inter','ui-sans-serif','system-ui']
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #E4E5FE;
+        background-image:
+          radial-gradient(circle at 20% 10%, rgba(44,50,197,0.10) 0, rgba(44,50,197,0.0) 40%),
+          radial-gradient(circle at 80% 0%, rgba(233,197,55,0.14) 0, rgba(233,197,55,0.0) 35%),
+          repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px),
+          repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px);
+      }
+    </style>
+  </head>
+  <body class="font-sans text-ink">
+    <main class="min-h-screen grid place-items-center px-6 py-10">
+      <section class="w-full max-w-6xl rounded-3xl bg-white/70 border border-ink/10 shadow-lg p-12">
+        <div class="text-center">
+          <!-- Icon -->
+          <div class="inline-flex h-24 w-24 rounded-3xl bg-primary/10 items-center justify-center border border-primary/20 mb-6">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-primary">
+              <path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          
+          <!-- Title -->
+          <h1 class="font-display font-extrabold leading-none text-6xl sm:text-7xl tracking-tight bg-gradient-to-r from-primary to-ink bg-clip-text text-transparent mb-4">
+            Terima Kasih
+          </h1>
+          <p class="text-2xl font-semibold text-ink/80 mb-8">
+            Sesi Tanya Jawab
+          </p>
+          
+          <!-- Summary Box -->
+          <div class="max-w-3xl mx-auto mb-8">
+            <div class="rounded-2xl bg-gradient-to-r from-primary/10 to-accent2/10 p-6 border border-primary/20">
+              <h3 class="font-bold text-ink mb-3">📌 Ringkasan Kontribusi</h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div class="text-center">
+                  <div class="text-3xl font-bold text-primary mb-1">8-Step</div>
+                  <div class="text-ink/70">Workflow terstruktur</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-3xl font-bold text-primary mb-1">30%</div>
+                  <div class="text-ink/70">Pengurangan error</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-3xl font-bold text-primary mb-1">40%</div>
+                  <div class="text-ink/70">Percepatan workflow</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Contact Info -->
+          <div class="space-y-2 mb-8">
+            <p class="text-lg font-semibold text-ink">gtkrshnaaa</p>
+            <p class="text-ink/70">Program Studi Teknik Informatika</p>
+            <p class="text-ink/70">Universitas Teknologi Digital Indonesia</p>
+          </div>
+          
+          <!-- Key Features Recap -->
+          <div class="max-w-2xl mx-auto mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+              <div class="rounded-lg bg-bgdom p-3 border border-ink/10">
+                <div class="font-semibold text-primary">Multi-API Key</div>
+              </div>
+              <div class="rounded-lg bg-bgdom p-3 border border-ink/10">
+                <div class="font-semibold text-primary">Thinking Phase</div>
+              </div>
+              <div class="rounded-lg bg-bgdom p-3 border border-ink/10">
+                <div class="font-semibold text-primary">Integrity Check</div>
+              </div>
+              <div class="rounded-lg bg-bgdom p-3 border border-ink/10">
+                <div class="font-semibold text-primary">Path Security</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Navigation -->
+          <div class="flex flex-wrap justify-center gap-3">
+            <a href="slide15_saran.html" class="inline-flex items-center gap-2 rounded-full bg-ink text-white px-6 py-3 text-base font-semibold hover:opacity-90 transition">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 19L9 12l7-7"/></svg>
+              <span>Kembali</span>
+            </a>
+            <a href="slide01_cover.html" class="inline-flex items-center gap-2 rounded-full bg-primary text-white px-6 py-3 text-base font-semibold hover:opacity-90 transition">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12h18M3 12l6-6M3 12l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Ke Awal</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <div class="fixed bottom-4 inset-x-0 flex justify-center">
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-4 py-2 border border-ink/10 text-sm text-ink">
+        <span class="text-primary">●</span>
+        Slide 16/16 • Selesai
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') window.location.href = 'slide15_saran.html';
+        if (e.key === 'ArrowRight') window.location.href = 'slide01_cover.html';
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo & Skenario — Paicode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bgdom: '#E4E5FE',
+              primary: '#2C32C5',
+              accent2: '#E9C537',
+              ink: '#252525'
+            },
+            fontFamily: {
+              display: ['Unbounded','system-ui','sans-serif'],
+              sans: ['Inter','ui-sans-serif','system-ui']
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #E4E5FE;
+        background-image:
+          radial-gradient(circle at 20% 10%, rgba(44,50,197,0.10) 0, rgba(44,50,197,0.0) 40%),
+          radial-gradient(circle at 80% 0%, rgba(233,197,55,0.14) 0, rgba(233,197,55,0.0) 35%),
+          repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px),
+          repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 60px);
+      }
+    </style>
+  </head>
+  <body class="font-sans text-ink">
+    <main class="min-h-screen grid place-items-center px-6 py-10">
+      <section class="w-full max-w-6xl rounded-3xl bg-white/70 border border-ink/10 shadow-lg p-10">
+        <div class="mb-6">
+          <span class="inline-flex items-center rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-semibold">Slide 12/16 • Demo</span>
+        </div>
+        
+        <h1 class="font-display font-extrabold text-5xl tracking-tight text-ink mb-6">Demo & Skenario Pengujian</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <div class="rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-5 border border-primary/30">
+            <h3 class="font-bold text-ink mb-2">📁 Skenario 1: Pembuatan Proyek</h3>
+            <p class="text-sm text-ink/80 mb-2">Agen membuat struktur proyek Python sederhana (direktori, file, README)</p>
+            <div class="text-xs text-ink/60">
+              <strong>Perintah:</strong> MKDIR, TOUCH, WRITE, TREE
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-5 border border-primary/30">
+            <h3 class="font-bold text-ink mb-2">📖 Skenario 2: Pembacaan Kode</h3>
+            <p class="text-sm text-ink/80 mb-2">Agen menampilkan isi file sumber dan menjelaskan ringkas</p>
+            <div class="text-xs text-ink/60">
+              <strong>Perintah:</strong> READ, LIST_PATH
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-accent2/20 to-accent2/10 p-5 border border-accent2/40">
+            <h3 class="font-bold text-ink mb-2">✏️ Skenario 3: Modifikasi Terarah</h3>
+            <p class="text-sm text-ink/80 mb-2">Agen menerapkan perubahan kecil pada fungsi (diff-based, max 500 baris)</p>
+            <div class="text-xs text-ink/60">
+              <strong>Perintah:</strong> READ, MODIFY (dengan thinking & integrity check)
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-accent2/20 to-accent2/10 p-5 border border-accent2/40">
+            <h3 class="font-bold text-ink mb-2">🔧 Skenario 4: Refactoring Ringan</h3>
+            <p class="text-sm text-ink/80 mb-2">Agen memecah fungsi panjang menjadi beberapa fungsi kecil</p>
+            <div class="text-xs text-ink/60">
+              <strong>Perintah:</strong> READ, MODIFY (multiple iterations)
+            </div>
+          </div>
+          
+          <div class="rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-5 border border-primary/30">
+            <h3 class="font-bold text-ink mb-2">📝 Skenario 5: Dokumentasi</h3>
+            <p class="text-sm text-ink/80 mb-2">Agen menulis docstring/README singkat</p>
+            <div class="text-xs text-ink/60">
+              <strong>Perintah:</strong> READ, WRITE, MODIFY
+            </div>
+          </div>
+        </div>
+        
+        <div class="rounded-2xl bg-bgdom p-6 border border-ink/10 mb-6">
+          <h3 class="font-semibold text-ink mb-3">🎬 Contoh Interaksi</h3>
+          <div class="bg-ink/5 p-4 rounded-lg font-mono text-sm space-y-2">
+            <div><span class="text-primary">$</span> pai</div>
+            <div><span class="text-accent2">&gt;</span> buatkan proyek python sederhana: BMI Calculator</div>
+            <div class="text-ink/60"># Agen: Intent Classification → Task → Thinking → Execute</div>
+            <div class="text-ink/60"># MKDIR bmi_calculator</div>
+            <div class="text-ink/60"># TOUCH bmi_calculator/main.py</div>
+            <div class="text-ink/60"># WRITE bmi_calculator/main.py::...</div>
+            <div class="text-ink/60"># Integrity Check: PASS (Quality: 8/10)</div>
+            <div class="mt-2"><span class="text-accent2">&gt;</span> tampilkan struktur</div>
+            <div class="text-ink/60"># TREE bmi_calculator</div>
+            <div class="mt-2"><span class="text-accent2">&gt;</span> tampilkan isi kode sumber</div>
+            <div class="text-ink/60"># READ bmi_calculator/main.py</div>
+          </div>
+        </div>
+        
+        <div class="rounded-2xl bg-gradient-to-r from-green-50 to-green-100 p-5 border border-green-300">
+          <h3 class="font-semibold text-green-900 mb-2">📊 Metrik yang Diukur</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-green-800">
+            <div>⏱️ <strong>Waktu</strong> penyelesaian</div>
+            <div>📈 <strong>Jumlah langkah</strong> perintah</div>
+            <div>✅ <strong>Keberhasilan</strong> build/run</div>
+            <div>🔒 <strong>Kepatuhan</strong> path security</div>
+            <div>📏 <strong>Ukuran perubahan</strong> (diff)</div>
+            <div>⭐ <strong>Skor kualitas</strong> (1-10)</div>
+            <div>🎯 <strong>Efektivitas</strong> thinking phase</div>
+            <div>⚡ <strong>Percepatan</strong> auto-continue</div>
+          </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="slide11_implementasi.html" class="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 19L9 12l7-7"/></svg>
+            Sebelumnya
+          </a>
+          <a href="slide13_hasil_evaluasi.html" class="inline-flex items-center gap-2 rounded-full bg-accent2 text-ink px-4 py-2 text-sm font-semibold hover:opacity-90">
+            <span>Berikutnya</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7-11-7Z"/></svg>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <div class="fixed bottom-4 inset-x-0 flex justify-center">
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-4 py-2 border border-ink/10 text-sm text-ink">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Tekan → untuk lanjut • Tekan ← untuk kembali
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') window.location.href = 'slide11_implementasi.html';
+        if (e.key === 'ArrowRight') window.location.href = 'slide13_hasil_evaluasi.html';
+      });
+    </script>
+  </body>
+</html>
