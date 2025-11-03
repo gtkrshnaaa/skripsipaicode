@@ -38,50 +38,53 @@
     </style>
   </head>
   <body class="font-sans text-ink">
-    <main class="min-h-screen grid place-items-center px-6 py-10">
-      <section class="w-full max-w-6xl rounded-3xl bg-white/70 border border-ink/10 shadow-lg p-10">
-        <div class="mb-6">
+    <main class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+      <section class="w-full max-w-6xl rounded-2xl sm:rounded-3xl bg-white/70 border border-ink/10 shadow-lg p-5 sm:p-8 lg:p-10">
+        <div class="mb-4 sm:mb-6">
           <span class="inline-flex items-center rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-semibold">Slide 10/16 • Keamanan</span>
         </div>
         
-        <h1 class="font-display font-extrabold text-5xl tracking-tight text-ink mb-6">Path Security & Diff-Aware Modify</h1>
+        <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight text-ink mb-4 sm:mb-6">Path Security & Diff-Aware Modify</h1>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Path Security -->
           <div class="space-y-4">
-            <h2 class="text-2xl font-bold text-ink">🔒 Path Security</h2>
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-6 h-6 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <h2 class="text-xl sm:text-2xl font-bold text-ink">Path Security</h2>
+            </div>
             
-            <div class="rounded-2xl bg-red-50 p-5 border border-red-300">
+            <div class="rounded-xl sm:rounded-2xl bg-red-50 p-4 sm:p-5 border border-red-300">
               <h3 class="font-semibold text-red-900 mb-2">Deny-List Direktori Sensitif</h3>
               <div class="space-y-1 text-sm text-red-800">
                 <div class="flex items-center gap-2">
-                  <span class="text-red-600">❌</span>
+                  <svg class="w-4 h-4 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                   <code class="bg-red-200 px-2 py-0.5 rounded">.env</code>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="text-red-600">❌</span>
+                  <svg class="w-4 h-4 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                   <code class="bg-red-200 px-2 py-0.5 rounded">.git</code>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="text-red-600">❌</span>
+                  <svg class="w-4 h-4 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                   <code class="bg-red-200 px-2 py-0.5 rounded">venv</code>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="text-red-600">❌</span>
+                  <svg class="w-4 h-4 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                   <code class="bg-red-200 px-2 py-0.5 rounded">__pycache__</code>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="text-red-600">❌</span>
+                  <svg class="w-4 h-4 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                   <code class="bg-red-200 px-2 py-0.5 rounded">.pai_history</code>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="text-red-600">❌</span>
+                  <svg class="w-4 h-4 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                   <code class="bg-red-200 px-2 py-0.5 rounded">.idea, .vscode</code>
                 </div>
               </div>
             </div>
             
-            <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+            <div class="rounded-xl sm:rounded-2xl bg-bgdom p-4 sm:p-5 border border-ink/10">
               <h3 class="font-semibold text-ink mb-2">Alur Validasi</h3>
               <ol class="space-y-2 text-sm text-ink/80">
                 <li class="flex items-start gap-2">
@@ -106,9 +109,12 @@
           
           <!-- Diff-Aware Modify -->
           <div class="space-y-4">
-            <h2 class="text-2xl font-bold text-ink">📝 Diff-Aware Modify</h2>
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-6 h-6 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <h2 class="text-xl sm:text-2xl font-bold text-ink">Diff-Aware Modify</h2>
+            </div>
             
-            <div class="rounded-2xl bg-green-50 p-5 border border-green-300">
+            <div class="rounded-xl sm:rounded-2xl bg-green-50 p-4 sm:p-5 border border-green-300">
               <h3 class="font-semibold text-green-900 mb-2">Pembatasan Perubahan</h3>
               <div class="space-y-2 text-sm text-green-800">
                 <div class="flex items-center justify-between">
@@ -125,7 +131,7 @@
               </div>
             </div>
             
-            <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+            <div class="rounded-xl sm:rounded-2xl bg-bgdom p-4 sm:p-5 border border-ink/10">
               <h3 class="font-semibold text-ink mb-2">Mekanisme Two-Phase</h3>
               <ol class="space-y-2 text-sm text-ink/80">
                 <li class="flex items-start gap-2">
@@ -147,36 +153,39 @@
               </ol>
             </div>
             
-            <div class="rounded-2xl bg-blue-50 p-5 border border-blue-300">
-              <h3 class="font-semibold text-blue-900 mb-2">✨ Keunggulan</h3>
+            <div class="rounded-xl sm:rounded-2xl bg-blue-50 p-4 sm:p-5 border border-blue-300">
+              <div class="flex items-center gap-2 mb-2">
+                <svg class="w-5 h-5 text-blue-900" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <h3 class="font-semibold text-blue-900">Keunggulan</h3>
+              </div>
               <ul class="space-y-1 text-sm text-blue-800">
-                <li>✓ Mencegah penimpaan berkas besar</li>
-                <li>✓ Mendorong perubahan fokus & minimal</li>
-                <li>✓ Surgical approach seperti Cascade</li>
-                <li>✓ Retry otomatis jika terlalu besar</li>
+                <li class="flex items-start gap-2"><svg class="w-4 h-4 text-green-700 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Mencegah penimpaan berkas besar</span></li>
+                <li class="flex items-start gap-2"><svg class="w-4 h-4 text-green-700 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Mendorong perubahan fokus & minimal</span></li>
+                <li class="flex items-start gap-2"><svg class="w-4 h-4 text-green-700 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Surgical approach seperti Cascade</span></li>
+                <li class="flex items-start gap-2"><svg class="w-4 h-4 text-green-700 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Retry otomatis jika terlalu besar</span></li>
               </ul>
             </div>
           </div>
         </div>
         
         <!-- Navigation -->
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="slide09_fitur_utama.html" class="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 text-sm font-semibold hover:opacity-90">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 19L9 12l7-7"/></svg>
+        <div class="mt-6 sm:mt-8 flex flex-wrap gap-3">
+          <a href="slide09_fitur_utama.html" class="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 text-xs sm:text-sm font-semibold hover:opacity-90 transition">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 19L9 12l7-7"/></svg>
             Sebelumnya
           </a>
-          <a href="slide11_implementasi.html" class="inline-flex items-center gap-2 rounded-full bg-accent2 text-ink px-4 py-2 text-sm font-semibold hover:opacity-90">
+          <a href="slide11_implementasi.html" class="inline-flex items-center gap-2 rounded-full bg-accent2 text-ink px-4 py-2 text-xs sm:text-sm font-semibold hover:opacity-90 transition">
             <span>Berikutnya</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7-11-7Z"/></svg>
+            <svg class="w-3 h-3 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7-11-7Z"/></svg>
           </a>
         </div>
       </section>
     </main>
 
-    <div class="fixed bottom-4 inset-x-0 flex justify-center">
-      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-4 py-2 border border-ink/10 text-sm text-ink">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        Tekan → untuk lanjut • Tekan ← untuk kembali
+    <div class="fixed bottom-3 sm:bottom-4 inset-x-0 flex justify-center px-4">
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-3 sm:px-4 py-1.5 sm:py-2 border border-ink/10 text-xs sm:text-sm text-ink shadow-sm">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="hidden sm:inline">Tekan → untuk lanjut • Tekan ← untuk kembali</span><span class="sm:hidden">Swipe atau tekan →</span>
       </div>
     </div>
 

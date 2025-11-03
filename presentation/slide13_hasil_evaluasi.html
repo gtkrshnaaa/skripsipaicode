@@ -38,9 +38,9 @@
     </style>
   </head>
   <body class="font-sans text-ink">
-    <main class="min-h-screen grid place-items-center px-6 py-10">
-      <section class="w-full max-w-6xl rounded-3xl bg-white/70 border border-ink/10 shadow-lg p-10">
-        <div class="mb-6">
+    <main class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+      <section class="w-full max-w-6xl rounded-2xl sm:rounded-3xl bg-white/70 border border-ink/10 shadow-lg p-5 sm:p-8 lg:p-10">
+        <div class="mb-4 sm:mb-6">
           <span class="inline-flex items-center rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-semibold">Slide 13/16 • Hasil ⭐ KUNCI</span>
         </div>
         
@@ -49,19 +49,19 @@
         
         <!-- Key Metrics -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div class="rounded-2xl bg-gradient-to-br from-green-50 to-green-100 p-6 border border-green-300">
+          <div class="rounded-xl sm:rounded-2xl bg-gradient-to-br from-green-50 to-green-100 p-6 border border-green-300">
             <div class="text-4xl font-bold text-green-700 mb-1">30%</div>
             <div class="text-sm font-semibold text-green-900">Pengurangan Error</div>
             <p class="text-xs text-green-700 mt-2">Thinking phase membantu LLM merencanakan pendekatan yang lebih fokus dan surgical</p>
           </div>
           
-          <div class="rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 p-6 border border-blue-300">
+          <div class="rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 p-6 border border-blue-300">
             <div class="text-4xl font-bold text-blue-700 mb-1">40%</div>
             <div class="text-sm font-semibold text-blue-900">Percepatan Workflow</div>
             <p class="text-xs text-blue-700 mt-2">Auto-continue mempercepat alur kerja untuk tugas multi-langkah yang sudah direncanakan</p>
           </div>
           
-          <div class="rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 p-6 border border-purple-300">
+          <div class="rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 p-6 border border-purple-300">
             <div class="text-4xl font-bold text-purple-700 mb-1">7.5/10</div>
             <div class="text-sm font-semibold text-purple-900">Rata-rata Skor Kualitas</div>
             <p class="text-xs text-purple-700 mt-2">Integrity check memberikan feedback langsung tentang kualitas hasil eksekusi</p>
@@ -70,7 +70,7 @@
         
         <!-- Detailed Results -->
         <div class="space-y-4">
-          <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+          <div class="rounded-xl sm:rounded-2xl bg-bgdom p-4 sm:p-5 border border-ink/10">
             <h3 class="font-semibold text-ink mb-3 flex items-center gap-2">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               8-Step Workflow
@@ -78,7 +78,7 @@
             <p class="text-sm text-ink/80">Memberikan struktur yang <strong>jelas, terukur, dan dapat diaudit</strong> untuk setiap tugas pemrograman. Setiap langkah memiliki tujuan spesifik dan output yang terverifikasi.</p>
           </div>
           
-          <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+          <div class="rounded-xl sm:rounded-2xl bg-bgdom p-4 sm:p-5 border border-ink/10">
             <h3 class="font-semibold text-ink mb-3 flex items-center gap-2">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Pembatasan Diff (Max 500 Baris)
@@ -86,7 +86,7 @@
             <p class="text-sm text-ink/80">Efektif mencegah penimpaan berkas yang tidak diinginkan, dengan <strong>sistem retry otomatis</strong> jika modifikasi terlalu besar. Mendorong perubahan yang fokus dan minimal.</p>
           </div>
           
-          <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+          <div class="rounded-xl sm:rounded-2xl bg-bgdom p-4 sm:p-5 border border-ink/10">
             <h3 class="font-semibold text-ink mb-3 flex items-center gap-2">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Multi-API Key dengan Round-Robin
@@ -94,7 +94,7 @@
             <p class="text-sm text-ink/80">Meningkatkan <strong>keandalan sistem</strong> dan mengurangi downtime akibat rate limiting. Load balancing otomatis antar API key yang tersedia.</p>
           </div>
           
-          <div class="rounded-2xl bg-bgdom p-5 border border-ink/10">
+          <div class="rounded-xl sm:rounded-2xl bg-bgdom p-4 sm:p-5 border border-ink/10">
             <h3 class="font-semibold text-ink mb-3 flex items-center gap-2">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Session Logging & Interrupt Handling
@@ -104,8 +104,11 @@
         </div>
         
         <!-- Comparison Table -->
-        <div class="mt-6 rounded-2xl bg-gradient-to-r from-accent2/10 to-accent2/5 p-5 border border-accent2/30">
-          <h3 class="font-semibold text-ink mb-3">📊 Perbandingan dengan Proses Manual</h3>
+        <div class="mt-6 rounded-xl sm:rounded-2xl bg-gradient-to-r from-accent2/10 to-accent2/5 p-4 sm:p-5 border border-accent2/30">
+          <div class="flex items-center gap-2 mb-3">
+            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <h3 class="font-semibold text-ink">Perbandingan dengan Proses Manual</h3>
+          </div>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
@@ -141,23 +144,23 @@
         </div>
         
         <!-- Navigation -->
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="slide12_demo.html" class="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 text-sm font-semibold hover:opacity-90">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 19L9 12l7-7"/></svg>
+        <div class="mt-6 sm:mt-8 flex flex-wrap gap-3">
+          <a href="slide12_demo.html" class="inline-flex items-center gap-2 rounded-full bg-ink text-white px-4 py-2 text-xs sm:text-sm font-semibold hover:opacity-90 transition">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 19L9 12l7-7"/></svg>
             Sebelumnya
           </a>
-          <a href="slide14_kesimpulan.html" class="inline-flex items-center gap-2 rounded-full bg-accent2 text-ink px-4 py-2 text-sm font-semibold hover:opacity-90">
+          <a href="slide14_kesimpulan.html" class="inline-flex items-center gap-2 rounded-full bg-accent2 text-ink px-4 py-2 text-xs sm:text-sm font-semibold hover:opacity-90 transition">
             <span>Berikutnya</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7-11-7Z"/></svg>
+            <svg class="w-3 h-3 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7-11-7Z"/></svg>
           </a>
         </div>
       </section>
     </main>
 
-    <div class="fixed bottom-4 inset-x-0 flex justify-center">
-      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-4 py-2 border border-ink/10 text-sm text-ink">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        Tekan → untuk lanjut • Tekan ← untuk kembali
+    <div class="fixed bottom-3 sm:bottom-4 inset-x-0 flex justify-center px-4">
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-3 sm:px-4 py-1.5 sm:py-2 border border-ink/10 text-xs sm:text-sm text-ink shadow-sm">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="hidden sm:inline">Tekan → untuk lanjut • Tekan ← untuk kembali</span><span class="sm:hidden">Swipe atau tekan →</span>
       </div>
     </div>
 
