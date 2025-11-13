@@ -10,14 +10,14 @@ Arsitektur Paicode dirancang modular dan berlapis, dengan pembagian tanggung jaw
 
 \begin{itemize}
   \item \textbf{Antarmuka CLI (\texttt{cli.py})}: titik masuk perintah \texttt{pai} dan pengelola argumen (subperintah \texttt{auto}, \texttt{config}). Mendukung parameter \texttt{--model} dan \texttt{--temperature} untuk konfigurasi runtime LLM. Secara default, CLI memanggil sesi interaktif agen.
-  \item \textbf{Agen (\texttt{agent.py})}: mengimplementasikan \textit{Single-Shot Intelligence} yang mencakup: (1) klasifikasi intensi (\textit{chat} vs \textit{task}), (2) fase perencanaan untuk analisis mendalam, dan (3) fase eksekusi untuk implementasi cerdas dengan adaptasi dinamis. Menyediakan perintah: \texttt{MKDIR}, \texttt{TOUCH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{RM}, \texttt{MV}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{FINISH}. Mengelola memori percakapan dengan pencatatan sesi ke \texttt{.pai\_history}.
+  \item \textbf{Agen (\texttt{agent.py})}: mengimplementasikan \textit{Single-Shot Intelligence} yang mencakup: (1) klasifikasi intensi (\textit{chat} vs \textit{task}), (2) \textit{acknowledgment} dinamis, (3) fase perencanaan untuk analisis mendalam dalam format JSON, (4) fase eksekusi adaptif dengan 1-3 subfase berdasarkan kompleksitas, dan (5) saran langkah berikutnya. Menyediakan 10 perintah: \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{MKDIR}, \texttt{TOUCH}, \texttt{RM}, \texttt{MV}, \texttt{FINISH}. Mengelola memori percakapan dengan pencatatan sesi ke \texttt{.pai\_history}.
   \item \textbf{Jembatan LLM (\texttt{llm.py})}: menangani konfigurasi API Gemini dengan manajemen API key tunggal. Membersihkan output dari markdown artifacts, menyediakan status spinner saat LLM berpikir, dan mengoptimalkan penggunaan token dengan sistem 2-panggilan API.
   \item \textbf{Manajemen Konfigurasi (\texttt{config.py})}: menyimpan dan mengelola API key tunggal dalam format JSON di \texttt{~/.config/pai-code/credentials.json} dengan izin berkas 600. Mendukung operasi: \texttt{set}, \texttt{show}, \texttt{remove}, \texttt{validate}, dan migrasi otomatis dari sistem multi-key.
-  \item \textbf{Pengatur Workspace (\texttt{workspace.py})}: bertindak sebagai \emph{workspace controller} yang menyediakan fungsi-fungsi terpusat untuk menjalankan operasi tingkat-aplikasi pada ruang kerja proyek. Sebelum aksi dieksekusi, modul ini menegakkan kebijakan \textit{path security} (normalisasi, verifikasi akar, dan deny-list direktori sensitif). Sistem modifikasi berbasis \textit{diff} mencegah penimpaan berkas tidak diinginkan dengan atomic write menggunakan tempfile.
+  \item \textbf{Pengatur Workspace (\texttt{workspace.py})}: bertindak sebagai \emph{workspace controller} yang menyediakan fungsi-fungsi terpusat untuk menjalankan operasi tingkat-aplikasi pada ruang kerja proyek. Sebelum aksi dieksekusi, modul ini menegakkan kebijakan \textit{path security} (normalisasi, verifikasi akar, dan deny-list direktori sensitif). Sistem modifikasi berbasis \textit{diff} dengan threshold 500 baris (dapat dikonfigurasi) mencegah penimpaan berkas tidak diinginkan dengan atomic write menggunakan tempfile.
   \item \textbf{Tampilan Terminal (\texttt{ui.py})}: penyajian hasil eksekusi menggunakan \texttt{rich} (panel, warna, tabel, penyorotan sintaks, spinner status). Mendukung \texttt{prompt\_toolkit} (opsional) untuk input multiline yang lebih baik.
 \end{itemize}
 
-Alur data tipikal dengan \textit{Single-Shot Intelligence}: masukan pengguna (CLI) → klasifikasi intensi → konstruksi prompt (Agen) → fase perencanaan (panggilan LLM pertama) → fase eksekusi (panggilan LLM kedua) → pencatatan konteks sebagai memori percakapan.
+Alur data tipikal dengan \textit{Single-Shot Intelligence}: masukan pengguna (CLI) → klasifikasi intensi → \textit{acknowledgment} dinamis → fase perencanaan (analisis JSON) → fase eksekusi adaptif (1-3 subfase) → saran langkah berikutnya → pencatatan konteks sebagai memori percakapan.
 
 \section{Visualisasi Metodologi}
 Bagian ini menyajikan visualisasi konsep menggunakan tabel dan daftar terstruktur berbasis LaTeX.
@@ -34,10 +34,10 @@ Bagian ini menyajikan visualisasi konsep menggunakan tabel dan daftar terstruktu
   \midrule
   \endhead
   CLI (\texttt{cli.py}) & Titik masuk perintah, parsing argumen (\texttt{--model}, \texttt{--temperature}); memanggil sesi agen. Bergantung pada modul \texttt{agent}, \texttt{config}, dan \texttt{llm}. \\
-  Agen (\texttt{agent.py}) & Implementasi \textit{Single-Shot Intelligence}: klasifikasi intensi, fase perencanaan, dan fase eksekusi dalam 2 panggilan API. Mengelola memori percakapan, \textit{interrupt handling} (Ctrl+C), dan pencatatan sesi ke \texttt{.pai\_history}. Memanggil \texttt{llm}, \texttt{workspace}, \texttt{ui}. \\
+  Agen (\texttt{agent.py}) & Implementasi \textit{Single-Shot Intelligence}: klasifikasi intensi, \textit{acknowledgment} dinamis, fase perencanaan JSON, fase eksekusi adaptif (1-3 subfase), dan saran langkah berikutnya. Mengelola memori percakapan, \textit{interrupt handling} (Ctrl+C), dan pencatatan sesi ke \texttt{.pai\_history}. Menyediakan 10 perintah workspace. Memanggil \texttt{llm}, \texttt{workspace}, \texttt{ui}. \\
   LLM Bridge (\texttt{llm.py}) & Integrasi Gemini API (\texttt{google-generativeai}) dengan manajemen API key tunggal. Membersihkan markdown artifacts dari output LLM dan mengoptimalkan penggunaan token. Mengambil API key dari \texttt{config}. \\
   Konfigurasi (\texttt{config.py}) & Manajemen API key tunggal dalam format JSON di \texttt{~/.config/pai-code/credentials.json}. Operasi: \texttt{set}, \texttt{show}, \texttt{remove}, \texttt{validate}, dan migrasi otomatis dari sistem multi-key. \\
-  Pengatur Workspace (\texttt{workspace.py}) & \emph{Workspace controller} dengan fungsi operasi workspace (baca/tulis, buat/hapus/pindah, tree/list path). Sistem modifikasi berbasis \textit{diff} dengan atomic write. Penegakan \textit{path security} (normalisasi, verifikasi akar, deny-list). \\
+  Pengatur Workspace (\texttt{workspace.py}) & \emph{Workspace controller} dengan fungsi operasi workspace (baca/tulis, buat/hapus/pindah, tree/list path). Sistem modifikasi berbasis \textit{diff} dengan threshold 500 baris dan atomic write. Penegakan \textit{path security} (normalisasi, verifikasi akar, deny-list). \\
   Terminal UI (\texttt{ui.py}) & Komponen TUI berbasis \texttt{rich}: panel, tema, syntax highlighting, tabel, spinner. Dukungan opsional \texttt{prompt\_toolkit} untuk input multiline yang lebih baik. \\
   \bottomrule
 \end{longtable}
@@ -58,10 +58,10 @@ Pada Tabel~\ref{tab:diagram-modul} ditunjukkan komponen utama dan interkoneksiny
   1 & Pengguna & Memberikan tujuan/permintaan tingkat tinggi di terminal. \\
   2 & CLI & Meneruskan masukan ke agen; menyiapkan konteks sesi. \\
   3 & Agen & Melakukan klasifikasi intensi (\textit{chat} vs \textit{task}) menggunakan LLM. Jika \textit{chat}, langsung berikan respons dan kembali ke langkah 1. \\
-  4 & Agen & Memberikan respons awal singkat untuk mengakui permintaan pengguna. \\
-  5 & LLM & \textbf{Fase Perencanaan} (Panggilan API 1): Melakukan analisis mendalam dan menghasilkan perencanaan komprehensif. \\
-  6 & Agen & Memberikan respons sebelum eksekusi untuk menunjukkan kesiapan melaksanakan rencana. \\
-  7 & LLM & \textbf{Fase Eksekusi} (Panggilan API 2): Implementasi cerdas dengan adaptasi dinamis berdasarkan rencana. \\
+  4 & Agen & \textbf{Acknowledgment Dinamis}: Memberikan respons awal untuk mengakui dan memahami permintaan pengguna. \\
+  5 & LLM & \textbf{Fase Perencanaan}: Melakukan analisis mendalam dan menghasilkan perencanaan komprehensif dalam format JSON dengan detail eksekusi. \\
+  6 & Agen & Menampilkan hasil perencanaan dalam panel terstruktur dan memberikan konfirmasi sebelum eksekusi. \\
+  7 & LLM & \textbf{Fase Eksekusi Adaptif}: Menentukan jumlah subfase (1-3) berdasarkan kompleksitas, kemudian melaksanakan implementasi cerdas. \\
   8 & Workspace/UI & Menjalankan operasi berkas (\texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, dll.) dengan \textit{path security} dan sistem \textit{diff}-aware, menampilkan hasil di terminal. \\
   9 & Agen & Memberikan status akhir (sukses/gagal) dan saran langkah berikutnya jika diperlukan. \\
   10 & Agen & Mencatat seluruh interaksi ke \texttt{.pai\_history/session\_YYYYMMDD\_HHMMSS.log} sebagai memori (\emph{stateful}). \\
