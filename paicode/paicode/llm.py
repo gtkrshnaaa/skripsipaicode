@@ -1,5 +1,6 @@
 import os
 import warnings
+import time
 
 # Reduce noisy STDERR logs from gRPC/absl before importing Google SDKs.
 # These settings aim to suppress INFO/WARNING/ERROR logs emitted by native libs
@@ -22,7 +23,7 @@ warnings.filterwarnings("ignore", message=".*log messages before absl::Initializ
 import google.generativeai as genai
 from . import config, ui
 
-DEFAULT_MODEL = os.getenv("PAI_MODEL", "gemini-2.5-flash")
+DEFAULT_MODEL = os.getenv("PAI_MODEL", "gemini-2.5-flash-lite")
 try:
     DEFAULT_TEMPERATURE = float(os.getenv("PAI_TEMPERATURE", "0.3"))
     # Clamp temperature to safe range
@@ -41,105 +42,164 @@ _runtime = {
 }
 
 def set_runtime_model(model_name: str | None = None, temperature: float | None = None):
-    """Configure or reconfigure the GenerativeModel at runtime.
-
-    This reads the API key from config and constructs a new GenerativeModel
-    using the provided (or default) model name and temperature.
-    """
+    """Set the runtime model configuration."""
     global model, _runtime
-    # Only update the runtime preferred name/temperature; API key will be injected per call (round-robin)
-    try:
-        name = (model_name or DEFAULT_MODEL) or "gemini-2.5-flash"
-        temp = DEFAULT_TEMPERATURE if temperature is None else float(temperature)
-        # Clamp temperature to safe range
-        temp = max(0.0, min(2.0, temp))
-        _runtime["name"] = name
-        _runtime["temperature"] = temp
-        # (Re)build model object shell; API key is configured on each request
-        generation_config = {"temperature": temp}
-        model = genai.GenerativeModel(name, generation_config=generation_config)
-    except Exception as e:
-        ui.print_error(f"Failed to configure the generative AI model: {e}")
-        model = None
+    
+    # Update runtime settings
+    if model_name is not None:
+        _runtime["name"] = model_name
+    if temperature is not None:
+        temperature = max(0.0, min(2.0, temperature))
+        _runtime["temperature"] = temperature
+    
+    # Reset model so it gets recreated with new settings on next use
+    model = None
 
-# Initialize once on import with defaults
-set_runtime_model(DEFAULT_MODEL, DEFAULT_TEMPERATURE)
+# Initialize runtime settings (model will be created when needed)
+_runtime = {
+    "name": DEFAULT_MODEL,
+    "temperature": DEFAULT_TEMPERATURE
+}
 
 def _prepare_runtime() -> bool:
-    """Configure API key via round-robin and ensure model object exists."""
+    """Configure API key and ensure model object exists.
+    
+    Returns:
+        bool: True if successful, False otherwise.
+    """
     global model
-    # Try round-robin key first
-    pair = config.next_api_key()
-    api_key = None
-    if pair is not None:
-        _, api_key = pair
+    
+    # Get single API key
+    api_key = config.get_api_key()
+    
     if not api_key:
-        api_key = config.get_api_key()
-    if not api_key:
-        ui.print_error("Error: No API keys configured. Use `pai config add <ID> <API_KEY>`.")
+        ui.print_error("Error: No API key configured. Use 'pai config set <API_KEY>'.")
         model = None
         return False
+    
     try:
         genai.configure(api_key=api_key)
         if model is None:
-            # build model using stored runtime prefs
+            # Build model using stored runtime prefs
             name = _runtime.get("name") or DEFAULT_MODEL
             temp = _runtime.get("temperature") if _runtime.get("temperature") is not None else DEFAULT_TEMPERATURE
             generation_config = {"temperature": temp}
             model = genai.GenerativeModel(name, generation_config=generation_config)
         return True
     except Exception as e:
-        ui.print_error(f"Failed to set API key or build model: {e}")
+        ui.print_error(f"Failed to configure API key: {e}")
         model = None
         return False
 
-def generate_text(prompt: str) -> str:
-    """Sends a prompt to the Gemini API and returns the text response."""
-    if not _prepare_runtime():
-        return ""
+def _is_rate_limit_error(error: Exception) -> bool:
+    """Detect if an exception is a rate limit error.
+    
+    Args:
+        error: The exception to check
+        
+    Returns:
+        True if it's a rate limit error, False otherwise
+    """
+    error_msg = str(error).lower()
+    
+    # Common rate limit indicators
+    rate_limit_keywords = [
+        'rate limit', 'rate_limit', 'ratelimit',
+        'quota', 'quota exceeded',
+        'resource exhausted', 'resourceexhausted',
+        '429', 'too many requests',
+        'limit exceeded', 'requests per minute'
+    ]
+    
+    return any(keyword in error_msg for keyword in rate_limit_keywords)
 
+def _clean_response_text(text: str) -> str:
+    """Clean markdown artifacts from LLM response.
+    
+    Args:
+        text: Raw response text from LLM
+        
+    Returns:
+        Cleaned text without markdown code blocks
+    """
+    cleaned_text = text.strip()
+    
+    # Remove all common markdown code block patterns
+    code_block_prefixes = [
+        "```python", "```html", "```css", "```javascript", "```js",
+        "```typescript", "```ts", "```json", "```yaml", "```yml",
+        "```bash", "```sh", "```diff", "```xml", "```sql",
+        "```java", "```cpp", "```c", "```go", "```rust", "```ruby",
+        "```php", "```markdown", "```md", "```text", "```txt", "```"
+    ]
+    
+    for prefix in code_block_prefixes:
+        if cleaned_text.startswith(prefix):
+            cleaned_text = cleaned_text[len(prefix):].strip()
+            break
+    
+    # Remove trailing code block markers
+    if cleaned_text.endswith("```"):
+        cleaned_text = cleaned_text[:-len("```")].strip()
+    
+    # Remove any remaining language tags at the start
+    lines = cleaned_text.split('\n')
+    if lines and len(lines[0].strip()) < 20 and lines[0].strip().lower() in [
+        'html', 'css', 'javascript', 'js', 'python', 'json', 'yaml', 
+        'bash', 'sh', 'diff', 'xml', 'sql', 'java', 'cpp', 'c', 'go', 
+        'rust', 'ruby', 'php', 'markdown', 'md', 'text', 'txt', 'on'
+    ]:
+        cleaned_text = '\n'.join(lines[1:]).strip()
+    
+    return cleaned_text
+
+def generate_text(prompt: str, call_purpose: str = "thinking") -> str:
+    """
+    Generate text with single API key - optimized for 2-call system.
+    
+    Args:
+        prompt: The prompt to send to the LLM
+        call_purpose: Purpose of the call for logging (e.g., "planning", "execution")
+        
+    Returns:
+        The cleaned response text, or empty string if failed
+    """
+    global model
+    
+    # Ensure model is configured
+    if model is None:
+        if not _prepare_runtime():
+            return ""
+    
     try:
-        with ui.console.status("[bold yellow]Agent is thinking...", spinner="dots"):
+        # Show status with purpose
+        status_msg = f"[bold yellow]Agent {call_purpose}..."
+        
+        with ui.console.status(status_msg, spinner="dots"):
             response = model.generate_content(prompt)
         
-        # Clean the output from markdown code blocks if they exist
-        cleaned_text = response.text.strip()
+        # Success! Clean and return the response
+        cleaned_text = _clean_response_text(response.text)
         
-        # Remove all common markdown code block patterns
-        # Handle language-specific code blocks
-        code_block_prefixes = [
-            "```python", "```html", "```css", "```javascript", "```js",
-            "```typescript", "```ts", "```json", "```yaml", "```yml",
-            "```bash", "```sh", "```diff", "```xml", "```sql",
-            "```java", "```cpp", "```c", "```go", "```rust", "```ruby",
-            "```php", "```markdown", "```md", "```text", "```txt", "```"
-        ]
+        # Log token usage if available (for optimization)
+        if hasattr(response, 'usage_metadata'):
+            usage = response.usage_metadata
+            ui.print_info(f"Tokens: {usage.prompt_token_count} → {usage.candidates_token_count}")
         
-        for prefix in code_block_prefixes:
-            if cleaned_text.startswith(prefix):
-                cleaned_text = cleaned_text[len(prefix):].strip()
-                break
-        
-        # Remove trailing code block markers
-        if cleaned_text.endswith("```"):
-            cleaned_text = cleaned_text[:-len("```")].strip()
-        
-        # Remove any remaining language tags at the start (e.g., "html", "json")
-        lines = cleaned_text.split('\n')
-        if lines and len(lines[0].strip()) < 20 and lines[0].strip().lower() in [
-            'html', 'css', 'javascript', 'js', 'python', 'json', 'yaml', 
-            'bash', 'sh', 'diff', 'xml', 'sql', 'java', 'cpp', 'c', 'go', 
-            'rust', 'ruby', 'php', 'markdown', 'md', 'text', 'txt', 'on'
-        ]:
-            cleaned_text = '\n'.join(lines[1:]).strip()
-        
-        # Additional cleanup for markdown formatting in text
-        # Remove markdown bold/italic markers if they appear to be artifacts
-        if cleaned_text.count('**') > 0 or cleaned_text.count('*') > 10:
-            # This might be markdown formatting, but only clean if it looks excessive
-            pass  # Keep for now, as some legitimate content uses these
-            
         return cleaned_text
+        
     except Exception as e:
-        ui.print_error(f"Error: An issue occurred with the LLM API: {e}")
+        is_rate_limit = _is_rate_limit_error(e)
+        
+        if is_rate_limit:
+            ui.print_error("✗ Rate limit reached. Please wait a few minutes before trying again.")
+            ui.print_info("Consider using a different API key if available.")
+        else:
+            ui.print_error(f"✗ LLM API error: {e}")
+        
         return ""
+
+def test_api_connection() -> bool:
+    """Test if API connection works."""
+    test_response = generate_text("Say 'Hello' if you can hear me.", "connection test")
+    return len(test_response) > 0

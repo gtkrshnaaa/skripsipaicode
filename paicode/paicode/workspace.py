@@ -28,7 +28,7 @@ SENSITIVE_PATTERNS = {
     '.git', 
     'venv', 
     '__pycache__', 
-    '.pai_history', 
+    '.pai_history',  # Pai cannot access this directly - only for LLM context
     '.idea', 
     '.vscode'
 }
@@ -44,8 +44,8 @@ def _is_path_safe(path: str) -> bool:
         # 1. Normalize the path for consistency and strip whitespace
         norm_path = os.path.normpath(path.strip())
         
-        # 2. Reject empty paths after normalization
-        if not norm_path or norm_path in {'.', '..'}:
+        # 2. Reject empty paths after normalization, but allow '.' for current directory
+        if not norm_path or norm_path == '..':
             return False
         
         # 3. Check if the path tries to escape the root directory
@@ -163,7 +163,7 @@ def create_file(file_path: str) -> str:
         dir_name = os.path.dirname(full_path)
         if dir_name: os.makedirs(dir_name, exist_ok=True)
         with open(full_path, 'w') as f: pass
-        return f"Success: File created: {file_path}"
+        return f"Success: New empty file created: {file_path}"
     except IOError as e:
         return f"Error: Failed to create file: {e}"
 
@@ -200,7 +200,7 @@ def write_to_file(file_path: str, content: str) -> str:
         if dir_name: os.makedirs(dir_name, exist_ok=True)
         with open(full_path, 'w') as f:
             f.write(content)
-        return f"Success: Content successfully written to: {file_path}"
+        return f"Success: New file written: {file_path}"
     except IOError as e:
         return f"Error: Failed to write to file: {e}"
 
@@ -282,7 +282,7 @@ def apply_modification_with_patch(file_path: str, original_content: str, new_con
         message = (
             f"Warning: Modification for '{file_path}' rejected. "
             f"Change too large: {changed_lines_count} lines (~{ratio:.1%}) exceeds threshold {env_threshold} and ratio {max_ratio:.0%}.\n"
-            f"SOLUTION: Think like Professional Programmer - break this into focused, surgical modifications:\n"
+            f"SOLUTION: Think like Cascade - break this into focused, surgical modifications:\n"
             f"  - Focus on ONE specific area/feature at a time\n"
             f"  - Ideal: 100-200 lines per modification (very focused)\n"
             f"  - Acceptable: 200-500 lines (still focused on one area)\n"
@@ -302,6 +302,6 @@ def apply_modification_with_patch(file_path: str, original_content: str, new_con
             tmp.write(new_norm)
             tmp_name = tmp.name
         os.replace(tmp_name, full_path)
-        return True, f"Success: Applied modification to {file_path} ({changed_lines_count} lines changed; +{add_count}/-{del_count})."
+        return True, f"Success: File modified: {file_path} ({changed_lines_count} lines changed; +{add_count}/-{del_count})"
     except IOError as e:
         return False, f"Error: Failed to write modification to file: {e}"

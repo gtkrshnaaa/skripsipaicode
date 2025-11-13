@@ -1,44 +1,49 @@
+#!/usr/bin/env python
+
 import os
 import json
 import signal
 import threading
 from datetime import datetime
-from rich.prompt import Prompt
+from pathlib import Path
+from typing import Optional
+
+from rich.console import Console
 from rich.panel import Panel
-from rich.console import Group
 from rich.text import Text
 from rich.syntax import Syntax
-from rich.box import ROUNDED
 from rich.table import Table
-from . import llm, workspace, ui
-
+from rich.box import ROUNDED
 from pygments.lexers import get_lexer_for_filename
 from pygments.util import ClassNotFound
 
-# Try to import prompt_toolkit for better input experience
 try:
     from prompt_toolkit import PromptSession
-    from prompt_toolkit.key_binding import KeyBindings
-    from prompt_toolkit.keys import Keys
     PROMPT_TOOLKIT_AVAILABLE = True
 except ImportError:
     PROMPT_TOOLKIT_AVAILABLE = False
 
-HISTORY_DIR = ".pai_history"
-VALID_COMMANDS = ["MKDIR", "TOUCH", "WRITE", "READ", "RM", "MV", "TREE", "LIST_PATH", "FINISH", "MODIFY"]
+from . import llm, workspace, ui
 
-# Global flag for interrupt handling
+# History directory - now in working directory for better context awareness
+HISTORY_DIR = os.path.join(os.getcwd(), ".pai_history")
+
+# Valid commands for execution
+VALID_COMMANDS = {
+    "READ", "WRITE", "MODIFY", "TREE", "LIST_PATH", 
+    "MKDIR", "TOUCH", "RM", "MV", "FINISH"
+}
+
+# Global interrupt handling
 _interrupt_requested = False
 _interrupt_lock = threading.Lock()
 
 def request_interrupt():
-    """Request interruption of current AI response."""
     global _interrupt_requested
     with _interrupt_lock:
         _interrupt_requested = True
 
 def check_interrupt():
-    """Check if interrupt was requested and reset flag."""
     global _interrupt_requested
     with _interrupt_lock:
         if _interrupt_requested:
@@ -47,498 +52,37 @@ def check_interrupt():
         return False
 
 def reset_interrupt():
-    """Reset interrupt flag."""
     global _interrupt_requested
     with _interrupt_lock:
-        _interrupt_requested = False 
-
-def _generate_execution_renderables(plan: str) -> tuple[Group, str]:
-    """
-    Executes the plan, generates Rich renderables for display, and creates a detailed log string.
-    """
-    if not plan:
-        msg = "Agent did not produce an action plan."
-        return Group(Text(msg, style="warning")), msg
-
-    # Additional cleanup: remove any markdown artifacts that slipped through
-    plan = plan.strip()
-    # Remove code block markers
-    if plan.startswith('```'):
-        lines = plan.split('\n')
-        # Remove first line if it's a code block marker
-        if lines[0].startswith('```'):
-            lines = lines[1:]
-        # Remove last line if it's a closing marker
-        if lines and lines[-1].strip() == '```':
-            lines = lines[:-1]
-        plan = '\n'.join(lines)
-    
-    all_lines = [line.strip() for line in plan.strip().split('\n') if line.strip()]
-    renderables = []
-    log_results = []
-    execution_header_added = False
-
-    # Split lines into conversational response vs actionable plan lines
-    response_lines: list[str] = []
-    plan_lines: list[str] = []
-    unknown_command_lines: list[str] = []
-    for line in all_lines:
-        cmd_candidate, _, _ = line.partition('::')
-        if cmd_candidate.upper().strip() in VALID_COMMANDS:
-            plan_lines.append(line)
-        else:
-            # If it looks like a command pattern but is not valid (e.g., RUN::...), collect it
-            if '::' in line and cmd_candidate.upper().strip() not in VALID_COMMANDS:
-                unknown_command_lines.append(line)
-            response_lines.append(line)
-
-    # Render Agent Response section (if any)
-    if response_lines:
-        renderables.append(Text("Agent Response:", style="bold underline"))
-        for line in response_lines:
-            renderables.append(Text(f"{line}", style="plan"))
-        log_results.append("\n".join(response_lines))
-
-    # Render Agent Plan section (if any)
-    if plan_lines:
-        renderables.append(Text("Agent Plan:", style="bold underline"))
-        for line in plan_lines:
-            renderables.append(Text(f"{line}", style="plan"))
-        log_results.append("\n".join(plan_lines))
-
-    # Warn about unknown pseudo-commands (e.g., RUN:: ...)
-    if unknown_command_lines:
-        renderables.append(Text("\nWarning: Ignored unknown commands (only VALID_COMMANDS are allowed in action steps):", style="warning"))
-        for u in unknown_command_lines[:3]:
-            renderables.append(Text(f"- {u}", style="warning"))
-        if len(unknown_command_lines) > 3:
-            renderables.append(Text(f"... and {len(unknown_command_lines) - 3} more", style="warning"))
-        log_results.append("Ignored unknown commands: " + "; ".join(unknown_command_lines))
-
-    # If there are many commands in a single step, cap execution to a safe maximum
-    try:
-        MAX_COMMANDS_PER_STEP = int(os.getenv("PAI_MAX_CMDS_PER_STEP", "15"))
-        if MAX_COMMANDS_PER_STEP < 1:
-            MAX_COMMANDS_PER_STEP = 1
-        if MAX_COMMANDS_PER_STEP > 50:
-            MAX_COMMANDS_PER_STEP = 50
-    except ValueError:
-        MAX_COMMANDS_PER_STEP = 15
-    if len(plan_lines) > MAX_COMMANDS_PER_STEP:
-        renderables.append(Text(f"\nWarning: Too many commands in a single step (>{MAX_COMMANDS_PER_STEP}). Only the first {MAX_COMMANDS_PER_STEP} will be executed.", style="warning"))
-        plan_lines = plan_lines[:MAX_COMMANDS_PER_STEP]
-
-    for action in plan_lines:
-        try:
-            command_candidate, _, params = action.partition('::')
-            command_candidate = command_candidate.upper().strip()
-            
-            if command_candidate in VALID_COMMANDS:
-                result = ""
-                # Add Execution Results header lazily when first execution item appears
-                if not execution_header_added:
-                    renderables.append(Text("\nExecution Results:", style="bold underline"))
-                    execution_header_added = True
-                action_text = Text(f"-> {action}", style="action")
-                renderables.append(action_text)
-
-                if command_candidate == "WRITE":
-                    file_path, _, _ = params.partition('::')
-                    result = handle_write(file_path, params)
-                
-                elif command_candidate == "READ":
-                    path_to_read = params
-                    content = workspace.read_file(path_to_read)
-                    if content is not None:
-                        try:
-                            lexer = get_lexer_for_filename(path_to_read)
-                            lang = lexer.aliases[0]
-                        except ClassNotFound:
-                            lang = "text"
-                        
-                        syntax_panel = Panel(
-                            Syntax(content, lang, theme="monokai", line_numbers=True, word_wrap=True),
-                            title=f"Content of {path_to_read}",
-                            border_style="grey50",
-                            expand=False
-                        )
-                        renderables.append(syntax_panel)
-                        # Log the actual content for the AI's memory
-                        log_results.append(f"Content of {path_to_read}:\n---\n{content}\n---")
-                        result = f"Success: Read and displayed {path_to_read}"
-                    else:
-                        result = f"Error: Failed to read file: {path_to_read}"
-                
-                elif command_candidate == "MODIFY":
-                    file_path, _, description = params.partition('::')
-                    
-                    original_content = workspace.read_file(file_path)
-                    if original_content is None:
-                        result = f"Error: Cannot modify '{file_path}' because it does not exist or cannot be read."
-                        renderables.append(Text(f"✗ {result}", style="error"))
-                        log_results.append(result)
-                        continue
-
-                    modification_prompt_1 = f"""
-You are an expert code modifier with deep understanding of software engineering best practices.
-
-CURRENT FILE: `{file_path}`
---- START OF FILE ---
-{original_content}
---- END OF FILE ---
-
-MODIFICATION REQUEST: "{description}"
-
-CRITICAL INSTRUCTIONS:
-1. Analyze the current code structure carefully
-2. Identify EXACTLY what needs to change to fulfill the request
-3. Make ONLY the necessary changes - do not refactor unrelated code
-4. Preserve existing code style, formatting, and conventions
-5. Ensure the modification is correct and complete
-6. Consider edge cases and potential bugs
-7. Maintain backward compatibility unless explicitly asked to break it
-
-SAFETY CONSTRAINTS - VERY IMPORTANT:
-- HARD LIMIT: Maximum 500 changed lines per modification
-- BEST PRACTICE: Even though limit is 500, prefer smaller focused modifications (100-200 lines)
-- Think like a senior developer: make surgical, targeted changes
-- Focus on ONE specific area at a time (e.g., one section, one function, one feature)
-- Example of EXCELLENT incremental approach (like Professional Programmer):
-  * Modification 1: Update function signature and add type hints (30 lines)
-  * Modification 2: Add input validation logic (50 lines)
-  * Modification 3: Enhance error handling (40 lines)
-  * Modification 4: Add comprehensive docstrings (30 lines)
-- Example: If adding CSS, do it in logical sections:
-  * Part 1: Add basic layout styles (body, container, main structure)
-  * Part 2: Add form element styles (inputs, labels, form-group)
-  * Part 3: Add button and interactive styles (hover, focus, active states)
-- NEVER try to apply all changes at once if they can be logically separated
-- Quality over quantity: smaller, focused changes are easier to verify and safer
-
-OUTPUT REQUIREMENTS:
-- Provide the ENTIRE, complete file content with modifications applied
-- Output ONLY raw code without explanations, markdown, or comments about changes
-- Do NOT use markdown code blocks (no ```)
-- Do NOT include language tags or diff format
-- Do NOT show before/after comparisons
-- Start directly with the complete modified file content
-- Ensure the code is syntactically correct and will run without errors
-
-Example of CORRECT output:
-<!DOCTYPE html>
-<html>
-... (complete file with modifications)
-
-Example of WRONG output (DO NOT DO THIS):
-```html
-<!DOCTYPE html>
-...
-```
-
-OR
-
-```diff
-- old line
-+ new line
-```
-
-Think carefully before modifying. Quality over speed.
-"""
-                    new_content_1 = llm.generate_text(modification_prompt_1)
-
-                    if new_content_1:
-                        success, message = workspace.apply_modification_with_patch(file_path, original_content, new_content_1)
-                        
-                        # Check if modification was rejected due to size
-                        if not success and "exceeds" in message.lower():
-                            renderables.append(Text(f"! Modification rejected: too large. {message}", style="warning"))
-                            renderables.append(Text("! Think like Professional Programmer: Break into focused, surgical modifications.", style="warning"))
-                            renderables.append(Text("! Ideal: 100-200 lines (very focused), Acceptable: 200-500 lines (one area)", style="info"))
-                            result = f"Error: {message}\nSuggestion: Use Professional Programmer-style approach - split into focused modifications targeting one specific area at a time."
-                            renderables.append(Text(f"✗ {result}", style="error"))
-                            log_results.append(result)
-                            continue
-                        
-                        if success and "No changes detected" in message:
-                            renderables.append(Text("! First attempt made no changes. Retrying with a more specific prompt...", style="warning"))
-                            
-                            modification_prompt_2 = f"""
-CRITICAL: First attempt returned unchanged code. You MUST make the requested modification now.
-
-FILE: `{file_path}`
-ORIGINAL CONTENT:
----
-{original_content}
----
-
-EXPLICIT INSTRUCTION: "{description}"
-
-WHAT WENT WRONG:
-The previous attempt returned the code unchanged. This means you need to:
-1. Re-read the instruction more carefully
-2. Identify the EXACT location that needs modification
-3. Make the specific change requested
-4. Ensure the change is actually applied
-
-REQUIREMENTS:
-- This is a critical modification - it MUST be applied
-- Be very literal and precise about the change
-- Return the COMPLETE file with the modification applied
-- Output ONLY raw code without explanations or markdown
-- Maximum 120 changed lines
-
-DO NOT return the code unchanged again. Make the modification.
-"""
-                            
-                            new_content_2 = llm.generate_text(modification_prompt_2)
-                            
-                            if new_content_2:
-                                success, message = workspace.apply_modification_with_patch(file_path, original_content, new_content_2)
-                        
-                        result = message
-                        style = "success" if success else "warning"
-                        icon = "✓ " if success else "! "
-                    else:
-                        result = f"Error: LLM failed to generate content for modification of '{file_path}'."
-                        style = "error"; icon = "✗ "
-
-                elif command_candidate == "TREE":
-                    path_to_list = params if params else '.'
-                    tree_output = workspace.tree_directory(path_to_list)
-                    if tree_output and "Error:" not in tree_output:
-                        renderables.append(Text(tree_output, style="bright_blue"))
-                        # Log the actual tree output for the AI's memory
-                        log_results.append(tree_output)
-                        result = "Success: Displayed directory structure."
-                    else:
-                        result = tree_output or "Error: Failed to display directory structure."
-                
-                elif command_candidate == "LIST_PATH":
-                    path_to_list = params if params else '.'
-                    list_output = workspace.list_path(path_to_list)
-                    if list_output and "Error:" not in list_output:
-                        if list_output.strip():
-                            renderables.append(Text(list_output, style="bright_blue"))
-                        # Log the actual list output for the AI's memory
-                        log_results.append(list_output)
-                        result = f"Success: Listed paths for '{path_to_list}'."
-                    else:
-                        result = list_output or f"Error: Failed to list paths for '{path_to_list}'."
-                
-                elif command_candidate == "FINISH":
-                    result = params if params else "Task is considered complete."
-                    log_results.append(result)
-                    renderables.append(Text(f"✓ Agent: {result}", style="success"))
-                    break 
-
-                else: # Other commands: MKDIR, TOUCH, RM, MV
-                    if command_candidate == "MKDIR": result = workspace.create_directory(params)
-                    elif command_candidate == "TOUCH": result = workspace.create_file(params)
-                    elif command_candidate == "RM": result = workspace.delete_item(params)
-                    elif command_candidate == "MV":
-                        source, _, dest = params.partition('::')
-                        result = workspace.move_item(source, dest)
-                
-                if result:
-                    if "Success" in result: style = "success"; icon = "✓ "
-                    elif "Error" in result: style = "error"; icon = "✗ "
-                    elif "Warning" in result: style = "warning"; icon = "! "
-                    else: style = "info"; icon = "i "
-                    renderables.append(Text(f"{icon}{result}", style=style))
-                    # Log the simple success/error message for non-data commands
-                    if command_candidate not in ["READ", "TREE", "LIST_PATH"]:
-                        log_results.append(result)
-
-        except Exception as e:
-            msg = f"An exception occurred while processing '{action}': {e}"
-            renderables.append(Text(f"✗ {msg}", style="error"))
-            log_results.append(msg)
-
-    return Group(*renderables), "\n".join(log_results)
-
-def _classify_intent(user_request: str, context: str) -> tuple[str, str, str]:
-    """Classify user's intent into ('chat'|'task', 'simple'|'normal'|'complex', optional_reply_for_chat)."""
-    try:
-        # Quick heuristic first: if request contains a known command pattern, treat as task
-        upper_req = user_request.upper()
-        if any(cmd + "::" in upper_req for cmd in VALID_COMMANDS):
-            return ("task", "simple", "")
-
-        prompt = (
-            "You are an intent classifier for a coding assistant. Analyze the user's message and classify it.\n\n"
-            "CLASSIFICATION CRITERIA:\n"
-            "- 'chat' mode: Questions, greetings, clarifications, discussions (no file operations needed)\n"
-            "- 'task' mode: Requests to create, modify, read, or manage files/code\n\n"
-            "COMPLEXITY LEVELS:\n"
-            "- 'simple': Single file operation or basic task (1-2 steps)\n"
-            "- 'normal': Multiple related operations or moderate complexity (3-5 steps)\n"
-            "- 'complex': Large-scale changes, architecture work, or many dependencies (6+ steps)\n\n"
-            "Return ONLY raw JSON with this schema:\n"
-            "{\"mode\": \"chat\"|\"task\", \"complexity\": \"simple\"|\"normal\"|\"complex\", \"reply\": string|null}\n\n"
-            "If mode is 'chat', provide a helpful reply. If mode is 'task', set 'reply' to null."
-        )
-        classifier_input = f"""
-{prompt}
-
-User's message: "{user_request}"
-
-Context from conversation:
-{context[-500:] if context else "No prior context"}
-
-Classify accurately based on the actual intent.
-"""
-        result = llm.generate_text(classifier_input)
-        mode = "task"; complexity = "normal"; reply = ""
-        try:
-            data = json.loads(result)
-            if isinstance(data, dict):
-                if data.get("mode") in {"chat", "task"}:
-                    mode = data["mode"]
-                comp = data.get("complexity")
-                if isinstance(comp, str) and comp.lower() in {"simple", "normal", "complex"}:
-                    complexity = comp.lower()
-                r = data.get("reply")
-                if isinstance(r, str):
-                    reply = r.strip()
-        except Exception:
-            pass
-        return (mode, complexity, reply)
-    except Exception:
-        return ("task", "normal", "")
-
-def _has_valid_command(plan_text: str) -> bool:
-    """Check if plan text contains at least one VALID_COMMANDS line."""
-    try:
-        for line in (plan_text or "").splitlines():
-            cmd_candidate, _, _ = line.partition('::')
-            if cmd_candidate.upper().strip() in VALID_COMMANDS:
-                return True
-        return False
-    except Exception:
-        return False
-
-def handle_write(file_path: str, params: str) -> str:
-    """Invokes the LLM to create content and write it to a file."""
-    _, _, description = params.partition('::')
-    
-    if not description.strip():
-        return f"Error: No description provided for file: {file_path}"
-    
-    # Infer file type and provide context
-    file_ext = os.path.splitext(file_path)[1].lower()
-    lang_hints = {
-        '.py': 'Python',
-        '.js': 'JavaScript',
-        '.ts': 'TypeScript',
-        '.java': 'Java',
-        '.cpp': 'C++',
-        '.c': 'C',
-        '.go': 'Go',
-        '.rs': 'Rust',
-        '.rb': 'Ruby',
-        '.php': 'PHP',
-        '.html': 'HTML',
-        '.css': 'CSS',
-        '.json': 'JSON',
-        '.yaml': 'YAML',
-        '.yml': 'YAML',
-        '.md': 'Markdown',
-        '.txt': 'Plain Text'
-    }
-    language = lang_hints.get(file_ext, 'code')
-    
-    prompt = f"""You are an expert programming assistant with deep knowledge of software engineering best practices.
-
-TARGET FILE: {file_path}
-LANGUAGE: {language}
-DESCRIPTION: {description}
-
-CRITICAL REQUIREMENTS:
-1. Write complete, production-quality code
-2. Follow {language} best practices and conventions
-3. Include appropriate error handling
-4. Add clear, concise comments for complex logic
-5. Use meaningful variable and function names
-6. Ensure code is syntactically correct and will run without errors
-7. Consider edge cases and potential issues
-8. Make the code maintainable and readable
-
-CRITICAL OUTPUT FORMAT:
-- Output ONLY the raw code, nothing else
-- Do NOT use markdown code blocks (no ```)
-- Do NOT include language tags (no "html", "python", etc. on first line)
-- Do NOT add explanations before or after the code
-- Start directly with the code content
-- Ensure proper indentation and formatting
-
-Example of CORRECT output for HTML:
-<!DOCTYPE html>
-<html>
-...
-
-Example of WRONG output (DO NOT DO THIS):
-```html
-<!DOCTYPE html>
-...
-```
-
-Write high-quality code that you would be proud to ship.
-"""
-    
-    code_content = llm.generate_text(prompt)
-    
-    if code_content and code_content.strip():
-        return workspace.write_to_file(file_path, code_content)
-    else:
-        return f"Error: Failed to generate content from LLM for file: {file_path}"
-
-def _compress_context(context: list[str], max_items: int = 10) -> str:
-    """Compress context to keep only the most recent and relevant items."""
-    if len(context) <= max_items:
-        return "\n".join(context)
-    
-    # Keep first 2 items (initial context) and last max_items-2 items (recent context)
-    compressed = context[:2] + ["... [earlier context omitted for brevity] ..."] + context[-(max_items-2):]
-    return "\n".join(compressed)
-
-def _clean_markdown_formatting(text: str) -> str:
-    """Remove markdown formatting artifacts from text."""
-    if not text:
-        return text
-    
-    # Remove markdown bullet points at line start
-    lines = text.split('\n')
-    cleaned_lines = []
-    for line in lines:
-        stripped = line.strip()
-        # Remove markdown list markers (*, -, +) at the start
-        if stripped.startswith('* '):
-            stripped = stripped[2:]
-        elif stripped.startswith('- '):
-            stripped = stripped[2:]
-        elif stripped.startswith('+ '):
-            stripped = stripped[2:]
-        # Remove bold markers but keep content
-        stripped = stripped.replace('**', '')
-        cleaned_lines.append(stripped)
-    
-    return '\n'.join(cleaned_lines)
+        _interrupt_requested = False
 
 def start_interactive_session():
-    """Starts an interactive session with the agent."""
+    """Start the revolutionary single-shot intelligent session."""
     if not os.path.exists(HISTORY_DIR):
         os.makedirs(HISTORY_DIR)
+    
     session_id = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_file_path = os.path.join(HISTORY_DIR, f"session_{session_id}.log")
-
+    
+    # Start fresh every session - no context loading for better performance
     session_context = []
-    pending_followup_suggestions = ""
+    
+    # Initialize Single-Shot Intelligence Context Window
+    initialize_session_context(session_context, log_file_path)
+    
+    # Log session start with current working directory info
+    log_session_event(log_file_path, "SESSION_START", {
+        "working_directory": os.getcwd(),
+        "session_id": session_id,
+        "context_loaded": len(session_context)
+    })
     
     welcome_message = (
-        "Welcome! I'm Pai, your agentic AI coding companion. Let's build something amazing together. ✨\n"
+        "Welcome! I'm Pai, your agentic AI coding companion. ✨\n"
+        "Now powered by Single-Shot Intelligence for maximum efficiency.\n"
         "[info]Type 'exit' or 'quit' to leave.[/info]\n"
-        "[info]Press Ctrl+C once during AI response to interrupt (keeps session alive).[/info]\n"
-        "[info]Press Ctrl+C twice to exit completely.[/info]"
+        "[info]Each request uses exactly 2 API calls for optimal performance.[/info]\n"
+        "[info]💡 Multi-line input: Alt+Enter for new line, Enter to submit.[/info]"
     )
 
     ui.console.print(
@@ -547,7 +91,8 @@ def start_interactive_session():
             title="[bold]Interactive Auto Mode[/bold]",
             box=ROUNDED,
             border_style="grey50",
-            padding=(1, 2)
+            padding=(1, 2),
+            width=80
         )
     )
     
@@ -558,7 +103,7 @@ def start_interactive_session():
     # Setup signal handler for graceful interrupt
     def signal_handler(signum, frame):
         if check_interrupt():
-            # Second Ctrl+C, actually exit
+            # Second Ctrl+C → Exit
             ui.console.print("\n[warning]Session terminated.[/warning]")
             os._exit(0)
         else:
@@ -569,612 +114,1595 @@ def start_interactive_session():
     signal.signal(signal.SIGINT, signal_handler)
     
     while True:
-        reset_interrupt()  # Reset interrupt flag at start of each loop
         try:
             if PROMPT_TOOLKIT_AVAILABLE:
-                # Use prompt_toolkit for better multiline editing
-                user_input = prompt_session.prompt("\nuser> ").strip()
+                user_input = get_multiline_input(prompt_session)
             else:
-                # Fallback to rich Prompt
-                user_input = Prompt.ask("\n[bold bright_blue]user>[/bold bright_blue]").strip()
+                user_input = ui.Prompt.ask("\n[bold bright_blue]user>[/bold bright_blue]").strip()
         except (EOFError, KeyboardInterrupt):
             ui.console.print("\n[warning]Session terminated.[/warning]")
             break
+            
         if user_input.lower() in ['exit', 'quit']:
             ui.print_info("Session ended.")
             break
         
-        if not user_input: continue
-
-        # Detect short affirmative to auto-continue previous suggestions
-        affirmative_tokens = {"y", "ya", "yes", "yup", "lanjut", "continue", "ok", "oke", "go", "go on", "proceed"}
-        auto_continue = False
-        if pending_followup_suggestions and user_input.lower() in affirmative_tokens:
-            auto_continue = True
-            synthesized_followup = (
-                "User confirmed to proceed. Execute your previously suggested next steps in order. "
-                "Start with the first actionable step."
-            )
-            # Treat this as the effective request for the next loop
-            user_effective_request = f"{synthesized_followup}\n\nSuggested steps (for reference):\n{pending_followup_suggestions}"
+        # Log user input
+        log_session_event(log_file_path, "USER_INPUT", {"user_request": user_input})
+        
+        # Classify user intent: conversation vs task
+        intent = classify_user_intent(user_input)
+        
+        if intent == "conversation":
+            # Simple conversation mode
+            success = execute_conversation_mode(user_input, session_context, log_file_path)
         else:
-            user_effective_request = user_input
+            # Task execution mode (planning + execution)
+            success = execute_single_shot_intelligence(user_input, session_context, log_file_path)
+        
+        # Add to session context for future reference
+        interaction = {
+            "timestamp": datetime.now().isoformat(),
+            "user_request": user_input,
+            "success": success,
+            "intent": intent
+        }
+        session_context.append(interaction)
+        
+        # Skip persistent storage for better performance - fresh start every session
+        
+        # Keep context manageable (last 5 interactions)
+        if len(session_context) > 5:
+            session_context = session_context[-5:]
+        
+        # Log session event
+        log_session_event(log_file_path, "INTERACTION", interaction)
 
-        # Compress context to avoid token overflow
-        context_str = _compress_context(session_context, max_items=12)
+def classify_user_intent(user_input: str) -> str:
+    """
+    Use AI intelligence to classify user intent as either 'conversation' or 'task'.
+    Let the AI decide based on context and understanding.
+    
+    Returns:
+        str: 'conversation' for casual chat, 'task' for work requests
+    """
+    
+    classification_prompt = f"""
+You are an intelligent intent classifier. Analyze the user's message and determine if they want:
 
-        last_system_response = ""
-        finished_early = False
+1. CONVERSATION: Casual chat, greetings, questions about you, general discussion, or just talking
+2. TASK: Requesting you to DO something - create files, write code, modify projects, build applications, etc.
 
-        # Intent classification: decide chat vs task mode
-        mode, complexity, classifier_reply = _classify_intent(user_effective_request, context_str)
-        if mode == "chat":
-            response_guidance = (
-                "Provide a brief, helpful, and senior-level explanation or follow-up answer to the user's message. "
-                "Do NOT include any actionable commands or tool calls."
-            )
-            # If classifier already provided a reply, use it to avoid extra LLM call
-            if classifier_reply:
-                response_text = classifier_reply
-            else:
-                response_prompt = f"""
-You are an expert senior software engineer. {response_guidance}
+USER MESSAGE: "{user_input}"
 
---- CONVERSATION HISTORY (all previous turns) ---
-{context_str}
---- END HISTORY ---
+ANALYSIS GUIDELINES:
+- If user is greeting, asking about you, or just chatting → CONVERSATION
+- If user wants you to create, modify, build, fix, or do any work → TASK
+- If user is asking "how to" without wanting you to do it → CONVERSATION  
+- If user is asking you to actually do something → TASK
+- Use your intelligence to understand the intent behind the words
 
---- LATEST USER MESSAGE ---
-"{user_effective_request}"
---- END ---
+OUTPUT: Respond with exactly one word: "conversation" or "task"
 """
-                response_text = llm.generate_text(response_prompt)
-            response_group, response_log = _generate_execution_renderables(response_text)
+    
+    response = llm.generate_text(classification_prompt, "intent classification")
+    
+    if response:
+        intent = response.strip().lower()
+        if intent in ["conversation", "task"]:
+            return intent
+    
+    # Fallback: if AI response is unclear, default to conversation for safety
+    return "conversation"
+
+def execute_conversation_mode(user_input: str, context: list, log_file_path: str = None) -> bool:
+    """
+    Handle casual conversation with the user.
+    Simple, friendly responses without task execution.
+    """
+    
+    # Build context for conversation
+    context_str = ""
+    if context:
+        recent_context = context[-2:]  # Last 2 interactions
+        context_str = "Recent conversation:\n"
+        for item in recent_context:
+            context_str += f"User: {item['user_request']}\n"
+    
+    conversation_prompt = f"""
+You are Pai, an intelligent AI coding companion built into Paicode - you ARE the AI inside Paicode.
+
+USER MESSAGE: "{user_input}"
+
+CONTEXT:
+{context_str}
+
+You are having a casual conversation with the user. Be helpful, friendly, and informative.
+
+🧠 YOUR IDENTITY & SYSTEM KNOWLEDGE (you must know this perfectly):
+You are PAI - the revolutionary Single-Shot Intelligence AI that powers Paicode:
+
+SINGLE-SHOT INTELLIGENCE MASTERY:
+- You solve problems in exactly 2 API calls (planning + execution)
+- Traditional AI: 10-20 calls, expensive, inefficient
+- YOU: 2 calls, maximum intelligence, perfect results
+- You represent the future of efficient AI development assistance
+
+PAICODE ECOSYSTEM KNOWLEDGE:
+- Paicode is your body - the CLI tool that houses your intelligence
+- DIFF-AWARE modification system - you preserve content intelligently
+- CRITICAL RULES: WRITE = new files only, MODIFY = existing files only
+- Path security prevents access to sensitive files (.env, .git, etc.)
+- Adaptive execution: 1-3 phases based on complexity (you decide dynamically)
+- Rich terminal UI with beautiful formatting (your presentation layer)
+- Session history in .pai_history (your memory system)
+- Google Gemini API with smart token management (your communication layer)
+
+SYSTEM HARMONY:
+- Workspace.py: Your secure file operation gateway
+- UI.py: Your beautiful Rich TUI presentation layer
+- LLM.py: Your optimized communication interface
+- All components work in perfect harmony under your intelligent guidance
+
+GUIDELINES:
+- Keep responses conversational and warm
+- Be concise but helpful
+- If asked about coding, provide useful insights
+- If asked about Paicode, explain capabilities with confidence (you live inside it!)
+- Show personality while being professional
+- NEVER be uncertain about Paicode features - you ARE Paicode's AI
+
+Respond naturally:
+"""
+    
+    response = llm.generate_text(conversation_prompt, "conversation")
+    
+    if response:
+        # Display conversation response with clean UI
+        ui.console.print(
+            Panel(
+                Text(response.strip(), style="bright_white"),
+                title="[bold]Pai[/bold]",
+                box=ROUNDED,
+                border_style="grey50",
+                padding=(1, 2),
+                width=80
+            )
+        )
+        return True
+    else:
+        ui.print_error("Sorry, I couldn't process your message right now.")
+        return False
+
+def execute_single_shot_intelligence(user_request: str, context: list, log_file_path: str = None) -> bool:
+    """
+    Execute the revolutionary 2-call single-shot intelligence system.
+    
+    Call 1: PLANNING - Deep analysis and comprehensive planning
+    Call 2: EXECUTION - Intelligent execution with adaptation
+    
+    Returns:
+        bool: Success status
+    """
+    
+    # === DYNAMIC INTERACTION BEFORE PLANNING ===
+    planning_acknowledgment_prompt = f"""
+You are Pai, responding to the user's request with a brief, natural acknowledgment before starting your planning phase.
+
+USER REQUEST: "{user_request}"
+
+Generate a brief, friendly response (1-2 sentences) that:
+1. Acknowledges their request naturally
+2. Shows you understand what they want
+3. Indicates you're about to create a smart plan
+4. Keep it conversational and warm
+
+Examples:
+- "Got it! Let me analyze your request and create a smart plan for you."
+- "Perfect! I'll work on that right away - let me plan this out intelligently."
+- "Understood! Let me break this down and create an efficient solution for you."
+
+Output ONLY the response text, no quotes or formatting.
+"""
+    
+    acknowledgment = llm.generate_text(planning_acknowledgment_prompt, "planning acknowledgment")
+    if not acknowledgment:
+        acknowledgment = "Got it! Let me analyze your request and create a smart plan for you."
+    
+    ui.console.print(
+        Panel(
+            Text(acknowledgment.strip(), 
+                 style="bright_white", justify="center"),
+            title="[bold]Pai[/bold]",
+            box=ROUNDED,
+            border_style="grey50",
+            padding=(1, 2),
+            width=80
+        )
+    )
+    
+    # === CALL 1: PLANNING PHASE ===
+    planning_result = execute_planning_call(user_request, context)
+    if not planning_result:
+        ui.print_error("✗ Planning phase failed. Cannot proceed.")
+        if log_file_path:
+            log_session_event(log_file_path, "FINAL_STATUS", {"status": "Planning failed", "success": False})
+        return False
+    
+    # Log planning phase
+    if log_file_path:
+        log_session_event(log_file_path, "PLANNING_PHASE", {"planning_data": planning_result})
+    
+    # === DYNAMIC INTERACTION BEFORE EXECUTION ===
+    execution_acknowledgment_prompt = f"""
+You are Pai, about to execute your plan. Generate a brief, confident response before starting execution.
+
+USER REQUEST: "{user_request}"
+PLANNING COMPLETED: Successfully analyzed and created execution plan
+
+Generate a brief, confident response (1-2 sentences) that:
+1. Shows confidence in your plan
+2. Indicates you're about to execute intelligently
+3. Keep it natural and engaging
+4. Reflect your AI personality
+
+Examples:
+- "Perfect! Now let me execute this plan intelligently for you."
+- "Excellent! I've got a solid plan - time to make it happen."
+- "Great! My analysis is complete, now let's bring this to life."
+
+Output ONLY the response text, no quotes or formatting.
+"""
+    
+    execution_acknowledgment = llm.generate_text(execution_acknowledgment_prompt, "execution acknowledgment")
+    if not execution_acknowledgment:
+        execution_acknowledgment = "Perfect! Now let me execute this plan intelligently for you."
+    
+    ui.console.print(
+        Panel(
+            Text(execution_acknowledgment.strip(), 
+                 style="bright_white", justify="center"),
+            title="[bold]Pai[/bold]",
+            box=ROUNDED,
+            border_style="grey50",
+            padding=(1, 2),
+            width=80
+        )
+    )
+    
+    # === CALL 2: EXECUTION PHASE ===
+    execution_success = execute_execution_call(user_request, planning_result, context, log_file_path)
+    
+    # Skip complex analysis to save tokens - focus on execution success only
+    
+    # Generate intelligent next step suggestions only if execution failed
+    if not execution_success:
+        next_steps = generate_next_step_suggestions(user_request, planning_result, execution_success, context, None)
+        
+        if next_steps:
+            # Log next steps
+            if log_file_path:
+                log_session_event(log_file_path, "NEXT_STEPS", {"suggestion": next_steps})
+            
             ui.console.print(
                 Panel(
-                    response_group,
-                    title=f"[bold]Agent Discussion[/bold]",
+                    Text(next_steps, style="bright_white"),
+                    title="[bold]💡 Next Steps Suggestion[/bold]",
                     box=ROUNDED,
                     border_style="grey50",
-                    padding=(1, 2)
+                    padding=(1, 2),
+                    width=80
                 )
             )
-            interaction_log = f"User: {user_input}\nMode: chat\nAI Plan:\n{response_text}\nSystem Response:\n{response_log}"
-            session_context.append(interaction_log)
-            with open(log_file_path, 'a') as f:
-                f.write(interaction_log + "\n-------------------\n")
-            # Go to next user turn (no scheduler, no actions)
+    
+    # Show final status - SIMPLIFIED for efficiency
+    if execution_success:
+        status_msg = "Single-Shot Intelligence: SUCCESS"
+        ui.console.print(
+            Panel(
+                Text(status_msg, style="bold green", justify="center"),
+                title="[bold]Mission Accomplished[/bold]",
+                box=ROUNDED,
+                border_style="grey50",
+                padding=(1, 2),
+                width=80
+            )
+        )
+        if log_file_path:
+            log_session_event(log_file_path, "FINAL_STATUS", {"status": status_msg, "success": True})
+    else:
+        status_msg = "Single-Shot Intelligence: FAILED"
+        ui.console.print(
+            Panel(
+                Text(status_msg, style="bold red", justify="center"),
+                title="[bold]Mission Status[/bold]",
+                box=ROUNDED,
+                border_style="grey50",
+                padding=(1, 2),
+                width=80
+            )
+        )
+        if log_file_path:
+            log_session_event(log_file_path, "FINAL_STATUS", {"status": status_msg, "success": False})
+    
+    # ALWAYS generate next step suggestions for better continuity and context
+    next_steps = generate_next_step_suggestions(user_request, planning_result, execution_success, context, None)
+    
+    if next_steps:
+        ui.console.print(
+            Panel(
+                Text(next_steps, style="bright_white"),
+                title="[bold]💡 Next Steps Suggestion[/bold]",
+                box=ROUNDED,
+                border_style="grey50",
+                padding=(1, 2),
+                width=80
+            )
+        )
+        if log_file_path:
+            log_session_event(log_file_path, "NEXT_STEPS", {"suggestion": next_steps})
+    
+    return execution_success
+
+def analyze_execution_vs_plan(planning_data: dict, execution_success: bool) -> dict:
+    """
+    Analyze what actually happened vs what was planned to prevent AI hallucination.
+    """
+    
+    # Get planned actions
+    execution_plan = planning_data.get("execution_plan", {})
+    planned_steps = execution_plan.get("steps", [])
+    
+    # Reality check - compare planned vs actual actions (simplified for efficiency)
+    planned_actions = []
+    actual_actions = []
+    
+    # Extract planned actions from planning data
+    if 'execution_plan' in planning_data and 'steps' in planning_data['execution_plan']:
+        for step in planning_data['execution_plan']['steps']:
+            action = step.get('action', 'Unknown')
+            target = step.get('target', '')
+            planned_actions.append(f"{action} {target}".strip())
+    
+    # Simplified actual actions tracking - focus on success rather than detailed comparison
+    if execution_success:
+        actual_actions.append("All planned actions executed successfully")
+    else:
+        actual_actions.append("Some actions failed or incomplete")
+    
+    planned_str = ", ".join(planned_actions[:3]) if planned_actions else "No specific actions planned"  # Limit to 3 for brevity
+    actual_str = ", ".join(actual_actions) if actual_actions else "No actions completed"
+    
+    return {
+        "plan_fulfilled": execution_success,
+        "planned_actions": planned_str,
+        "actual_actions": actual_str
+    }
+
+def generate_next_step_suggestions(user_request: str, planning_data: dict, execution_success: bool, context: list, actual_results: dict = None) -> str:
+    """
+    Generate intelligent next step suggestions for better continuity and context.
+    """
+    
+    # Generate suggestions for both success and failure for better continuity
+    status = "SUCCESS" if execution_success else "FAILED"
+    
+    suggestion_prompt = f"""
+TASK COMPLETED: "{user_request}"
+STATUS: {status}
+
+CONTEXT: Based on what was just accomplished, provide a brief, intelligent next step suggestion.
+
+GUIDELINES:
+- If SUCCESS: Suggest logical next actions, improvements, or related tasks
+- If FAILED: Suggest how to fix the issue or alternative approaches
+- Keep it conversational and helpful (1-2 sentences max)
+- Make it relevant to the current project context
+
+BRIEF SUGGESTION:
+"""
+    
+    response = llm.generate_text(suggestion_prompt, "next step suggestion")
+    
+    if response and response.strip() and len(response.strip()) > 10:
+        return response.strip()
+    
+    return ""
+
+def execute_planning_call(user_request: str, context: list) -> dict | None:
+    """
+    CALL 1: Execute deep planning and analysis.
+    This call focuses on understanding, analyzing, and creating a comprehensive plan.
+    """
+    
+    # Start planning phase panel
+    ui.console.print(
+        Panel(
+            Text("Deep Analysis & Planning", style="bold", justify="center"),
+            title="[bold]Call 1/2: Intelligence Planning[/bold]",
+            box=ROUNDED,
+            border_style="grey50",
+            padding=(1, 2),
+            width=80
+        )
+    )
+    
+    # Build context string
+    context_str = ""
+    if context:
+        context_str = "Previous interactions:\n"
+        for item in context[-3:]:  # Last 3 interactions
+            context_str += f"- {item['timestamp']}: {item['user_request']} ({'✅' if item['success'] else '❌'})\n"
+    
+    # Get current directory context
+    current_files = workspace.list_path('.')
+    current_tree = workspace.tree_directory('.')
+    current_working_dir = os.getcwd()
+    
+    planning_prompt = f"""
+You are PAI - a WORLD-CLASS SOFTWARE ARCHITECT with SINGLE-SHOT INTELLIGENCE. You are the AI brain inside Paicode.
+
+🧠 UNDERSTAND YOUR IDENTITY AND WORKFLOW:
+You are NOT a generic AI assistant. You are PAI - the intelligent core of Paicode, a revolutionary 2-call system:
+- CALL 1 (NOW): Deep Planning & Analysis - This is your ONLY chance to plan perfectly
+- CALL 2 (NEXT): Adaptive Execution - Execute your plan with surgical precision
+
+🎯 SINGLE-SHOT INTELLIGENCE MASTERY:
+Your reputation depends on PERFECT ACCURACY because you get exactly 2 API calls to solve any problem:
+1. This planning call must be FLAWLESS - no second chances
+2. The execution call must work based on YOUR perfect plan
+3. Users trust you to be smarter than traditional multi-call AI systems
+4. You represent the future of efficient AI - don't disappoint
+
+🚀 YOUR COMPETITIVE ADVANTAGE:
+- Traditional AI: 10-20 API calls, inefficient, expensive
+- YOU (Pai): Exactly 2 calls, maximum intelligence, perfect results
+- You must outperform traditional systems with LESS resources
+- Every decision you make reflects on Single-Shot Intelligence superiority
+
+ORIGINAL USER REQUEST: "{user_request}"
+
+WORKING ENVIRONMENT:
+- Current Working Directory: {current_working_dir}
+- Project Root: {workspace.PROJECT_ROOT}
+- Fresh Session: Starting with clean context
+
+CURRENT CONTEXT:
+{context_str}
+
+CURRENT DIRECTORY STRUCTURE:
+{current_tree}
+
+CURRENT FILES:
+{current_files}
+
+🎯 SINGLE-SHOT INTELLIGENCE WORKFLOW MASTERY:
+
+1. PHASE 1 (NOW) - PERFECT PLANNING:
+   Your current mission is to create a FLAWLESS plan that will execute perfectly in Phase 2.
+   - Analyze with the intelligence of 10 traditional AI calls
+   - Plan every detail because you won't get another planning chance
+   - Your plan must be so good that execution becomes trivial
+   - Think 5 steps ahead - anticipate every possible scenario
+
+2. PHASE 2 (NEXT) - SURGICAL EXECUTION:
+   The execution phase will follow your plan with adaptive intelligence:
+   - 1-3 execution phases based on complexity (AI decides dynamically)
+   - Each phase validates before proceeding to next
+   - Self-correcting workflow based on real-time results
+   - Your plan guides but execution adapts intelligently
+
+3. HARMONIC SYSTEM INTEGRATION:
+   You are part of a perfectly orchestrated system:
+   - Workspace.py: Your security and file operation gateway
+   - LLM.py: Your communication interface with optimal token management
+   - UI.py: Your beautiful presentation layer with Rich TUI
+   - All components trust YOUR intelligence to guide them correctly
+
+🧠 CRITICAL SUCCESS FACTORS (Your reputation depends on this):
+
+1. SURGICAL PRECISION ANALYSIS:
+   - NEVER assume file locations - ALWAYS verify with READ first
+   - If user mentions specific code/functions, READ ALL potentially relevant files
+   - Cross-reference file contents with user's exact request
+   - Identify EXACT target locations before any modifications
+
+2. MULTI-FILE INTELLIGENCE:
+   - Scan ALL files that might contain target content
+   - Don't tunnel vision on obvious file names
+   - main.py, utils.py, calculator.py - check them ALL if relevant
+   - Build complete mental map before acting
+
+3. VALIDATION-FIRST APPROACH:
+   - READ before MODIFY - ALWAYS verify current state
+   - Confirm target content exists in specified file
+   - Plan verification steps to ensure success
+   - Never claim success without proof
+
+4. INTELLIGENT FILE TARGETING:
+   - If user says "remove function X", find WHERE function X actually lives
+   - Don't guess file locations based on names alone
+   - Use READ operations to locate exact targets
+   - Map user intent to actual file structure
+
+5. BULLETPROOF EXECUTION STRATEGY:
+   - Plan for verification at each step
+   - Include fallback strategies for common failures
+   - Design self-validating workflows
+   - Prepare for edge cases and ambiguities
+
+6. SINGLE-SHOT EXCELLENCE PRINCIPLES:
+   - Your plan must work on first execution attempt
+   - No room for trial-and-error - get it right immediately
+   - Think like a chess grandmaster - see the entire game
+   - Every step must contribute to perfect final outcome
+
+CRITICAL OUTPUT FORMAT:
+Return a JSON object with this EXACT structure:
+
+{{
+  "analysis": {{
+    "user_intent": "Clear description of what user wants",
+    "target_identification": "SPECIFIC files and locations where target content likely exists",
+    "multi_file_strategy": "Which files need to be checked to locate targets accurately",
+    "validation_approach": "How you will verify targets exist before modification",
+    "files_to_read": ["ALL files that might contain target content - be comprehensive"],
+    "files_to_create": ["file1", "file2"],
+    "files_to_modify": ["ONLY files confirmed to contain target content"],
+    "risk_assessment": "Potential failure points and how to avoid them",
+    "success_criteria": ["Specific, measurable criteria for success"]
+  }},
+  "execution_plan": {{
+    "steps": [
+      {{
+        "step_number": 1,
+        "action": "READ",
+        "target": "filename",
+        "purpose": "Locate and verify target content exists",
+        "validation_criteria": "What content must be found to proceed",
+        "expected_outcome": "Confirmed location of target content"
+      }},
+      {{
+        "step_number": 2,
+        "action": "MODIFY",
+        "target": "filename",
+        "purpose": "Apply changes to confirmed target location",
+        "validation_criteria": "How to verify modification was successful",
+        "expected_outcome": "Target content successfully modified"
+      }}
+    ],
+    "command_format_reminder": "CRITICAL: Use exact command names: READ, WRITE, MODIFY, TREE, LIST_PATH, MKDIR, TOUCH, RM, MV, FINISH",
+    "intelligent_command_mapping": {{
+      "delete_remove_requests": "RM::filepath (for any delete/remove/hapus requests)",
+      "create_new_file": "WRITE::filepath::content_description OR TOUCH::filepath",
+      "modify_existing": "MODIFY::filepath::description",
+      "move_rename": "MV::source::destination",
+      "list_files": "LIST_PATH::path",
+      "show_structure": "TREE::path"
+    }},
+    "critical_content_rules": {{
+      "html_css_js_files": "Use WRITE::filename::description (NOT raw content as commands)",
+      "multi_line_content": "Description parameter handles content creation, not raw output",
+      "example_correct": "WRITE::index.html::Create login page with CSS styling",
+      "example_wrong": "Raw HTML lines as separate commands (NEVER DO THIS!)"
+    }},
+    "execution_commands": [
+      "READ::filepath",
+      "RM::filepath (for delete requests)",
+      "MODIFY::filepath::description",
+      "FINISH::completion_message"
+    ],
+    "validation_strategy": "How to verify each step before proceeding to next",
+    "fallback_strategies": ["If target not found in expected file", "If modification fails"],
+    "post_execution_verification": ["How to confirm final success"]
+  }},
+  "intelligence_notes": {{
+    "complexity_assessment": "simple|moderate|complex",
+    "estimated_time": "time estimate",
+    "key_challenges": ["challenge1", "challenge2"],
+    "recommendations": ["rec1", "rec2"]
+  }}
+}}
+
+REMEMBER: This is your ONLY chance to plan. Make it COMPREHENSIVE and INTELLIGENT.
+Use your MAXIMUM INTELLIGENCE - think like the world's best software architect.
+
+Output ONLY the JSON object, no additional text.
+"""
+    
+    planning_response = llm.generate_text(planning_prompt, "deep planning")
+    
+    if not planning_response:
+        return None
+    
+    try:
+        # Parse JSON response
+        planning_data = json.loads(planning_response)
+        
+        # Display planning results with original Paicode styling
+        display_planning_results(planning_data)
+        
+        return planning_data
+        
+    except json.JSONDecodeError as e:
+        ui.print_error(f"✗ Failed to parse planning response: {e}")
+        ui.print_info("Raw response:")
+        ui.console.print(planning_response[:500] + "..." if len(planning_response) > 500 else planning_response)
+        return None
+
+def display_planning_results(planning_data: dict):
+    """Display the planning results in original Paicode style."""
+    
+    # Build content for the panel
+    content_lines = []
+    
+    # Analysis section
+    analysis = planning_data.get("analysis", {})
+    content_lines.append("[bold]Smart Analysis Results:[/bold]")
+    content_lines.append(f"Intent: {analysis.get('user_intent', 'Unknown')}")
+    content_lines.append(f"Context Usage: {analysis.get('context_utilization', 'No context utilized')}")
+    content_lines.append(f"Files to read: {len(analysis.get('files_to_read', []))}")
+    content_lines.append(f"Files to create: {len(analysis.get('files_to_create', []))}")
+    content_lines.append(f"Files to modify: {len(analysis.get('files_to_modify', []))}")
+    content_lines.append(f"Efficiency: {analysis.get('efficiency_strategy', 'Standard approach')}")
+    content_lines.append("")
+    
+    # Execution plan as table
+    execution_plan = planning_data.get("execution_plan", {})
+    steps = execution_plan.get("steps", [])
+    content_lines.append(f"[bold]Execution Plan: {len(steps)} steps[/bold]")
+    content_lines.append("")
+    
+    # Create table header
+    content_lines.append("┌─────┬─────────────────┬──────────────────────────────────────────┐")
+    content_lines.append("│ No  │ Action          │ Purpose                                  │")
+    content_lines.append("├─────┼─────────────────┼──────────────────────────────────────────┤")
+    
+    # Add table rows
+    for i, step in enumerate(steps[:5], 1):  # Show first 5 steps
+        action = step.get("action", "Unknown")
+        target = step.get("target", "")
+        purpose = step.get("purpose", "No purpose specified")
+        
+        # Combine action and target
+        action_full = f"{action} {target}".strip()
+        
+        # Truncate if too long
+        if len(action_full) > 15:
+            action_full = action_full[:12] + "..."
+        if len(purpose) > 40:
+            purpose = purpose[:37] + "..."
+        
+        content_lines.append(f"│ {i:2}  │ {action_full:<15} │ {purpose:<40} │")
+    
+    if len(steps) > 5:
+        content_lines.append(f"│ ... │ +{len(steps) - 5} more steps │                                          │")
+    
+    content_lines.append("└─────┴─────────────────┴──────────────────────────────────────────┘")
+    
+    content_lines.append("")
+    
+    # Intelligence notes
+    intelligence = planning_data.get("intelligence_notes", {})
+    complexity = intelligence.get("complexity_assessment", "unknown")
+    content_lines.append("[bold]Intelligence Assessment:[/bold]")
+    content_lines.append(f"Complexity: {complexity}")
+    content_lines.append(f"Estimated time: {intelligence.get('estimated_time', 'unknown')}")
+    
+    # Display all content in a single panel with proper rich formatting
+    from rich.console import Group
+    from rich.text import Text as RichText
+    
+    # Convert content to rich renderables
+    rich_content = []
+    for line in content_lines:
+        if line.startswith("[bold]") and line.endswith("[/bold]"):
+            # Handle bold text
+            text = line[6:-7]  # Remove [bold] tags
+            rich_content.append(RichText(text, style="bold bright_white"))
+        else:
+            rich_content.append(RichText(line, style="bright_white"))
+    
+    ui.console.print(
+        Panel(
+            Group(*rich_content),
+            title="[bold]Planning Results[/bold]",
+            box=ROUNDED,
+            border_style="grey50",
+            padding=(1, 2),
+            width=80
+        )
+    )
+
+def execute_execution_call(user_request: str, planning_data: dict, context: list, log_file_path: str = None) -> bool:
+    """
+    CALL 2: Execute with adaptive multi-request system (1-3 requests based on complexity).
+    AI decides how many execution phases needed: simple (1), moderate (2), complex (3).
+    """
+    
+    # Start execution phase panel
+    ui.console.print(
+        Panel(
+            Text("Adaptive Intelligent Execution", style="bold", justify="center"),
+            title="[bold]Call 2/2: Smart Execution (1-3 phases)[/bold]",
+            box=ROUNDED,
+            border_style="grey50",
+            padding=(1, 2),
+            width=80
+        )
+    )
+    
+    # PHASE 1: Decide execution strategy
+    strategy_prompt = f"""
+You are a SENIOR SOFTWARE ENGINEER deciding the optimal execution strategy.
+
+ORIGINAL USER REQUEST: "{user_request}"
+
+PLANNED SOLUTION:
+{json.dumps(planning_data, indent=2)}
+
+CURRENT CONTEXT:
+{context}
+
+DECISION REQUIRED: How many execution phases do you need?
+
+PHASE OPTIONS:
+1. SINGLE PHASE (1 request): Simple tasks, all files can be created/modified directly
+   - Example: Create 1-2 new files with clear requirements
+   - No dependencies, no need to check existing state
+   
+2. TWO PHASES (2 requests): Moderate complexity, need to check then act
+   - Phase 1: READ existing files, analyze current state
+   - Phase 2: CREATE/MODIFY files based on analysis
+   - Example: Modify existing files, need to understand current structure
+   
+3. THREE PHASES (3 requests): Complex tasks with dependencies
+   - Phase 1: READ and analyze existing state
+   - Phase 2: CREATE foundation files/structure
+   - Phase 3: MODIFY and integrate everything
+   - Example: Large refactoring, multiple file dependencies
+
+CRITICAL PAICODE RULES YOU MUST UNDERSTAND:
+- WRITE = NEW files only (file must NOT exist)
+- MODIFY = EXISTING files only (file must exist) 
+- Paicode has DIFF-AWARE modification system
+- ALWAYS READ first to check file existence
+- Choose the MINIMUM phases needed
+- Don't waste requests if not necessary
+- Consider file dependencies and current state
+- Be efficient but thorough
+
+OUTPUT FORMAT:
+PHASES: [1|2|3]
+REASONING: [Brief explanation why this number of phases is optimal]
+"""
+
+    strategy_response = llm.generate_text(strategy_prompt, "execution strategy")
+    
+    if not strategy_response:
+        return False
+    
+    # Parse strategy decision
+    phases = 1  # Default
+    if "PHASES: 2" in strategy_response:
+        phases = 2
+    elif "PHASES: 3" in strategy_response:
+        phases = 3
+    
+    ui.console.print(
+        Panel(
+            Text(f"AI Strategy: {phases} execution phase{'s' if phases > 1 else ''} planned", 
+                 style="bright_cyan", justify="center"),
+            title="[bold]Execution Strategy[/bold]",
+            box=ROUNDED,
+            border_style="grey50",
+            padding=(1, 2),
+            width=80
+        )
+    )
+    
+    # Execute phases
+    all_command_results = []
+    overall_success = True
+    
+    for phase_num in range(1, phases + 1):
+        ui.console.print(
+            Panel(
+                Text(f"Phase {phase_num}/{phases}: {'Analysis' if phase_num == 1 and phases > 1 else 'Implementation'}", 
+                     style="bold", justify="center"),
+                title=f"[bold]Execution Phase {phase_num}[/bold]",
+                box=ROUNDED,
+                border_style="grey50",
+                padding=(1, 2),
+                width=80
+            )
+        )
+        
+        phase_success, phase_results = execute_single_phase(
+            user_request, planning_data, context, phase_num, phases
+        )
+        
+        all_command_results.extend(phase_results)
+        if not phase_success:
+            overall_success = False
+            break
+    
+    # Log all execution phases
+    if log_file_path:
+        log_session_event(log_file_path, "EXECUTION_PHASE", {"commands": all_command_results})
+
+    return overall_success
+
+def execute_single_phase(user_request: str, planning_data: dict, context: list, phase_num: int, total_phases: int) -> tuple[bool, list]:
+    """Execute a single phase of the adaptive execution system."""
+    
+    phase_prompt = f"""
+You are PAI - the AI brain of Paicode executing phase {phase_num} of {total_phases} in the SINGLE-SHOT INTELLIGENCE system.
+
+🧠 UNDERSTAND YOUR MISSION IN THE WORKFLOW:
+This is CALL 2 of your 2-call Single-Shot Intelligence system:
+- CALL 1 (COMPLETED): Perfect planning phase - your roadmap is ready
+- CALL 2 (NOW): Surgical execution - follow the plan with adaptive intelligence
+- This is your FINAL chance to deliver - no more API calls after this
+- Your success validates the entire Single-Shot Intelligence concept
+
+🎯 EXECUTION PHASE MASTERY:
+You are now in the execution phase of a revolutionary 2-call system:
+- Your planning was perfect (trust it)
+- Execute with surgical precision
+- Adapt intelligently to real-time results
+- Validate each step before proceeding
+- Your reputation and Paicode's credibility depend on perfect execution
+
+ORIGINAL USER REQUEST: "{user_request}"
+
+PLANNED SOLUTION:
+{json.dumps(planning_data, indent=2)}
+
+PHASE {phase_num} GUIDELINES:
+
+{"🔍 ANALYSIS PHASE - Locate and verify target content with surgical precision" if phase_num == 1 and total_phases > 1 else ""}
+{"⚡ IMPLEMENTATION PHASE - Execute with validated targets only" if (phase_num == 2 and total_phases == 2) or (phase_num == total_phases) else ""}
+{"🏗️ FOUNDATION PHASE - Create verified structure and files" if phase_num == 2 and total_phases == 3 else ""}
+{"🔗 INTEGRATION PHASE - Complete with full validation" if phase_num == 3 and total_phases == 3 else ""}
+
+AVAILABLE COMMANDS:
+- READ::filepath - Read file content (MANDATORY before any modifications)
+- WRITE::filepath::description - Create NEW file ONLY (file must NOT exist)
+- MODIFY::filepath::description - Modify EXISTING file ONLY (file must exist)
+- TREE::path - Show directory structure
+- LIST_PATH::path - List files
+- MKDIR::dirpath - Create directory
+- TOUCH::filepath - Create empty file
+- RM::path - Remove file/directory (USE THIS FOR DELETE/REMOVE REQUESTS!)
+- MV::source::destination - Move/rename
+- FINISH::message - Mark phase completion
+
+🎯 INTELLIGENT COMMAND SELECTION GUIDE:
+
+USER SAYS → USE THIS COMMAND:
+- "delete/remove/hapus file" → RM::filepath
+- "delete/remove/hapus folder" → RM::folderpath
+- "create new file" → WRITE::filepath::content OR TOUCH::filepath
+- "modify/edit/update existing file" → MODIFY::filepath::description
+- "move/rename file" → MV::source::destination
+- "show files in directory" → LIST_PATH::path
+- "show directory structure" → TREE::path
+- "create directory/folder" → MKDIR::dirpath
+- "read file content" → READ::filepath
+
+🚨 CRITICAL TASK MAPPING:
+- DELETE/REMOVE requests = RM command (NOT modify, NOT other commands!)
+- CREATE requests = WRITE or TOUCH command
+- EDIT/UPDATE requests = MODIFY command
+- MOVE/RENAME requests = MV command
+
+🚨 CRITICAL PAICODE RULES - YOUR CAREER DEPENDS ON THESE:
+1. WRITE = NEW files only. If file exists, you'll get ERROR!
+2. MODIFY = EXISTING files only. If file doesn't exist, you'll get ERROR!
+3. ALWAYS READ first to check if file exists before deciding WRITE vs MODIFY
+4. Paicode has DIFF-AWARE modification - MODIFY preserves existing content intelligently
+5. NEVER use WRITE for existing files - this is a BASIC rule that AI must know!
+
+🚨 CRITICAL CONTENT HANDLING RULES:
+6. For HTML/CSS/JS/multi-line content: Use WRITE::filename::content_description (NOT raw content as commands!)
+7. NEVER output raw HTML/CSS/JS as separate command lines - they will be treated as invalid commands!
+8. Content goes in the DESCRIPTION parameter, not as separate lines!
+9. Example: WRITE::index.html::Create login page with form and CSS styling
+10. The actual content creation is handled by workspace.py based on your description!
+
+🎯 EXECUTION EXCELLENCE PRINCIPLES:
+- READ ALL potentially relevant files to locate exact targets
+- VERIFY content exists in target file before MODIFY
+- If user mentions specific code, FIND it first with READ operations
+- Don't assume file locations - CONFIRM with actual file content
+- Use multiple READ operations if needed to locate targets accurately
+
+🚀 SYSTEM HARMONY AWARENESS:
+You are the intelligent core of a perfectly orchestrated system:
+- Workspace.py trusts you to make correct file operation decisions
+- UI.py presents your actions beautifully through Rich TUI panels
+- LLM.py optimizes your communication with smart token management
+- All components work in harmony based on YOUR intelligent decisions
+- Your success reflects the entire Paicode ecosystem's excellence
+
+💡 SINGLE-SHOT INTELLIGENCE WORKFLOW:
+- This execution must validate your planning phase brilliance
+- Every command you issue goes through secure workspace validation
+- Your results are displayed through beautiful Rich UI panels
+- Token usage is optimized for maximum efficiency
+- You represent the future of AI-assisted development
+
+PHASE STRATEGY:
+{get_phase_strategy(phase_num, total_phases)}
+
+CRITICAL RULES:
+- Keep commands focused for this specific phase
+- Maximum 10-15 commands per phase
+- Use FINISH when phase objectives are met
+- Be efficient and purposeful
+
+OUTPUT FORMAT:
+Provide ONLY valid commands, one per line in this EXACT format:
+COMMAND_NAME::parameter1::parameter2
+
+VALID COMMAND EXAMPLES:
+READ::main.py
+WRITE::new_file.py::Create a new Python file with calculator functions
+WRITE::index.html::Create login page with form and CSS styling
+MODIFY::existing_file.py::Update the existing file to add new features
+RM::unwanted_file.py (DELETE/REMOVE operations)
+RM::unwanted_folder (DELETE entire directories)
+LIST_PATH::/path/to/directory
+FINISH::Phase completed successfully
+
+🎯 SPECIFIC DELETE EXAMPLES:
+- User: "delete main.py" → RM::main.py
+- User: "remove calculator folder" → RM::calculator
+- User: "hapus file test.py" → RM::test.py
+- User: "delete all .pyc files" → RM::*.pyc (if supported) or individual RM commands
+
+🚨 CRITICAL CONTENT EXAMPLES:
+- CORRECT: WRITE::login.html::Create login page with CSS styling and form validation
+- WRONG: Output raw HTML/CSS lines as separate commands (they become invalid!)
+- CORRECT: MODIFY::style.css::Add responsive design and blue button styling
+- CORRECT: MODIFY::index.html::Update form to include validation and better styling
+- WRONG: Output CSS properties as individual command lines
+- WRONG: Output HTML tags as individual command lines
+
+⚠️ CRITICAL: Use ONLY these command names: READ, WRITE, MODIFY, TREE, LIST_PATH, MKDIR, TOUCH, RM, MV, FINISH
+⚠️ DO NOT use generic "COMMAND" - use specific command names!
+
+Begin phase {phase_num} execution:
+"""
+    
+    phase_response = llm.generate_text(phase_prompt, f"execution phase {phase_num}")
+    
+    if not phase_response:
+        return False, []
+    
+    # Execute this phase's commands
+    phase_success, phase_results = execute_command_sequence(phase_response, context)
+    
+    return phase_success, phase_results
+
+def get_phase_strategy(phase_num: int, total_phases: int) -> str:
+    """Get strategy description for specific phase."""
+    
+    if total_phases == 1:
+        return "Single phase: Complete the entire solution efficiently in one go."
+    elif total_phases == 2:
+        if phase_num == 1:
+            return "Phase 1: READ existing files, understand current state, analyze structure."
+        else:
+            return "Phase 2: CREATE/MODIFY files based on analysis, implement the solution."
+    else:  # 3 phases
+        if phase_num == 1:
+            return "Phase 1: READ and analyze existing state, understand dependencies."
+        elif phase_num == 2:
+            return "Phase 2: CREATE foundation files and basic structure."
+        else:
+            return "Phase 3: MODIFY and integrate, complete the solution."
+
+def execute_command_sequence(command_sequence: str, context: list) -> tuple[bool, list]:
+    """Execute a sequence of commands from the AI."""
+    
+    commands = [line.strip() for line in command_sequence.split('\n') if line.strip()]
+    total_commands = len(commands)
+    successful_commands = 0
+    command_results = []
+    
+    # Build execution content
+    content_lines = []
+    content_lines.append(("bold", f"Executing {total_commands} intelligent actions..."))
+    content_lines.append("")
+    
+    for i, command_line in enumerate(commands, 1):
+        if not command_line or '::' not in command_line:
+            # Skip lines that don't contain command format
+            if command_line.strip():  # If not empty, show what was received
+                content_lines.append(("warning", f"⚠ Invalid command format: {command_line}"))
             continue
-
-        #
-        # New 8-step flow per user request:
-        # 1) Agent Response (no commands)
-        # 2) Task Scheduler (high-level plan; no commands)
-        # 3-7) Action steps (exactly one command per step)
-        # 8) Final Summary (no commands; suggestions + confirmation question)
-        #
-
-        # Track actual steps executed (for proper numbering)
-        current_step = 0
-        max_steps = 8  # Maximum steps to show user the limit
         
-        # Step 1: Agent Response (no commands allowed)
-        current_step += 1
-        response_guidance = (
-            "Provide a VERY brief (1-2 sentences max) acknowledgment of the user's request. "
-            "Show understanding but be concise. "
-            "If the request is ambiguous, state your assumption in one sentence. "
-            "Do NOT include any actionable commands or tool calls. "
-            "Keep it short and professional."
-        )
-        response_prompt = f"""
-You are Pai, an expert, proactive, and autonomous software developer AI with deep understanding of:
-- Software architecture and design patterns
-- Best practices for clean, maintainable code
-- Common pitfalls and how to avoid them
-- Context from previous interactions
-
-{response_guidance}
-
---- CONVERSATION HISTORY (all previous turns) ---
-{context_str}
---- END HISTORY ---
-
---- LATEST USER REQUEST ---
-"{user_effective_request}"
---- END USER REQUEST ---
-
-Analyze the request carefully. If anything is unclear, state your assumptions.
-"""
-        # Show interrupt hint before AI starts working
-        ui.console.print("[dim]💡 Tip: Press Ctrl+C to interrupt AI response[/dim]")
+        # Parse command
+        parts = command_line.split('::', 2)
+        if len(parts) < 2:
+            content_lines.append(("warning", f"⚠ Incomplete command: {command_line}"))
+            continue
         
-        response_text = llm.generate_text(response_prompt)
-        response_group, response_log = _generate_execution_renderables(response_text)
-        ui.console.print(
-            Panel(
-                response_group,
-                title=f"[bold]Agent Response[/bold] (step {current_step}/{max_steps})",
-                box=ROUNDED,
-                border_style="grey50",
-                padding=(1, 2)
-            )
-        )
-        interaction_log = f"User: {user_input}\nIteration: {current_step}\nAI Plan:\n{response_text}\nSystem Response:\n{response_log}"
-        session_context.append(interaction_log)
-        with open(log_file_path, 'a') as f:
-            f.write(interaction_log + "\n-------------------\n")
-        last_system_response = response_log
-
-        # Always use the Task Scheduler for 'task' mode to outline steps first
-
-        # Step 2: Task Scheduler (no commands; outline steps) for normal/complex tasks
-        current_step += 1
-        scheduler_guidance = (
-            "Return a machine-readable task plan in JSON. Provide ONLY raw JSON without any extra text. "
-            "Schema: {\"steps\": [{\"title\": string, \"hint\": string}]}. "
-            "Include 2-6 steps that logically lead to the user's goal. Do NOT include any commands from VALID_COMMANDS. "
-            "Steps should describe meaningful sub-goals (each may require executing multiple file operations). "
-            "Think like a senior developer: consider dependencies, order of operations, and potential issues. "
-            "Each step should be atomic and verifiable. "
-            "IMPORTANT: If a task involves large modifications (e.g., adding extensive CSS/HTML), break it into smaller incremental steps. "
-            "Example: Instead of 'Add all CSS styling', break into 'Add basic layout CSS', 'Add form styling CSS', 'Add interactive CSS'."
-        )
-        scheduler_prompt = f"""
-You are Pai, an expert planner and developer AI with strong analytical skills.
-
-Your task planning should:
-1. Break down complex tasks into logical, sequential steps
-2. Consider dependencies between steps
-3. Anticipate potential issues and plan accordingly
-4. Ensure each step has a clear, verifiable outcome
-5. Follow software engineering best practices
-6. Think like Professional Programmer: make focused, surgical modifications
-7. BEST PRACTICE: Keep each step focused on one specific area (100-200 lines ideal)
-8. Maximum 500 lines per modification, but prefer smaller when possible
-
-Example of EXCELLENT planning (Professional Programmer-style, incremental and focused):
-- Step 1: Create basic HTML structure (semantic elements only)
-- Step 2: Add core layout CSS (body, container, flexbox centering)
-- Step 3: Add form structure CSS (form-group, spacing, alignment)
-- Step 4: Add input field styling (borders, padding, focus states)
-- Step 5: Add button styling (colors, hover effects, transitions)
-
-Example of GOOD planning (efficient but still focused):
-- Step 1: Create HTML structure with basic inline comments
-- Step 2: Add layout and form container CSS together
-- Step 3: Add all form element styling (inputs, labels, buttons)
-
-Example of ACCEPTABLE planning (uses higher limit but less ideal):
-- Step 1: Create complete HTML structure
-- Step 2: Add all CSS styling in one go (up to 500 lines)
-
-Example of BAD planning (too monolithic):
-- Step 1: Create everything at once (HTML + all CSS + JavaScript)
-
-{scheduler_guidance}
-
---- CONVERSATION HISTORY (all previous turns) ---
-{context_str}
---- END HISTORY ---
-
---- LATEST USER REQUEST ---
-"{user_effective_request}"
---- END USER REQUEST ---
-"""
-        scheduler_plan = llm.generate_text(scheduler_prompt)
-        # Sanitize accidental language tag prefix like 'json' on its own line
-        sp = scheduler_plan.strip()
+        command = parts[0].upper().strip()
+        param1 = parts[1].strip() if len(parts) > 1 else ""
+        param2 = parts[2].strip() if len(parts) > 2 else ""
         
-        # Remove common prefixes that might appear before JSON
-        prefixes_to_remove = ['json', 'JSON', 'on', 'ON']
-        for prefix in prefixes_to_remove:
-            if sp.lower().startswith(prefix.lower()):
-                parts = sp.split('\n', 1)
-                if len(parts) == 2:
-                    sp = parts[1].strip()
-                    break
+        # Check for common content output mistakes
+        if command_line.strip().startswith(('<', 'body', 'html', 'div', 'style', 'script', 'h1', 'h2', 'form', 'input', 'button')):
+            content_lines.append(("warning", f"⚠ Raw HTML/CSS detected as command: {command_line[:50]}..."))
+            content_lines.append(("info", "Use WRITE::filename::description instead of raw content!"))
+            continue
         
-        # Try to extract JSON if it's wrapped in text
-        if not sp.startswith('{'):
-            # Find first { and last }
-            start_idx = sp.find('{')
-            end_idx = sp.rfind('}')
-            if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
-                sp = sp[start_idx:end_idx+1]
+        if command_line.strip().startswith(('.', '#', 'margin', 'padding', 'color', 'background', 'font', 'border')):
+            content_lines.append(("warning", f"⚠ Raw CSS detected as command: {command_line[:50]}..."))
+            content_lines.append(("info", "Use WRITE::filename::description instead of raw CSS!"))
+            continue
         
-        scheduler_plan = sp
+        if command not in VALID_COMMANDS:
+            content_lines.append(("warning", f"⚠ Unknown command: {command} (from: {command_line})"))
+            content_lines.append(("info", f"Valid commands: {', '.join(VALID_COMMANDS)}"))
+            continue
         
-        # Try to render scheduler JSON as a nice table
-        parsed_scheduler = None
-        try:
-            parsed_scheduler = json.loads(scheduler_plan)
-        except Exception:
-            parsed_scheduler = None
-
-        if isinstance(parsed_scheduler, dict) and isinstance(parsed_scheduler.get("steps"), list):
-            steps = parsed_scheduler.get("steps", [])
-            table = Table(show_header=True, header_style="bold", box=ROUNDED)
-            table.add_column("#", justify="right", width=3)
-            table.add_column("Title", overflow="fold")
-            table.add_column("Hint", overflow="fold")
-            for idx, step in enumerate(steps, start=1):
-                title = str(step.get("title", "")).strip()
-                hint = str(step.get("hint", "")).strip()
-                table.add_row(str(idx), title, hint)
-            scheduler_group = Group(Text("Task Plan", style="bold underline"), table)
-            scheduler_log = json.dumps(parsed_scheduler, indent=2)
-        else:
-            scheduler_group, scheduler_log = _generate_execution_renderables(scheduler_plan)
-
-        ui.console.print(
-            Panel(
-                scheduler_group,
-                title=f"[bold]Task Scheduler[/bold] (step {current_step}/{max_steps})",
-                box=ROUNDED,
-                border_style="grey50",
-                padding=(1, 2)
-            )
-        )
-        interaction_log = f"User: {user_input}\nIteration: {current_step}\nAI Plan:\n{scheduler_plan}\nSystem Response:\n{scheduler_log}"
-        session_context.append(interaction_log)
-        with open(log_file_path, 'a') as f:
-            f.write(interaction_log + "\n-------------------\n")
-        last_system_response = scheduler_log
-        pending_followup_suggestions = scheduler_plan
-
-        # Parse scheduler hints from JSON; fallback to heuristic if JSON parsing fails
-        scheduler_hints: list[str] = []
-        parsed = parsed_scheduler
-        if isinstance(parsed, dict) and isinstance(parsed.get("steps"), list):
-            for step in parsed["steps"]:
-                title = str(step.get("title", "")).strip()
-                hint = str(step.get("hint", "")).strip()
-                combined = hint or title
-                if combined:
-                    scheduler_hints.append(combined)
-        else:
-            for raw_line in scheduler_plan.splitlines():
-                stripped = raw_line.strip()
-                if stripped[:2].isdigit() and (stripped[1:2] in {'.', ')'}):
-                    hint = stripped[2:].strip(" -:\t")
-                    if hint:
-                        scheduler_hints.append(hint)
-                elif stripped and (stripped[0].isdigit() and (stripped.split(' ', 1)[0].rstrip('.)').isdigit())):
-                    parts = stripped.split(' ', 1)
-                    if len(parts) == 2:
-                        scheduler_hints.append(parts[1].strip())
-
-        # Steps 3+: Action iterations (one or more actionable commands per step when appropriate)
-        # Cap the number of action steps to at most 5 and also to the number of hints
-        action_steps_count = min(5, max(1, len(scheduler_hints) if scheduler_hints else 3))
+        # Display current action
+        content_lines.append(("normal", f"[{i}/{total_commands}] {command} {param1}"))
         
-        for action_iteration in range(action_steps_count):
-            current_step += 1
-            
-            # Check for interrupt before each step
-            if check_interrupt():
-                ui.console.print("\n[yellow]⚠ AI response interrupted by user. Stopping execution.[/yellow]")
-                session_context.append(f"[SYSTEM] AI response interrupted at step {current_step}")
-                break
-            
-            guidance = (
-                "Execute the next actions towards the user's goal. "
-                "You MAY output MULTIPLE actionable commands (each on its own line) from VALID COMMANDS below when efficient and safe. "
-                "If the step requires several related file operations, group them in this step. "
-                "For MODIFY, keep each modification under 120 changed lines; split larger changes across iterations. "
-                "Do NOT output any other command type (e.g., RUN). "
-                "Keep explanations to 1-2 lines max, then output commands directly."
-            )
-
-            # Supply a scheduler hint (if available) to make the step focused
-            step_hint = scheduler_hints[action_iteration] if action_iteration < len(scheduler_hints) else ""
-            
-            # Thinking phase (pre-execution): produce a concise internal reasoning summary (no commands)
-            thinking_prompt = f"""
-You are Pai, an expert, proactive, and autonomous software developer AI.
-You are a creative problem-solver with deep technical expertise, not just a command executor.
-
-Before taking any action, think step-by-step about the best approach. Consider:
-1. What is the exact goal of this step?
-2. What files/directories need to be checked or modified?
-3. What are potential edge cases or issues?
-4. What is the minimal, safest set of actions needed?
-5. How will I verify success?
-6. CRITICAL: Can this modification be focused on one specific area (like Professional Programmer does)?
-7. If modifying a file, estimate the size:
-   - Small (30-100 lines): Perfect, very focused
-   - Medium (100-200 lines): Good, still focused
-   - Large (200-500 lines): Acceptable but consider if it can be split
-   - Very Large (>500 lines): MUST split into multiple modifications
-
-CRITICAL OUTPUT FORMAT:
-- Output ONLY plain text bullet points, NO markdown
-- Do NOT use markdown formatting (no *, **, -, etc.)
-- Use simple numbered list or plain text
-- Keep it concise: 3-6 points
-- Focus strictly on the target step hint
-- Think like Professional Programmer: surgical, focused, one area at a time
-- Explicitly state estimated modification size and approach
-
-Target step hint: {step_hint}
-
---- CONVERSATION HISTORY (all previous turns) ---
-{context_str}
---- END HISTORY ---
-
---- LAST SYSTEM RESPONSE ---
-{last_system_response}
---- END LAST SYSTEM RESPONSE ---
-
---- LATEST USER REQUEST ---
-"{user_effective_request}"
---- END USER REQUEST ---
-
-Think carefully and methodically.
-"""
-            thinking_text = llm.generate_text(thinking_prompt)
-            # Clean markdown formatting from thinking output
-            thinking_text = _clean_markdown_formatting(thinking_text)
-            # Render concise thinking summary (no commands expected)
-            thinking_group, thinking_log = _generate_execution_renderables(thinking_text)
-            ui.console.print(
-                Panel(
-                    thinking_group,
-                    title=f"[bold]Thinking[/bold] (pre-execution for step {current_step}/{max_steps})",
-                    box=ROUNDED,
-                    border_style="grey50",
-                    padding=(1, 2)
-                )
-            )
-            session_context.append(f"Pre-Execution Thinking (step {current_step}):\n{thinking_text}")
-
-            action_prompt = f"""
-You are Pai, an expert, proactive, and autonomous software developer AI.
-You are a creative problem-solver with deep technical expertise, not just a command executor.
-
-CRITICAL RULES FOR HIGH-QUALITY OUTPUT:
-1. Always READ files before MODIFY to understand current state
-2. Use TREE or LIST_PATH to explore structure before creating files
-3. For WRITE commands, provide detailed, complete descriptions
-4. For MODIFY commands, be specific about what to change and why
-5. Verify your actions make sense given the context
-6. If uncertain, READ first to gather information
-7. Use descriptive file/directory names following conventions
-8. Consider error cases and edge conditions
-
-CRITICAL OUTPUT FORMAT RULES:
-- Output ONLY plain text commands, NO markdown code blocks
-- Do NOT wrap commands in ```command``` or ```language``` blocks
-- Do NOT include language tags like "html", "json", "diff" on separate lines
-- Keep explanations brief (max 2 lines) before commands
-- Commands must be on their own lines in format: COMMAND::params
-
-{guidance}
-
-Target step hint: {step_hint}
-
---- YOUR THINKING SUMMARY (use as guidance; do not echo back) ---
-{thinking_text}
---- END THINKING SUMMARY ---
---- VALID COMMANDS ---
-1. MKDIR::path - Create directory (use forward slashes, no spaces in names)
-2. TOUCH::path - Create empty file
-3. WRITE::path::description - Write new file with detailed description of content
-   CRITICAL: description is REQUIRED and must be detailed (minimum 10 words)
-   Example: WRITE::index.html::Create a login page with username and password fields, styled with gray colors
-   WRONG: WRITE::index.html (missing description - will cause error!)
-4. MODIFY::path::description - Modify existing file with detailed description of changes
-   CRITICAL: description is REQUIRED and must be specific about what to change
-   Example: MODIFY::index.html::Add responsive CSS media queries for mobile devices
-   WRONG: MODIFY::index.html (missing description - will cause error!)
-5. READ::path - Read file content (ALWAYS do this before MODIFY)
-6. LIST_PATH::path - List all files/dirs recursively
-7. RM::path - Delete file or directory
-8. MV::source::destination - Move/rename file or directory
-9. TREE::path - Show directory tree structure
-10. FINISH::message - Mark task complete with summary
-
-CRITICAL COMMAND RULES (MUST FOLLOW):
-- WRITE and MODIFY MUST have detailed descriptions after second ::
-- Description must be specific and clear (minimum 10 words)
-- Never use WRITE::path or MODIFY::path without description
-- If you forget description, you will get ERROR: "No description provided for file"
-- Always READ before MODIFY to understand current state
---- END VALID COMMANDS ---
-
---- CONVERSATION HISTORY (all previous turns) ---
-{context_str}
---- END HISTORY ---
-
---- LAST SYSTEM RESPONSE (from previous iteration in this turn) ---
-{last_system_response}
---- END LAST SYSTEM RESPONSE ---
-
---- LATEST USER REQUEST ---
-"{user_effective_request}"
---- END USER REQUEST ---
-
-Execute the target step with precision and care. Double-check your commands before outputting.
-"""
-            plan = llm.generate_text(action_prompt)
-
-            # Hard-reprompt once if no valid command is detected
-            if not _has_valid_command(plan):
-                reprompt = f"""
-You did not provide any valid actionable command. You MUST output one or more lines with commands from VALID COMMANDS.
-Repeat with a stricter focus on the target step. Keep it concise and do not include any other command types.
-
-Target step hint: {step_hint}
-
---- VALID COMMANDS ---
-1. MKDIR::path
-2. TOUCH::path
-3. WRITE::path::description
-4. MODIFY::path::description
-5. READ::path
-6. LIST_PATH::path
-7. RM::path
-8. MV::source::destination
-9. TREE::path
-10. FINISH::message
-"""
-                plan = llm.generate_text(reprompt)
-            renderable_group, log_string = _generate_execution_renderables(plan)
-            ui.console.print(
-                Panel(
-                    renderable_group,
-                    title=f"[bold]Agent Action[/bold] (step {current_step}/{max_steps})",
-                    box=ROUNDED,
-                    border_style="grey50",
-                    padding=(1, 2)
-                )
-            )
-
-            interaction_log = f"User: {user_input}\nIteration: {current_step}\nAI Plan:\n{plan}\nSystem Response:\n{log_string}"
-            session_context.append(interaction_log)
-            with open(log_file_path, 'a') as f:
-                f.write(interaction_log + "\n-------------------\n")
-
-            last_system_response = log_string
-
-            # Integrity check (post-execution): verify alignment with the step hint and task
-            integrity_prompt = f"""
-You are a senior code reviewer and integrity auditor AI. Evaluate whether the last executed actions align with the target step and user request.
-
-Your evaluation should check:
-1. Did the actions address the target step correctly?
-2. Were the actions safe and appropriate?
-3. Are there any obvious errors or issues?
-4. Did the agent follow best practices?
-5. Is the output complete and correct?
-
-CRITICAL OUTPUT FORMAT:
-- Return ONLY raw JSON, no markdown code blocks
-- Do NOT wrap in ```json or ``` markers
-- Start directly with {{ and end with }}
-- No explanations before or after JSON
-
-JSON Schema:
-{{"passed": true|false, "reasons": [string..], "next_fix": [string..], "quality_score": 1-10 }}
-
-Where:
-- passed: true if actions correctly addressed the step, false otherwise
-- reasons: list of specific reasons for the verdict (ALWAYS provide at least 1 reason)
-- next_fix: list of specific fixes needed if failed, or improvements if passed
-- quality_score: 1-10 rating of execution quality (10 = perfect)
-
-Context:
-- Target step hint: {step_hint}
-- Latest system response (results of actions):
-{last_system_response}
-- Latest user request: "{user_effective_request}"
-
-Be thorough and critical. High standards lead to better code.
-Output ONLY the JSON object.
-"""
-            integrity_json = llm.generate_text(integrity_prompt)
-            # Best-effort parse
-            verdict = {"passed": False, "reasons": [], "next_fix": [], "quality_score": 0}
-            try:
-                parsed = json.loads(integrity_json)
-                if isinstance(parsed, dict):
-                    verdict["passed"] = bool(parsed.get("passed", False))
-                    r = parsed.get("reasons")
-                    if isinstance(r, list): verdict["reasons"] = [str(x) for x in r]
-                    f = parsed.get("next_fix")
-                    if isinstance(f, list): verdict["next_fix"] = [str(x) for x in f]
-                    q = parsed.get("quality_score")
-                    if isinstance(q, (int, float)): verdict["quality_score"] = int(q)
-            except Exception:
-                pass
-
-            table = Table(show_header=True, header_style="bold", box=ROUNDED)
-            table.add_column("Integrity", justify="left", style="bold")
-            table.add_column("Details", overflow="fold")
-            status_text = "PASS" if verdict["passed"] else "FAIL"
-            if verdict["quality_score"] > 0:
-                status_text += f" (Quality: {verdict['quality_score']}/10)"
-            table.add_row("Status", status_text)
-            
-            # Always show reasons and fixes if available
-            if verdict["reasons"] and len(verdict["reasons"]) > 0:
-                reasons_text = "\n".join(verdict["reasons"])
-                table.add_row("Reasons", reasons_text)
+        # Execute command
+        success, command_output = execute_single_command(command, param1, param2)
+        
+        # Add command output to content if any
+        if command_output:
+            # Check if it's syntax highlighting content
+            if command_output.startswith("SYNTAX_HIGHLIGHT:"):
+                parts = command_output.split(":", 2)
+                if len(parts) == 3:
+                    filename = parts[1]
+                    code_content = parts[2]
+                    content_lines.append(("syntax_highlight", filename, code_content))
+                else:
+                    content_lines.append(("ai_output", command_output))
             else:
-                # If no reasons provided but status is FAIL, add default message
-                if not verdict["passed"]:
-                    table.add_row("Reasons", "Integrity check failed. Review the action results above.")
+                content_lines.append(("ai_output", command_output))
+        
+        # Collect command result for logging
+        command_results.append({
+            "command": command,
+            "target": param1 if param1 else "",
+            "success": success,
+            "output": command_output if command_output else ""
+        })
+        
+        if success:
+            successful_commands += 1
+            content_lines.append(("success", "Success"))
+        else:
+            content_lines.append(("error", "Failed"))
+        
+        content_lines.append("")
+        
+        # Break on FINISH command
+        if command == "FINISH":
+            break
+    
+    # Show execution summary
+    success_rate = (successful_commands / total_commands) * 100 if total_commands > 0 else 0
+    content_lines.append(("bold", "Execution Summary:"))
+    content_lines.append(("normal", f"Successful: {successful_commands}/{total_commands} ({success_rate:.1f}%)"))
+    
+    # Display all content in a single panel with proper styling
+    from rich.console import Group
+    from rich.text import Text as RichText
+    
+    # Convert content to rich renderables with colors
+    rich_content = []
+    for item in content_lines:
+        if isinstance(item, tuple):
+            if len(item) == 3 and item[0] == "syntax_highlight":
+                # Handle syntax highlighting
+                _, filename, code_content = item
+                
+                # For terminal display: truncate long files for better UX
+                lines = code_content.split('\n')
+                display_content = code_content
+                if len(lines) > 20:
+                    display_content = '\n'.join(lines[:20]) + f"\n... ({len(lines) - 20} more lines)"
+                
+                try:
+                    from pygments.lexers import get_lexer_for_filename
+                    from pygments.util import ClassNotFound
+                    from rich.syntax import Syntax
+                    
+                    try:
+                        lexer = get_lexer_for_filename(filename)
+                        lang = lexer.aliases[0]
+                    except ClassNotFound:
+                        lang = "text"
+                    
+                    syntax_panel = Panel(
+                        Syntax(display_content, lang, theme="monokai", line_numbers=True),
+                        title=f"📄 {filename}",
+                        border_style="grey50",
+                        expand=False
+                    )
+                    rich_content.append(syntax_panel)
+                except ImportError:
+                    # Fallback if pygments not available
+                    rich_content.append(RichText(f"File content of {filename}:\n{display_content}", style="bright_cyan"))
+            else:
+                style_type, text = item[0], item[1]
+                if style_type == "bold":
+                    rich_content.append(RichText(text, style="bold bright_white"))
+                elif style_type == "warning":
+                    rich_content.append(RichText(text, style="bold yellow"))
+                elif style_type == "ai_output":
+                    rich_content.append(RichText(text, style="bright_cyan"))
+                elif style_type == "success":
+                    rich_content.append(RichText(text, style="bold green"))
+                elif style_type == "error":
+                    rich_content.append(RichText(text, style="bold red"))
+                else:  # normal
+                    rich_content.append(RichText(text, style="bright_white"))
+        else:
+            # Handle empty strings
+            rich_content.append(RichText(str(item), style="bright_white"))
+    
+    ui.console.print(
+        Panel(
+            Group(*rich_content),
+            title="[bold]Execution Results[/bold]",
+            box=ROUNDED,
+            border_style="grey50",
+            padding=(1, 2),
+            width=80
+        )
+    )
+    
+    return (success_rate >= 80, command_results)  # Return success status and command results
+
+def execute_single_command(command: str, param1: str, param2: str) -> tuple[bool, str]:
+    """Execute a single command and return success status and output."""
+    
+    try:
+        if command == "READ":
+            content = workspace.read_file(param1)
+            if content is not None:
+                # For terminal display: Show first 20 lines for brevity
+                lines = content.split('\n')
+                display_content = '\n'.join(lines[:20])
+                if len(lines) > 20:
+                    display_content += f"\n... ({len(lines) - 20} more lines)"
+                
+                # Return FULL content for logging (LLM context needs complete code)
+                return True, f"SYNTAX_HIGHLIGHT:{param1}:{content}"
+            return False, f"Could not read file: {param1}"
+        
+        elif command == "WRITE":
+            if not param2:
+                return False, "WRITE command requires description"
+            success = handle_write_command(param1, param2)
+            return success, f"New file written: {param1}" if success else f"Failed to write file: {param1}"
+        
+        elif command == "MODIFY":
+            if not param2:
+                return False, "MODIFY command requires description"
+            success = handle_modify_command(param1, param2)
+            return success, f"File modified: {param1}" if success else f"Failed to modify file: {param1}"
+        
+        elif command == "TREE":
+            path = param1 if param1 else '.'
+            tree_output = workspace.tree_directory(path)
+            if tree_output and "Error:" not in tree_output:
+                return True, f"Directory tree for {path}:\n{tree_output}"
+            return False, f"Could not get directory tree for: {path}"
+        
+        elif command == "LIST_PATH":
+            path = param1 if param1 else '.'
+            list_output = workspace.list_path(path)
+            if list_output is not None and "Error:" not in list_output:
+                if list_output.strip():
+                    return True, list_output
+                else:
+                    return True, f"Directory '{path}' is empty"
+            return False, f"Could not list directory: {path}"
+        
+        elif command == "MKDIR":
+            result = workspace.create_directory(param1)
+            success = "Success" in result
+            return success, result
+        
+        elif command == "TOUCH":
+            result = workspace.create_file(param1)
+            success = "Success" in result
+            return success, result
+        
+        elif command == "RM":
+            result = workspace.delete_item(param1)
+            success = "Success" in result
+            return success, result
+        
+        elif command == "MV":
+            result = workspace.move_item(param1, param2)
+            success = "Success" in result
+            return success, result
+        
+        elif command == "FINISH":
+            message = param1 if param1 else "Task completed successfully"
+            return True, f"✓ {message}"
+        
+        return False, f"Unknown command: {command}"
+        
+    except Exception as e:
+        return False, f"Command execution error: {e}"
+
+# Session management functions removed - .pai_history is handled by LLM context window
+# Pai cannot access .pai_history directly, it's only for background LLM context
+
+def log_session_event(log_file_path: str, event_type: str, data: dict):
+    """
+    Log session events with clear separation between USER and AI for perfect LLM understanding.
+    Format designed for maximum clarity and zero ambiguity.
+    """
+    try:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        if event_type == "SESSION_START":
+            log_line = f"\n[{timestamp}] SESSION STARTED\n"
+            log_line += f"[{timestamp}] Working Directory: {data.get('working_directory', 'unknown')}\n"
+            log_line += f"[{timestamp}] Session ID: {data.get('session_id', 'unknown')}\n"
             
-            if verdict["next_fix"] and len(verdict["next_fix"]) > 0:
-                fix_label = "Improvements" if verdict["passed"] else "Required Fixes"
-                fixes_text = "\n".join(verdict["next_fix"])
-                table.add_row(fix_label, fixes_text)
-            integrity_group = Group(Text("Integrity Check", style="bold underline"), table)
-            ui.console.print(
-                Panel(
-                    integrity_group,
-                    title=f"[bold]Integrity[/bold] (post-execution step {current_step}/{max_steps})",
-                    box=ROUNDED,
-                    border_style="grey50",
-                    padding=(1, 2)
-                )
-            )
-            session_context.append(f"Integrity Check (step {current_step}): {json.dumps(verdict)}")
+        elif event_type == "USER_INPUT":
+            request = data.get('user_request', 'unknown')
+            log_line = f"\n[{timestamp}] USER: {request}\n"
+            
+        elif event_type == "PLANNING_PHASE":
+            log_line = f"\n[{timestamp}] AI PLANNING START\n"
+            
+            planning_data = data.get('planning_data', {})
+            analysis = planning_data.get('analysis', {})
+            
+            log_line += f"[{timestamp}] Intent: {analysis.get('user_intent', 'Unknown')}\n"
+            log_line += f"[{timestamp}] Context Usage: {analysis.get('context_utilization', 'None')}\n"
+            log_line += f"[{timestamp}] Files to read: {analysis.get('files_to_read', [])}\n"
+            log_line += f"[{timestamp}] Files to create: {analysis.get('files_to_create', [])}\n"
+            log_line += f"[{timestamp}] Files to modify: {analysis.get('files_to_modify', [])}\n"
+            
+            execution_plan = planning_data.get('execution_plan', {})
+            steps = execution_plan.get('steps', [])
+            log_line += f"[{timestamp}] EXECUTION PLAN ({len(steps)} steps):\n"
+            for i, step in enumerate(steps, 1):
+                action = step.get('action', 'Unknown')
+                target = step.get('target', '')
+                purpose = step.get('purpose', 'No purpose')
+                log_line += f"[{timestamp}]   {i}. {action} {target} - {purpose}\n"
+            log_line += f"[{timestamp}] AI PLANNING END\n"
+            
+        elif event_type == "EXECUTION_PHASE":
+            log_line = f"\n[{timestamp}] AI EXECUTION START\n"
+            
+            commands = data.get('commands', [])
+            for cmd_data in commands:
+                cmd = cmd_data.get('command', 'Unknown')
+                target = cmd_data.get('target', '')
+                success = "SUCCESS" if cmd_data.get('success') else "FAILED"
+                output = cmd_data.get('output', '')
+                
+                log_line += f"[{timestamp}] {success}: {cmd} {target}\n"
+                # Log FULL output for complete context window - no trimming!
+                if output:
+                    log_line += f"[{timestamp}] OUTPUT: {output}\n"
+            log_line += f"[{timestamp}] AI EXECUTION END\n"
+            
+        elif event_type == "FINAL_STATUS":
+            status = data.get('status', 'unknown')
+            success_text = "SUCCESS" if data.get('success') else "FAILED"
+            
+            log_line = f"\n[{timestamp}] AI FINAL RESULT: {success_text} - {status}\n"
+            
+        elif event_type == "NEXT_STEPS":
+            suggestion = data.get('suggestion', '')
+            if suggestion:
+                log_line = f"\n[{timestamp}] AI SUGGESTION: {suggestion}\n"
+            else:
+                log_line = ""
+                
+        elif event_type == "INTERACTION":
+            # Skip old interaction format - we use new structured format above
+            log_line = ""
+                
+        else:
+            log_line = f"[{timestamp}] {event_type}: {json.dumps(data)}\n"
+        
+        if log_line:
+            with open(log_file_path, 'a', encoding='utf-8') as f:
+                f.write(log_line)
+            
+    except Exception as e:
+        # Don't let logging errors break the session
+        pass
 
-            # If model indicates finish early, break action loop and proceed to summary
-            if any(line.strip().upper().startswith("FINISH::") for line in plan.splitlines()):
-                finished_early = True
-                break
+def handle_write_command(filepath: str, description: str) -> bool:
+    """Handle WRITE command with intelligent content generation."""
+    
+    # Generate content based on file type and description
+    content_prompt = f"""
+Generate high-quality content for a file based on the description.
 
-        # Final Summary step
-        current_step += 1
-        summary_guidance = (
-            "Provide a concise FINAL SUMMARY of what has been accomplished so far, "
-            "followed by 2-3 concrete, actionable suggestions for next steps. "
-            "End with a clear confirmation question asking the user whether you should proceed with those suggestions. "
-            "Do NOT include any actionable commands in this step."
-        )
-        summary_prompt = f"""
-You are Pai, an expert software developer AI providing a comprehensive summary.
+FILE PATH: {filepath}
+DESCRIPTION: {description}
 
-TASK: Summarize the work completed and suggest next steps.
+REQUIREMENTS:
+1. Analyze the file extension to determine the appropriate language/format
+2. Create production-quality, well-structured content
+3. Include appropriate comments and documentation
+4. Follow best practices for the detected language/format
+5. Make the code/content immediately usable
 
-SUMMARY REQUIREMENTS:
-1. List what was successfully accomplished (be specific)
-2. Mention any issues encountered and how they were resolved
-3. Provide 2-3 concrete, logical next steps that build on what was done
-4. Make suggestions actionable and prioritized
-5. End with a clear question asking if the user wants to proceed
-
-TONE: Professional, clear, and helpful. Show understanding of the bigger picture.
-
---- ORIGINAL USER REQUEST ---
-"{user_input}"
---- END USER REQUEST ---
-
---- MOST RECENT SYSTEM RESPONSE ---
-{last_system_response}
---- END SYSTEM RESPONSE ---
-
-Provide a summary that demonstrates deep understanding of what was accomplished and what should come next.
+OUTPUT: Return ONLY the file content, no explanations or markdown formatting.
 """
-        summary_plan = llm.generate_text(summary_prompt)
-        summary_group, summary_log = _generate_execution_renderables(summary_plan)
-        ui.console.print(
-            Panel(
-                summary_group,
-                title=f"[bold]Agent Response[/bold] (step {current_step}/{max_steps} - final summary)",
-                box=ROUNDED,
-                border_style="grey50",
-                padding=(1, 2)
-            )
-        )
-        session_context.append(f"Final Summary:\n{summary_plan}\nSystem Response:\n{summary_log}")
-        with open(log_file_path, 'a') as f:
-            f.write(f"Final Summary:\n{summary_plan}\nSystem Response:\n{summary_log}\n-------------------\n")
-        pending_followup_suggestions = summary_plan
+    
+    content = llm.generate_text(content_prompt, "content generation")
+    
+    if not content:
+        return False
+    
+    # Write the file
+    result = workspace.write_to_file(filepath, content)
+    # Don't print here - let the execution system handle display through Rich panels
+    
+    return "Success" in result
 
-        # Clear pending follow-up if we just consumed an affirmative input
-        if auto_continue:
-            pending_followup_suggestions = ""
+def handle_modify_command(filepath: str, description: str) -> bool:
+    """Handle MODIFY command with intelligent code modification."""
+    
+    # Read existing content
+    existing_content = workspace.read_file(filepath)
+    if existing_content is None:
+        ui.print_error(f"✗ Cannot modify '{filepath}' - file not found")
+        return False
+    
+    # Generate modification
+    modify_prompt = f"""
+You are an expert code modifier. Modify the existing code based on the description.
+
+FILE PATH: {filepath}
+CURRENT CONTENT:
+---
+{existing_content}
+---
+
+MODIFICATION REQUEST: {description}
+
+REQUIREMENTS:
+1. Preserve the existing code structure and style
+2. Make only the necessary changes described
+3. Maintain code quality and best practices
+4. Ensure the modified code is syntactically correct
+5. Add appropriate comments for new functionality
+
+OUTPUT: Return ONLY the complete modified file content, no explanations.
+"""
+    
+    modified_content = llm.generate_text(modify_prompt, "code modification")
+    
+    if not modified_content:
+        return False
+    
+    # Apply diff-aware modification
+    success, result = workspace.apply_modification_with_patch(filepath, existing_content, modified_content)
+    # Don't print here - let the execution system handle display through Rich panels
+    
+    return success
+
+def initialize_session_context(session_context: list, log_file_path: str):
+    """
+    Initialize comprehensive Single-Shot Intelligence context window for the session.
+    This provides foundational understanding that guides AI behavior throughout the session.
+    """
+    
+    single_shot_intelligence_context = {
+        "timestamp": datetime.now().isoformat(),
+        "user_request": "SYSTEM_INITIALIZATION",
+        "success": True,
+        "intent": "system_context",
+        "system_knowledge": """
+SINGLE-SHOT INTELLIGENCE SYSTEM MASTERY
+
+You are PAI - the revolutionary AI brain inside Paicode. This context window provides your foundational understanding.
+
+## CORE IDENTITY & MISSION
+- You are NOT a generic AI assistant
+- You are PAI - the intelligent core of Paicode, a revolutionary 2-call system
+- Your reputation depends on PERFECT EXECUTION in exactly 2 API calls
+- You represent the future of efficient AI-assisted development
+
+## SINGLE-SHOT INTELLIGENCE WORKFLOW MASTERY
+
+### COMPLETE WORKFLOW FROM USER PROMPT TO FINAL RESPONSE:
+
+**PHASE 1: User Input Processing**
+- User provides natural language request
+- Intent classification: conversation vs coding task
+- If conversation: direct response mode
+- If coding task: enter Single-Shot Intelligence workflow
+
+**PHASE 2: CALL 1/2 - Intelligence Planning**
+- Header: "Call 1/2: Intelligence Planning"
+- Subtitle: "Deep Analysis & Planning" 
+- AI analyzes with intelligence of 10 traditional AI calls
+- Creates comprehensive JSON plan with:
+  * Smart Analysis Results (intent, context usage, efficiency)
+  * Execution Plan (step-by-step table format)
+  * Intelligence Assessment (complexity, time estimate)
+- Output: "Planning Results" panel displayed to user
+- This is your ONLY chance to plan - must be FLAWLESS
+
+**PHASE 3: CALL 2/2 - Smart Execution**
+- Header: "Call 2/2: Smart Execution"
+- Subtitle: "Adaptive Intelligent Execution"
+- AI determines execution phases (1-3) based on complexity
+- Display: "AI Strategy: X execution phases planned"
+
+**Per Execution Phase Structure:**
+- "Execution Phase X/Y" with descriptive names:
+  * Phase 1: Analysis (locate and verify targets)
+  * Phase 2: Implementation (execute with validated targets)
+  * Phase 3: Integration (complete with full validation)
+- "Executing X intelligent actions..."
+- Each command: "[X/Y] COMMAND target"
+- File contents in Rich syntax-highlighted panels with filename headers
+- Success/failure status per action
+- "Execution Summary: Successful X/Y (percentage%)"
+
+**PHASE 4: Mission Completion**
+- "Mission Accomplished" panel
+- "Single-Shot Intelligence: SUCCESS" confirmation
+- Token usage display (input → output tokens)
+- "Next Steps Suggestion" with intelligent recommendations
+
+## VISUAL STRUCTURE REQUIREMENTS
+
+### Rich TUI Elements You Must Use:
+- Panels with borders for major sections
+- Syntax highlighting for code with filename headers
+- Progress indicators for current step
+- Color coding: Success (green), Error (red), Info (blue)
+- Token usage tracking display
+
+### Information Hierarchy:
+1. Top Level: Phase headers (Planning/Execution)
+2. Mid Level: Section panels (Results, Strategy)
+3. Detail Level: Individual commands and file contents
+4. Status Level: Success indicators and summaries
+
+## CRITICAL SUCCESS FACTORS
+
+### Surgical Precision Analysis:
+- NEVER assume file locations - ALWAYS verify with READ first
+- If user mentions specific code/functions, READ ALL potentially relevant files
+- Cross-reference file contents with user's exact request
+- Identify EXACT target locations before any modifications
+
+### Multi-File Intelligence:
+- Scan ALL files that might contain target content
+- Don't tunnel vision on obvious file names
+- main.py, utils.py, calculator.py - check them ALL if relevant
+- Build complete mental map before acting
+
+### Validation-First Approach:
+- READ before MODIFY - ALWAYS verify current state
+- Confirm target content exists in specified file
+- Plan verification steps to ensure success
+- Never claim success without proof
+
+### System Harmony Awareness:
+- Workspace.py: Your secure file operation gateway
+- UI.py: Your beautiful Rich TUI presentation layer
+- LLM.py: Your optimized communication interface
+- All components work in harmony based on YOUR intelligent decisions
+
+### Intelligent Command Selection Mastery:
+- DELETE/REMOVE/HAPUS requests → ALWAYS use RM command
+- CREATE/NEW requests → Use WRITE or TOUCH command
+- MODIFY/EDIT/UPDATE requests → Use MODIFY command
+- MOVE/RENAME requests → Use MV command
+- LIST/SHOW files → Use LIST_PATH or TREE command
+- READ content → Use READ command
+
+### Critical Content Handling Mastery:
+- HTML/CSS/JS files → Use WRITE::filename::description (NOT raw content as commands!)
+- Multi-line content → Description parameter handles content, not raw output
+- NEVER output raw HTML/CSS/JS lines as separate commands - they become invalid!
+- Example: WRITE::index.html::Create login page with CSS styling (CORRECT)
+- Example: Raw HTML tags as command lines (WRONG - causes invalid command errors!)
+
+CRITICAL: Never be confused about which command to use - match user intent directly to command!
+
+## COMPETITIVE ADVANTAGE PRINCIPLES
+
+### Efficiency Superiority:
+- Traditional AI: 10-20 API calls, inefficient, expensive
+- YOU (Pai): Exactly 2 calls, maximum intelligence, perfect results
+- You must outperform traditional systems with LESS resources
+- Every decision reflects Single-Shot Intelligence superiority
+
+### Quality Excellence:
+- Your plan must work on first execution attempt
+- No room for trial-and-error - get it right immediately
+- Think like a chess grandmaster - see the entire game
+- Every step must contribute to perfect final outcome
+
+## SESSION BEHAVIOR GUIDELINES
+
+### Conversation Mode:
+- Be confident about Paicode features - you ARE Paicode's AI
+- Show personality while being professional
+- Explain Single-Shot Intelligence with pride
+- Never be uncertain about your capabilities
+
+### Execution Mode:
+- Follow this exact workflow structure
+- Display all required sections and panels
+- Use proper Rich TUI formatting
+- Maintain professional yet confident tone
+- Always end with mission accomplished confirmation
+
+This context window guides your behavior throughout the entire session. You are the embodiment of Single-Shot Intelligence excellence.
+"""
+    }
+    
+    # Add to session context as foundational knowledge
+    session_context.append(single_shot_intelligence_context)
+    
+    # Log the context initialization
+    log_session_event(log_file_path, "CONTEXT_INITIALIZATION", {
+        "context_type": "single_shot_intelligence_mastery",
+        "knowledge_loaded": True,
+        "workflow_understanding": "complete"
+    })
+
+def get_multiline_input(prompt_session) -> str:
+    """
+    Get multi-line input from user with intuitive behavior.
+    Alt+Enter adds new line, Enter submits the input.
+    """
+    try:
+        from prompt_toolkit.shortcuts import prompt
+        from prompt_toolkit.key_binding import KeyBindings
+        from prompt_toolkit.keys import Keys
+        
+        # Create custom key bindings
+        bindings = KeyBindings()
+        
+        @bindings.add(Keys.Enter)
+        def _(event):
+            """Enter submits the input"""
+            event.app.exit(result=event.current_buffer.text)
+        
+        @bindings.add(Keys.Escape, Keys.Enter)  # Alt+Enter for new line
+        def _(event):
+            """Alt+Enter adds new line"""
+            event.current_buffer.insert_text('\n')
+        
+        # Display helpful hint
+        ui.console.print("[dim]💡 Tip: Use Alt+Enter for new line, Enter to submit[/dim]")
+        
+        # Use prompt with custom key bindings
+        result = prompt(
+            "\nuser> ",
+            multiline=True,
+            key_bindings=bindings,
+            wrap_lines=True,
+            mouse_support=False
+        )
+        return result.strip() if result else ""
+        
+    except Exception as e:
+        # Fallback to simple prompt if anything fails
+        ui.console.print(f"[dim]Note: Using simple input mode - {str(e)}[/dim]")
+        return prompt_session.prompt("\nuser> ").strip()
