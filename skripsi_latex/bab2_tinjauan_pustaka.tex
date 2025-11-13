@@ -3,7 +3,7 @@
 \label{chap:tinjauan}
 
 \section{Teori Dasar}
-Bagian ini membahas konsep yang menjadi landasan penelitian: \textit{Command Line Interface} (CLI), agen kecerdasan buatan (AI Agent), \textit{Large Language Model} (LLM), arsitektur dan kebijakan data (integrasi LLM melalui API dan implikasi privasi), \textit{8-step workflow} untuk agen interaktif, sistem klasifikasi intensi, mekanisme \textit{thinking phase} dan \textit{integrity check}, serta perangkat bantu yang digunakan seperti Poetry untuk manajemen dependensi, \texttt{rich} dan \texttt{prompt\_toolkit} untuk antarmuka terminal.
+Bagian ini membahas konsep yang menjadi landasan penelitian: \textit{Command Line Interface} (CLI), agen kecerdasan buatan (AI Agent), \textit{Large Language Model} (LLM), arsitektur dan kebijakan data (integrasi LLM melalui API dan implikasi privasi), \textit{Single-Shot Intelligence} untuk agen interaktif, sistem klasifikasi intensi, serta perangkat bantu yang digunakan seperti pip dan virtual environment untuk manajemen dependensi, \texttt{rich} dan \texttt{prompt\_toolkit} untuk antarmuka terminal.
 
 \subsection{Command Line Interface (CLI)}
 CLI adalah antarmuka berbasis teks yang memungkinkan pengguna berinteraksi dengan sistem melalui perintah. Kelebihan CLI meliputi otomasi yang mudah, konsumsi sumber daya yang rendah, dan integrasi sederhana dengan alat lain melalui skrip. Dalam konteks pengembangan perangkat lunak, CLI memfasilitasi alur kerja yang ringkas dan dapat direproduksi.
@@ -11,7 +11,7 @@ CLI adalah antarmuka berbasis teks yang memungkinkan pengguna berinteraksi denga
 \subsection{AI Agent}
 AI Agent (sering disebut \textit{agentic AI} dalam literatur; selanjutnya disingkat "agen AI") dalam penelitian ini dipahami sebagai sistem yang mampu mengobservasi lingkungan (struktur proyek dan isi berkas), merencanakan tindakan (mis. membuat, membaca, memodifikasi berkas), serta mengevaluasi hasil untuk langkah berikutnya. Agen bersifat \textit{stateful} karena mempertahankan konteks percakapan dan hasil eksekusi sebagai memori kerja, sehingga dapat bertindak secara lebih \textit{proactive}.
 
-Pada implementasi Paicode, agen menggunakan arsitektur \textit{8-step workflow} yang mencakup: (1) respon awal agen, (2) penjadwalan tugas berbasis JSON, (3-7) iterasi aksi dengan fase berpikir dan pemeriksaan integritas, serta (8) ringkasan akhir dengan saran langkah berikutnya. Setiap iterasi aksi dilengkapi dengan \textit{thinking phase} untuk penalaran internal sebelum eksekusi, dan \textit{integrity check} pasca-eksekusi yang memberikan skor kualitas 1-10 beserta alasan dan saran perbaikan.
+Pada implementasi Paicode, agen menggunakan arsitektur \textit{Single-Shot Intelligence} yang mengoptimalkan efisiensi dengan tepat 2 panggilan API: (1) fase perencanaan untuk analisis mendalam dan perencanaan komprehensif, dan (2) fase eksekusi untuk implementasi cerdas dengan adaptasi dinamis. Sistem ini menggantikan pendekatan tradisional yang memerlukan 10-20 panggilan API dengan solusi yang lebih efisien tanpa mengorbankan kualitas hasil.
 
 \subsection{Large Language Model (LLM)}
 LLM merupakan model generatif berskala besar yang mampu memahami instruksi dan menghasilkan teks atau kode. Pada penelitian ini digunakan API Gemini sebagai penyedia LLM untuk menghasilkan konten baru (\texttt{WRITE}) dan menerapkan perubahan terarah (\texttt{MODIFY}) berdasarkan deskripsi. Prinsip kehati-hatian diterapkan dengan mekanisme pembatasan perubahan berbasis \textit{diff} sehingga modifikasi tidak berskala besar tanpa kontrol \cite{brown2020gpt3,openai2023gpt4,gemini2023,touvron2023llama,llama2_2023,schick2023toolformer,yao2023react}.
@@ -28,8 +28,8 @@ Pada skripsi ini penting untuk membedakan \textit{Large Language Model} (LLM) da
 \subsection{Arsitektur dan Kebijakan Data}
 Paicode dijalankan pada terminal lokal dan melakukan tindakan langsung pada \textbf{berkas proyek di workspace}. Akan tetapi, untuk kebutuhan inferensi, cuplikan kode atau konteks \textbf{dikirim ke layanan LLM melalui API}. Implikasinya, privasi dan kerahasiaan kode \textbf{bergantung pada kebijakan penyedia API}. Pengamanan di sisi lokal diterapkan melalui kebijakan \textit{path security} (keamanan \textit{path}) serta pembatasan perubahan berbasis \textit{diff} agar operasi berkas lebih terkendali.
 
-\subsection{Manajemen Dependensi dengan Poetry}
-Poetry menyediakan manajemen dependensi dan kemasan proyek Python yang deterministik. Berkas \texttt{pyproject.toml} mendeskripsikan dependensi dan titik masuk CLI (\texttt{pai}). Pendekatan ini memudahkan replikasi lingkungan dan distribusi alat. Pada implementasi Paicode, Poetry juga digunakan untuk mengelola dependensi seperti \texttt{google-generativeai} (versi $\geq$ 0.5.4), \texttt{python-dotenv} (versi $\geq$ 1.0.1), \texttt{rich} (versi $\geq$ 13.7.1), dan \texttt{Pygments} (versi $\geq$ 2.16.0).
+\subsection{Manajemen Dependensi dengan pip dan Virtual Environment}
+Paicode menggunakan pendekatan manajemen dependensi tradisional dengan pip dan virtual environment Python. Berkas \texttt{requirements.txt} mendeskripsikan dependensi yang diperlukan, sementara Makefile menyediakan otomasi untuk pembuatan virtual environment dan instalasi dependensi. Pendekatan ini memudahkan replikasi lingkungan dan instalasi alat. Pada implementasi Paicode, dependensi utama meliputi \texttt{google-generativeai} (versi $\geq$ 0.5.4), \texttt{rich} (versi $\geq$ 13.7.1), \texttt{Pygments} (versi $\geq$ 2.16.0), dan \texttt{prompt\_toolkit} (versi $\geq$ 3.0.43).
 
 \subsection{Antarmuka Terminal dengan \texttt{rich} dan \texttt{prompt\_toolkit}}
 Paket \texttt{rich} dimanfaatkan untuk menyajikan hasil eksekusi secara terstruktur dan mudah dibaca (panel, warna, penyorotan sintaks, tabel, dan spinner status). Penyajian output yang jelas mendukung pengalaman interaktif dan penelusuran hasil tindakan agen. Selain itu, Paicode juga mengintegrasikan \texttt{prompt\_toolkit} (opsional) untuk pengalaman input yang lebih baik dengan dukungan multiline editing dan key bindings. Jika \texttt{prompt\_toolkit} tidak tersedia, sistem akan fallback ke \texttt{rich.prompt.Prompt}.
@@ -44,12 +44,12 @@ Kontribusi penelitian ini ditempatkan pada ranah agentic AI untuk pengembangan p
 
 \begin{itemize}
   \item \textbf{CLI lokal dengan integrasi LLM via API}: agen berjalan di terminal, tindakan langsung tercermin pada \textbf{berkas proyek di workspace}; sementara inferensi dilakukan oleh LLM eksternal sehingga kebijakan data mengikuti penyedia API.
-  \item \textbf{Arsitektur 8-step workflow}: alur kerja terstruktur yang mencakup klasifikasi intensi, penjadwalan tugas berbasis JSON, fase berpikir sebelum eksekusi, iterasi aksi, pemeriksaan integritas pasca-eksekusi dengan skor kualitas 1-10, dan ringkasan akhir dengan saran langkah berikutnya.
-  \item \textbf{Manajemen multi-API key}: dukungan untuk menyimpan dan mengelola beberapa API key dengan sistem \textit{round-robin load balancing} untuk distribusi beban dan redundansi.
-  \item \textbf{Keamanan berkas}: kebijakan pelarangan akses \textit{path} sensitif dan validasi \textit{path} mencegah \textit{path traversal} dan operasi berisiko.
-  \item \textbf{Modifikasi terarah dengan threshold}: perintah \texttt{MODIFY} memanfaatkan \textit{diff} untuk membatasi ruang perubahan hingga maksimal 500 baris (dapat dikonfigurasi), mendukung prinsip perubahan minimal dan fokus seperti Professional Programmer.
-  \item \textbf{Fitur interaktif}: \textit{interrupt handling} (Ctrl+C) untuk menghentikan respons AI tanpa keluar dari sesi, \textit{auto-continue} untuk melanjutkan saran otomatis, dan pencatatan sesi lengkap ke \texttt{.pai\_history}.
-  \item \textbf{Keterulangan eksperimen}: penggunaan Poetry dan Makefile memudahkan replikasi lingkungan dan dokumentasi langkah.
+  \item \textbf{Arsitektur Single-Shot Intelligence}: alur kerja efisien yang mengoptimalkan penggunaan API dengan tepat 2 panggilan (perencanaan dan eksekusi), menggantikan pendekatan tradisional yang memerlukan 10-20 panggilan API.
+  \item \textbf{Manajemen API key tunggal}: sistem manajemen API key yang disederhanakan dengan migrasi otomatis dari sistem multi-key untuk kemudahan penggunaan.
+  \item \textbf{Keamanan berkas}: kebijakan pelarangan akses \textit{path} sensitif dan validasi \textit{path} mencegah \textit{path traversal} dan operasi berisiko pada direktori seperti \texttt{.git}, \texttt{venv}, dan \texttt{.env}.
+  \item \textbf{Modifikasi terarah berbasis diff}: perintah \texttt{MODIFY} memanfaatkan sistem \textit{diff}-aware untuk membatasi ruang perubahan dan mencegah penimpaan berkas tidak diinginkan.
+  \item \textbf{Fitur interaktif}: \textit{interrupt handling} (Ctrl+C) untuk menghentikan respons AI tanpa keluar dari sesi, pencatatan sesi lengkap ke \texttt{.pai\_history}, dan antarmuka terminal responsif dengan dukungan input multiline.
+  \item \textbf{Keterulangan eksperimen}: penggunaan pip, virtual environment, dan Makefile memudahkan replikasi lingkungan dan dokumentasi langkah instalasi.
 \end{itemize}
 
 \section{Rencana Gambar Tinjauan Pustaka}
