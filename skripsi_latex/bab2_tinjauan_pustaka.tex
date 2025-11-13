@@ -21,7 +21,7 @@ LLM merupakan model generatif berskala besar yang mampu memahami instruksi dan m
 Pada skripsi ini penting untuk membedakan \textit{Large Language Model} (LLM) dan \textit{Agen AI}:
 \begin{itemize}
   \item \textbf{LLM}: model generatif yang menghasilkan keluaran berbasis teks/kode dari masukan. LLM \emph{tidak} menjalankan aksi pada berkas secara langsung; ia hanya memberikan saran/hasil teks.
-  \item \textbf{Agen AI}: komponen perangkat lunak yang \emph{mengatur alur kerja} (merencanakan, memanggil LLM, dan mengeksekusi aksi nyata). Pada konteks ini, agen mengontrol perintah CLI untuk melakukan \textbf{operasi berkas tingkat-aplikasi pada workspace proyek}.
+  \item \textbf{Agen AI}: komponen perangkat lunak yang \emph{mengatur alur kerja} (melakukan perencanaan, memanggil LLM, dan mengeksekusi aksi nyata). Pada konteks ini, agen mengontrol perintah CLI untuk melakukan \textbf{operasi berkas tingkat-aplikasi pada workspace proyek}.
   \item \textbf{Hubungan}: agen memanfaatkan LLM untuk penalaran/generasi, lalu menerjemahkan hasilnya menjadi aksi yang terkontrol. Pengamanan lokal ditegakkan melalui \textit{path security} (keamanan \textit{path}) dan pembatasan perubahan berbasis \textit{diff}.
 \end{itemize}
 
@@ -52,8 +52,8 @@ Kontribusi penelitian ini ditempatkan pada ranah agentic AI untuk pengembangan p
   \item \textbf{Keterulangan eksperimen}: penggunaan pip, virtual environment, dan Makefile memudahkan replikasi lingkungan dan dokumentasi langkah instalasi.
 \end{itemize}
 
-\section{Rencana Gambar Tinjauan Pustaka}
-Bagian ini mendeskripsikan rencana gambar yang akan disertakan untuk mendukung narasi pada Bab~\ref{chap:tinjauan}. Gambar bersifat ilustratif/konseptual dan akan diganti dengan gambar final sesuai ketersediaan.
+\section{Gambar Tinjauan Pustaka}
+Bagian ini menampilkan gambar ilustratif yang mendukung narasi pada Bab~\ref{chap:tinjauan}. Gambar bersifat konseptual dengan placeholder yang akan diganti dengan implementasi aktual.
 
 % Figure 2.1: Konsep arsitektur agentic AI di CLI
 \begin{figure}[htbp]
@@ -70,12 +70,12 @@ Pada Gambar~\ref{fig:arsitektur-agentic-cli} ditunjukkan pemetaan komponen utama
 \begin{figure}[htbp]
   \centering
   \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig2-2-state-loop.png`\\
-  (Skema loop: input pengguna → rencana → eksekusi alat → hasil → memori)}}
+  (Skema loop: input pengguna → perencanaan → eksekusi alat → hasil → memori)}}
   \caption{Model interaksi \textit{stateful} dan \textit{feedback loop} pada sesi agen.}
   \label{fig:state-feedback-loop}
 \end{figure}
 
-Pada Gambar~\ref{fig:state-feedback-loop} divisualisasikan hubungan antara masukan pengguna, rencana aksi, eksekusi alat, dan pembaruan konteks.
+Pada Gambar~\ref{fig:state-feedback-loop} divisualisasikan hubungan antara masukan pengguna, perencanaan aksi, eksekusi alat, dan pembaruan konteks.
 
 % Figure 2.3: Komparasi singkat alat terkait (skema konseptual)
 \begin{figure}[htbp]

@@ -8,15 +8,15 @@ Penelitian ini menghasilkan prototipe \textbf{Paicode}, sebuah agen AI berbasis 
 Berdasarkan implementasi dan evaluasi awal, beberapa poin kesimpulan dapat dirangkum sebagai berikut:
 
 \begin{enumerate}
-  \item Arsitektur \textit{8-step workflow} (klasifikasi intensi, respon awal, penjadwalan tugas, iterasi aksi dengan \textit{thinking phase} dan \textit{integrity check}, serta ringkasan akhir) memberikan struktur yang jelas, terukur, dan dapat diaudit untuk setiap tugas pemrograman.
+  \item Arsitektur \textit{Single-Shot Intelligence} dengan 5 komponen (klasifikasi intensi, acknowledgment dinamis, fase perencanaan JSON, fase eksekusi adaptif 1-3 subfase, dan saran langkah berikutnya) memberikan struktur yang efisien dan terukur untuk setiap tugas pemrograman.
   \item Integrasi agen \textit{stateful} di lingkungan CLI efektif dalam mempercepat beberapa tugas rekayasa perangkat lunak berulang (pembuatan struktur proyek, pembuatan dan pembacaan berkas, serta modifikasi terarah) dengan tetap menjaga keterlacakan langkah.
-  \item Mekanisme pembatasan perubahan berbasis \textit{diff} pada perintah \texttt{MODIFY} dengan threshold maksimal 500 baris (dapat dikonfigurasi) membantu mengurangi risiko penimpaan besar yang tidak diinginkan, dengan sistem retry otomatis jika modifikasi terlalu besar.
-  \item \textit{Thinking phase} sebelum eksekusi membantu LLM merencanakan pendekatan yang lebih fokus dan surgical (seperti Professional Programmer), mengurangi kesalahan eksekusi hingga 30\% dalam skenario uji.
-  \item \textit{Integrity check} pasca-eksekusi dengan skor kualitas 1-10 memberikan feedback langsung tentang kualitas hasil, memudahkan identifikasi masalah dan perbaikan iteratif.
-  \item Manajemen multi-API key dengan \textit{round-robin load balancing} meningkatkan keandalan sistem dan mengurangi downtime akibat rate limiting.
-  \item Fitur interaktif seperti \textit{interrupt handling} (Ctrl+C), \textit{auto-continue}, dan pencatatan sesi ke \texttt{.pai\_history} meningkatkan pengalaman pengguna dan memudahkan debugging.
+  \item Mekanisme pembatasan perubahan berbasis \textit{diff} pada perintah \texttt{MODIFY} dengan threshold ganda (500 baris absolut dan 50\% ratio maksimal, dapat dikonfigurasi via \texttt{PAI\_MODIFY\_THRESHOLD} dan \texttt{PAI\_MODIFY\_MAX\_RATIO}) membantu mengurangi risiko penimpaan besar yang tidak diinginkan dengan atomic write menggunakan tempfile.
+  \item Fase perencanaan JSON dalam \textit{Single-Shot Intelligence} membantu LLM merencanakan pendekatan yang lebih fokus dan terstruktur, meningkatkan kualitas hasil eksekusi.
+  \item Sistem eksekusi adaptif dengan 1-3 subfase berdasarkan kompleksitas tugas terbukti lebih efisien dibandingkan pendekatan tradisional yang memerlukan banyak panggilan API berulang.
+  \item Manajemen API key tunggal dengan migrasi otomatis dari sistem multi-key (version 1 ke version 2) menyederhanakan konfigurasi dan meningkatkan keandalan sistem.
+  \item Fitur interaktif seperti \textit{interrupt handling} (Ctrl+C) dan pencatatan sesi ke \texttt{.pai\_history} meningkatkan pengalaman pengguna dan memudahkan debugging.
   \item Kebijakan keamanan path berhasil memblokir akses ke direktori sensitif (mis. \texttt{.git}, \texttt{venv}, \texttt{.env}) dan mencegah \textit{path traversal}, mendukung aspek privasi dan kendali lokal.
-  \item Pemakaian Poetry/setuptools, Makefile, dan LaTeX mendukung keterulangan eksperimen serta dokumentasi terstruktur untuk keperluan akademik.
+  \item Pemakaian pip/venv, Makefile, dan LaTeX mendukung keterulangan eksperimen serta dokumentasi terstruktur untuk keperluan akademik.
 \end{enumerate}
 
 Kinerja dan kualitas hasil tetap bergantung pada kemampuan LLM eksternal (Gemini) serta kejelasan instruksi yang diberikan. Hal ini menunjukkan pentingnya perancangan prompt dan strategi umpan balik yang baik dalam alur kerja agen.
@@ -26,8 +26,8 @@ Beberapa saran pengembangan lanjutan yang dapat dilakukan antara lain:
 
 \begin{itemize}
   \item \textbf{Dukungan multi-LLM}: menambahkan opsi pemilihan model dan penyedia LLM alternatif (OpenAI GPT, Anthropic Claude, Llama, dll.) sesuai kebutuhan (akurasi/biaya/latensi), dengan konfigurasi per-provider yang fleksibel.
-  \item \textbf{Optimasi \textit{thinking phase}}: mengembangkan mekanisme caching untuk hasil penalaran yang serupa, mengurangi waktu respons untuk tugas berulang.
-  \item \textbf{Peningkatan \textit{integrity check}}: menambahkan automated testing (unit test, integration test) sebagai bagian dari integrity check untuk verifikasi kualitas yang lebih objektif.
+  \item \textbf{Optimasi fase perencanaan}: mengembangkan mekanisme caching untuk hasil perencanaan JSON yang serupa, mengurangi waktu respons untuk tugas berulang.
+  \item \textbf{Peningkatan validasi hasil}: menambahkan automated testing (unit test, integration test) sebagai bagian dari validasi hasil eksekusi untuk verifikasi kualitas yang lebih objektif.
   \item \textbf{Integrasi editor}: menyediakan jembatan ringan ke IDE (mis. VS Code extension, Neovim plugin) yang memanggil agen CLI, sambil tetap menegaskan bahwa inferensi LLM dilakukan via API sesuai kebijakan penyedia.
   \item \textbf{Peningkatan keamanan}: memperluas kebijakan \textit{allow/deny list} \textit{path}, menambah konfirmasi eksplisit untuk operasi berisiko (mis. \texttt{RM}), dan memperketat validasi konten sebelum penulisan berkas.
   \item \textbf{Memori jangka panjang}: menambahkan ringkasan sesi dan penyimpanan konteks terkurasi (vector database) agar agen dapat mempelajari preferensi proyek pengguna secara berkelanjutan.
