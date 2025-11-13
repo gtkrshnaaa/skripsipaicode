@@ -27,7 +27,7 @@
 \textbf{interrupt handling} & Mekanisme penanganan interupsi (Ctrl+C) yang memungkinkan pengguna menghentikan respons AI tanpa keluar dari sesi. \\
 \textbf{atomic write} & Teknik penulisan berkas yang menggunakan file sementara (\texttt{tempfile}) untuk memastikan operasi tulis berhasil sepenuhnya atau gagal total, mencegah korupsi data. \\
 \textbf{threshold ganda} & Sistem pembatasan modifikasi berkas dengan dua kriteria: batas absolut (500 baris) dan batas relatif (50\% dari total baris berkas). \\
-\textbf{SENSITIVE\_PATTERNS} & Daftar 7 pola direktori/berkas sensitif yang diblokir akses: \\
+\textbf{SENSITIVE \_PATTERNS} & Daftar 7 pola direktori/berkas sensitif yang diblokir akses: \\
 & \texttt{.env}, \texttt{.git}, \texttt{venv}, \texttt{\_\_pycache\_\_}, \texttt{.pai\_history}, \texttt{.idea}, \texttt{.vscode}. \\
 \textbf{noise suppression} & Teknik menekan log yang berisik dari library \texttt{gRPC}/\texttt{absl} menggunakan environment variables khusus. \\
 \textbf{entry point} & Titik masuk aplikasi yang didefinisikan dalam \texttt{setup.cfg} sebagai console script (\texttt{pai = paicode.cli:main}). \\
