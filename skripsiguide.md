@@ -84,4 +84,7 @@ Panduan ini digunakan untuk menulis dan menyusun skripsi berbasis LaTeX di direk
 * Hindari bahasa sehari-hari.
 * Hindari kata ganti pribadi.
 
+## Catatan Penting
+karena tidak akan menggunakan gambar sama sekali di skripsi ini, maka untuk semua ilustrasi akan diisi/dibuat dengan tools yang disediakan oleh latex, baik itu untuk diagram, tabel, dan grafik atau apapun, intinya untuk ilustrasi tidak akan menggunakan cara lain selain dengan latex, kemudian untuk testing atau preview paicode (yang mana ini adalah CLI app) akan dilakukan dengan cara copas hasil interaksi langsung dari terminal, jadi tidak menggunakan gambar sama sekali.
+
 ---
