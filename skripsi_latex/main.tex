@@ -19,12 +19,20 @@
 \usepackage{array}
 \usepackage{enumitem}
 \usepackage{listings}
+\usepackage{listingsutf8}
 \usepackage{xcolor}
 \usepackage{titlesec}
 \usepackage{csquotes}
 \usepackage{nameref}
 % Bibliography using BibTeX (simple and Ubuntu-friendly)
 \usepackage[numbers]{natbib}
+% Support for Unicode box-drawing characters in monospaced text
+\usepackage{pmboxdraw}
+% Native diagram and plotting packages (no external images)
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 
 % --- Page setup ---
 \geometry{a4paper, margin=1in}
@@ -59,6 +67,13 @@
   framerule=0.3pt
 }
 \lstset{style=code}
+% Ensure listings read UTF-8 correctly and map box-drawing to ASCII
+\lstset{
+  inputencoding=utf8,
+  literate={╭}{{+}}1 {╮}{{+}}1 {╰}{{+}}1 {╯}{{+}}1 {─}{{-}}1 {│}{{|}}1 {✓}{{OK}}2
+           {┌}{{+}}1 {┐}{{+}}1 {└}{{+}}1 {┘}{{+}}1 {┬}{{+}}1 {┴}{{+}}1 {├}{{+}}1 {┤}{{+}}1 {┼}{{+}}1
+           {…}{{...}}3 {–}{{-}}1 {—}{{--}}2
+}
 
 % --- Chapter format (optional, cleaner look) ---
 \titleformat{\chapter}[display]

@@ -3,7 +3,7 @@
 \chapter{Lampiran A}
 \label{app:a}
 
-Bagian lampiran memuat materi pendukung: tangkapan layar sesi agen, konfigurasi lingkungan, daftar perintah yang dijalankan, dan hasil pengukuran rinci.
+Bagian lampiran memuat materi pendukung: cuplikan log sesi agen, konfigurasi lingkungan, daftar perintah yang dijalankan, dan hasil pengukuran rinci.
 
 \section{Konfigurasi Lingkungan}
 % Detail versi OS, Python, pip/venv, paket utama
@@ -14,15 +14,15 @@ Bagian lampiran memuat materi pendukung: tangkapan layar sesi agen, konfigurasi 
   \item Paket utama: google-generativeai (\textgreater= 0.5.4), rich (\textgreater= 13.7.1), Pygments (\textgreater= 2.16.0).
 \end{itemize}
 
-\section{Contoh Sesi Terminal}
-% Ganti fbox dengan includegraphics saat screenshot tersedia
-\begin{figure}[htbp]
-  \centering
-  \fbox{\parbox{0.95\textwidth}{\centering Placeholder: `img/appA-1-sesi-terminal.png`\\
-  (Screenshot sesi terminal lengkap)}}
-  \caption{Contoh sesi agen pada terminal.}
-  \label{fig:appA-sesi-terminal}
-\end{figure}
+\section{Cuplikan Log Sesi Agen}
+\begin{lstlisting}[language=bash,caption={Cuplikan log sesi agen (ringkas).},label={appA:sesi-log}]
+[2025-11-20 22:38:05] SESSION STARTED
+[2025-11-20 22:38:05] USER: buatkan proyek python sederhana: BMI Calculator
+[2025-11-20 22:38:15] EXECUTION PLAN (3 steps)
+[2025-11-20 22:38:23] SUCCESS: WRITE bmi_calculator.py
+[2025-11-20 22:38:23] SUCCESS: LIST_PATH .
+[2025-11-20 22:38:34] SUCCESS: TREE .
+\end{lstlisting}
 
 \section{Hasil Pengukuran Rinci}
 Tabel hasil pengukuran (waktu, langkah) per skenario akan disajikan di sini.

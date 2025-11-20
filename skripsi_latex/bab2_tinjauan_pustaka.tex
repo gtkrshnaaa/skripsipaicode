@@ -53,13 +53,26 @@ Kontribusi penelitian ini ditempatkan pada ranah agentic AI untuk pengembangan p
 \end{itemize}
 
 \section{Gambar Tinjauan Pustaka}
-Bagian ini menampilkan gambar ilustratif yang mendukung narasi pada Bab~\ref{chap:tinjauan}. Gambar bersifat konseptual dengan placeholder yang akan diganti dengan implementasi aktual.
 
 % Figure 2.1: Konsep arsitektur agentic AI di CLI
 \begin{figure}[htbp]
   \centering
-  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig2-1-arsitektur-agentic-cli.png`\\
-  (Block diagram of components: CLI, Agent, LLM, Workspace; control/data flow)}}
+  \begin{tikzpicture}[
+    node distance=12mm and 16mm,
+    box/.style={draw, rounded corners, align=center, minimum width=30mm, minimum height=8mm},
+    arrow/.style={-{Stealth}, thick}
+  ]
+    \node[box] (cli) {Terminal CLI};
+    \node[box, right=of cli] (agent) {Agen\\ (Single-Shot)};
+    \node[box, right=of agent] (llm) {LLM API\\ (Gemini)};
+    \node[box, below=of agent] (workspace) {Workspace Proyek};
+
+    \draw[arrow] (cli) -- node[above]{input} (agent);
+    \draw[arrow] (agent) -- node[above]{permintaan} (llm);
+    \draw[arrow] (llm) -- node[below]{respons} (agent);
+    \draw[arrow] (agent) -- node[right]{\shortstack{READ/WRITE/\\MODIFY/TREE}} (workspace);
+    \draw[arrow] (workspace.west) -| (cli.south) node[pos=0.25, below]{hasil};
+  \end{tikzpicture}
   \caption{Konsep arsitektur agentic AI di lingkungan CLI dengan inferensi LLM melalui API.}
   \label{fig:arsitektur-agentic-cli}
 \end{figure}
@@ -69,8 +82,21 @@ Pada Gambar~\ref{fig:arsitektur-agentic-cli} ditunjukkan pemetaan komponen utama
 % Figure 2.2: Model interaksi stateful/feedback loop
 \begin{figure}[htbp]
   \centering
-  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig2-2-state-loop.png`\\
-  (Skema loop: input pengguna → perencanaan → eksekusi alat → hasil → memori)}}
+  \begin{tikzpicture}[
+    node distance=12mm and 14mm,
+    flowstep/.style={draw, rounded corners, align=center, minimum width=32mm, minimum height=8mm},
+    arrow/.style={-{Stealth}, thick}
+  ]
+    \node[flowstep] (input) {Input Pengguna};
+    \node[flowstep, right=of input] (plan) {Perencanaan\\ (JSON)};
+    \node[flowstep, right=of plan] (exec) {Eksekusi\\ (1--3 subfase)};
+    \node[flowstep, below=of plan] (memory) {Konteks / Memori};
+
+    \draw[arrow] (input) -- (plan);
+    \draw[arrow] (plan) -- (exec);
+    \draw[arrow] (exec) |- node[pos=0.25, right]{hasil} (memory);
+    \draw[arrow] (memory) -| node[pos=0.25, below]{umpan balik} (plan);
+  \end{tikzpicture}
   \caption{Model interaksi \textit{stateful} dan \textit{feedback loop} pada sesi agen.}
   \label{fig:state-feedback-loop}
 \end{figure}
@@ -78,13 +104,28 @@ Pada Gambar~\ref{fig:arsitektur-agentic-cli} ditunjukkan pemetaan komponen utama
 Pada Gambar~\ref{fig:state-feedback-loop} divisualisasikan hubungan antara masukan pengguna, perencanaan aksi, eksekusi alat, dan pembaruan konteks.
 
 % Figure 2.3: Komparasi singkat alat terkait (skema konseptual)
-\begin{figure}[htbp]
+\begin{table}[htbp]
   \centering
-  \fbox{\parbox{0.95\textwidth}{\centering Placeholder gambar: `img/fig2-3-komparasi-tools.png`\\
-  (Tabel/diagram perbandingan: editor extension vs layanan cloud vs CLI + LLM via API)}}
   \caption{Ilustrasi komparasi konseptual antara pendekatan ekstensi editor, layanan daring, dan CLI dengan integrasi LLM via API.}
   \label{fig:komparasi-tools}
-\end{figure}
+  \begin{tabular}{@{}p{0.28\textwidth}p{0.30\textwidth}p{0.30\textwidth}@{}}
+    \toprule
+    & \textbf{Ekstensi Editor} & \textbf{Layanan Daring} \\
+    \midrule
+    \textbf{Integrasi} & Sangat terintegrasi dengan IDE & Antarmuka web/remote \\
+    \textbf{Konteks} & Di editor, tergantung API & Di server; unggah/ sinkron \\
+    \textbf{Privasi} & Bergantung vendor & Bergantung vendor \\
+    \textbf{Portabilitas} & Terikat IDE & Perlu akses internet \\
+    \midrule
+    & \multicolumn{2}{c}{\textbf{CLI + LLM via API (Paicode)}} \\
+    \midrule
+    \textbf{Integrasi} & \multicolumn{2}{c}{Agen berjalan di terminal lokal; perubahan langsung pada workspace} \\
+    \textbf{Konteks} & \multicolumn{2}{c}{Konteks lokal; cuplikan dikirim ke LLM via API} \\
+    \textbf{Privasi} & \multicolumn{2}{c}{Tergantung kebijakan penyedia API; guardrail lokal} \\
+    \textbf{Portabilitas} & \multicolumn{2}{c}{Editor-agnostic; cukup terminal Linux} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 Pada Gambar~\ref{fig:komparasi-tools} ditunjukkan perbedaan fokus dan pertukaran (trade-off) tingkat tinggi antar pendekatan.
 
