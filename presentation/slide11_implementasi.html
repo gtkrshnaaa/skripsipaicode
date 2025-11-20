@@ -85,13 +85,12 @@
               <h3 class="font-semibold text-ink">Konfigurasi API Key</h3>
             </div>
             <div class="bg-ink/5 p-3 rounded-lg font-mono text-xs space-y-1">
-              <div class="text-ink/60"># Tambah API key</div>
-              <div>pai config add primary &lt;KEY_1&gt;</div>
-              <div>pai config add secondary &lt;KEY_2&gt;</div>
-              <div class="mt-2 text-ink/60"># Set default</div>
-              <div>pai config set-default primary</div>
-              <div class="mt-2 text-ink/60"># List semua key</div>
-              <div>pai config list</div>
+              <div class="text-ink/60"># Set API key (single key)</div>
+              <div>pai config set &lt;API_KEY_GEMINI&gt;</div>
+              <div class="mt-2 text-ink/60"># Tampilkan (masked) / hapus / validasi</div>
+              <div>pai config show</div>
+              <div>pai config remove</div>
+              <div>pai config validate</div>
             </div>
           </div>
           
@@ -104,7 +103,7 @@
               <div class="text-ink/60"># Default</div>
               <div>pai</div>
               <div class="mt-2 text-ink/60"># Dengan opsi</div>
-              <div>pai --model gemini-2.5-flash \</div>
+              <div>pai --model gemini-2.5-flash-lite \</div>
               <div>    --temperature 0.3</div>
               <div class="mt-2 text-ink/60"># Dengan env vars</div>
               <div>export PAI_MODEL="gemini-2.5-flash"</div>
@@ -141,9 +140,9 @@
           <ul class="space-y-1 text-sm text-blue-800">
             <li>• <strong>Ctrl+C sekali</strong>: stop respons AI (sesi tetap aktif)</li>
             <li>• <strong>Ctrl+C dua kali</strong>: keluar dari sesi</li>
-            <li>• Ketik <code class="bg-blue-200 px-1 rounded">y/yes/lanjut</code> untuk auto-continue</li>
             <li>• Ketik <code class="bg-blue-200 px-1 rounded">exit/quit</code> untuk mengakhiri</li>
             <li>• Session log tersimpan di <code class="bg-blue-200 px-1 rounded">.pai_history/</code></li>
+            <li>• Format input user di demo: <code class="bg-blue-200 px-1 rounded">user&gt; ...</code></li>
           </ul>
         </div>
         

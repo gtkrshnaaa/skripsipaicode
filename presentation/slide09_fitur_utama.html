@@ -55,11 +55,11 @@
               <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-green-200 flex items-center justify-center">
                 <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               </div>
-              <h3 class="font-bold text-green-900 text-base sm:text-lg">Multi-API Key</h3>
+              <h3 class="font-bold text-green-900 text-base sm:text-lg">Single API Key</h3>
             </div>
-            <p class="text-xs sm:text-sm text-green-800 leading-relaxed">Manajemen beberapa API key dengan <strong>round-robin load balancing</strong>. Meningkatkan keandalan dan mengurangi downtime akibat rate limiting.</p>
+            <p class="text-xs sm:text-sm text-green-800 leading-relaxed">Manajemen <strong>satu API key</strong> yang disimpan aman (permission <code>0o600</code>) pada <code>~/.config/pai-code/credentials.json</code>. Mendukung <code>set</code>, <code>show</code>, <code>remove</code>, dan <code>validate</code>.</p>
             <div class="mt-2 text-xs text-green-700">
-              <code class="bg-green-200 px-1.5 py-0.5 rounded text-xs">pai config add/list/remove</code>
+              <code class="bg-green-200 px-1.5 py-0.5 rounded text-xs">pai config set/show/remove/validate</code>
             </div>
           </div>
           
@@ -68,12 +68,9 @@
               <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-blue-200 flex items-center justify-center">
                 <svg class="w-4 h-4 sm:w-5 sm:h-5 text-blue-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg>
               </div>
-              <h3 class="font-bold text-blue-900 text-base sm:text-lg">Thinking Phase</h3>
+              <h3 class="font-bold text-blue-900 text-base sm:text-lg">Planning JSON</h3>
             </div>
-            <p class="text-xs sm:text-sm text-blue-800 leading-relaxed">Penalaran internal sebelum eksekusi (3-6 poin). Membantu LLM merencanakan pendekatan yang <strong>fokus dan surgical</strong> seperti Professional Programmer.</p>
-            <div class="mt-2 text-xs text-blue-700">
-              <strong>Hasil:</strong> -30% kesalahan eksekusi
-            </div>
+            <p class="text-xs sm:text-sm text-blue-800 leading-relaxed">Perencanaan terstruktur <strong>berbasis JSON</strong> (intent, berkas target, langkah aksi, kriteria sukses) sebelum eksekusi.</p>
           </div>
           
           <div class="rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 p-4 sm:p-5 border border-purple-300">
@@ -81,12 +78,9 @@
               <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-purple-200 flex items-center justify-center">
                 <svg class="w-4 h-4 sm:w-5 sm:h-5 text-purple-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
               </div>
-              <h3 class="font-bold text-purple-900 text-base sm:text-lg">Integrity Check</h3>
+              <h3 class="font-bold text-purple-900 text-base sm:text-lg">Diff‑Aware MODIFY</h3>
             </div>
-            <p class="text-xs sm:text-sm text-purple-800 leading-relaxed">Evaluasi pasca-eksekusi dengan <strong>skor kualitas 1-10</strong>, alasan (reasons), dan saran perbaikan (next_fix). Feedback langsung tentang kualitas hasil.</p>
-            <div class="mt-2 text-xs text-purple-700">
-              <strong>Rata-rata:</strong> 7.5/10 pada skenario uji
-            </div>
+            <p class="text-xs sm:text-sm text-purple-800 leading-relaxed">Modifikasi kode dengan batas <strong>threshold 500 baris</strong> dan <strong>rasio 50%</strong> agar perubahan tetap terkontrol. Atomic write untuk mencegah korupsi.</p>
           </div>
           
           <div class="rounded-xl sm:rounded-2xl bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 sm:p-5 border border-yellow-300">
@@ -94,12 +88,9 @@
               <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-yellow-200 flex items-center justify-center">
                 <svg class="w-4 h-4 sm:w-5 sm:h-5 text-yellow-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
               </div>
-              <h3 class="font-bold text-yellow-900 text-base sm:text-lg">Auto-Continue</h3>
+              <h3 class="font-bold text-yellow-900 text-base sm:text-lg">Path Security</h3>
             </div>
-            <p class="text-xs sm:text-sm text-yellow-800 leading-relaxed">Melanjutkan saran otomatis dengan token afirmatif: <code class="bg-yellow-200 px-1 rounded text-xs">y, yes, lanjut, continue</code>. Mempercepat workflow untuk tugas multi-langkah.</p>
-            <div class="mt-2 text-xs text-yellow-700">
-              <strong>Hasil:</strong> +40% percepatan workflow
-            </div>
+            <p class="text-xs sm:text-sm text-yellow-800 leading-relaxed">Penegakan kebijakan keamanan <em>path</em> dengan <strong>deny‑list</strong> direktori sensitif (<code>.env</code>, <code>.git</code>, <code>venv</code>, <code>__pycache__</code>, <code>.pai_history</code>, <code>.idea</code>, <code>.vscode</code>).</p>
           </div>
           
           <div class="rounded-xl sm:rounded-2xl bg-gradient-to-br from-red-50 to-red-100 p-4 sm:p-5 border border-red-300">

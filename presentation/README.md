@@ -12,13 +12,13 @@ Presentasi lengkap untuk sidang skripsi dengan **16 slide profesional** yang men
 | 4 | `slide04_rumusan_masalah.html` | Rumusan Masalah | Pendahuluan | 4 rumusan masalah utama |
 | 5 | `slide05_tujuan.html` | Tujuan Penelitian | Pendahuluan | 4 tujuan penelitian |
 | 6 | `slide06_tinjauan_pustaka.html` | Tinjauan Pustaka | Teori | Teori dasar & posisi penelitian |
-| 7 | `slide07_arsitektur_8step.html` | **Arsitektur 8-Step Workflow** ⭐ | Metodologi | **KUNCI: Kontribusi utama** |
+| 7 | `slide07_arsitektur_single_shot.html` | **Arsitektur Single‑Shot Intelligence** ⭐ | Metodologi | **KUNCI: Kontribusi utama** |
 | 8 | `slide08_komponen_sistem.html` | Komponen Sistem | Metodologi | 6 modul utama & alur data |
 | 9 | `slide09_fitur_utama.html` | **Fitur Utama** ⭐ | Fitur | **KUNCI: 6 fitur unggulan** |
 | 10 | `slide10_path_security.html` | Path Security & Diff-Aware | Keamanan | Deny-list & threshold 500 baris |
 | 11 | `slide11_implementasi.html` | Implementasi | Teknis | Teknologi, instalasi, konfigurasi |
 | 12 | `slide12_demo.html` | Demo & Skenario | Demo | 5 skenario pengujian |
-| 13 | `slide13_hasil_evaluasi.html` | **Hasil Evaluasi** ⭐ | Hasil | **KUNCI: 30% ↓ error, 40% ↑ speed** |
+| 13 | `slide13_hasil_evaluasi.html` | **Hasil Evaluasi** ⭐ | Hasil | **KUNCI: Ringkasan metrik evaluasi (netral)** |
 | 14 | `slide14_kesimpulan.html` | Kesimpulan | Penutup | 7 poin kesimpulan |
 | 15 | `slide15_saran.html` | Saran Pengembangan | Penutup | 10 saran pengembangan lanjutan |
 | 16 | `slide16_penutup.html` | Terima Kasih & Q&A | Closing | Ringkasan & sesi tanya jawab |
@@ -59,9 +59,8 @@ open slide01_cover.html
 - ✅ **Hover effects** pada elemen interaktif
 
 ### Konten
-- ✅ **100% sesuai skripsi terbaru** (8-step workflow, multi-API key, dll.)
+- ✅ Selaras dengan skripsi terbaru: arsitektur **Single‑Shot Intelligence**
 - ✅ **3 slide kunci** ditandai dengan ⭐
-- ✅ **Metrik kuantitatif** (30% error reduction, 40% faster)
 - ✅ **Visualisasi** dengan grid, tabel, dan card layout
 
 ## 🎯 Tips Presentasi Sidang
@@ -72,30 +71,27 @@ open slide01_cover.html
 | Opening | 1-2 | 1 menit | Singkat, langsung ke inti |
 | Pendahuluan | 3-5 | 3 menit | Fokus pada rumusan masalah |
 | Tinjauan Pustaka | 6 | 2 menit | Highlight posisi penelitian |
-| **Metodologi** | **7-8** | **5 menit** | **PENTING: Jelaskan 8-step workflow detail** |
+| **Metodologi** | **7-8** | **5 menit** | **PENTING: Jelaskan arsitektur Single‑Shot (intent → acknowledgment → planning JSON → adaptive execution → logging)** |
 | **Fitur** | **9-10** | **4 menit** | **PENTING: Demo fitur-fitur unggulan** |
 | Implementasi | 11 | 2 menit | Teknis singkat |
 | Demo | 12 | 2 menit | Contoh interaksi |
-| **Hasil** | **13** | **3 menit** | **PENTING: Highlight 30% & 40%** |
+| **Hasil** | **13** | **3 menit** | **PENTING: Ringkas metrik evaluasi secara netral** |
 | Penutup | 14-16 | 3 menit | Kesimpulan & Q&A |
 
 ### Fokus Utama (Slide Kunci ⭐)
-1. **Slide 7**: Arsitektur 8-Step Workflow
-   - Jelaskan setiap step dengan detail
-   - Tekankan thinking phase & integrity check
-   - Ini adalah kontribusi utama penelitian!
+1. **Slide 7**: Arsitektur Single‑Shot Intelligence
+   - Intent classification → Dynamic acknowledgment → Planning JSON → Adaptive execution (1–3 subfase) → Finalization & logging (.pai_history)
+   - Penekanan: path security dan batasan diff saat eksekusi.
 
 2. **Slide 9**: Fitur Utama
-   - Multi-API key dengan round-robin
-   - Thinking phase → -30% error
-   - Auto-continue → +40% speed
-   - Integrity check dengan scoring 1-10
+   - Single API key management (secure file, 0o600)
+   - Path security (deny‑list direktori sensitif)
+   - Diff‑aware `MODIFY` (threshold 500 baris, ratio 50%)
+   - Session logging ke `.pai_history`
+   - Interrupt handling (Ctrl+C)
 
 3. **Slide 13**: Hasil Evaluasi
-   - **30% pengurangan error** (thinking phase)
-   - **40% percepatan workflow** (auto-continue)
-   - **7.5/10 rata-rata skor kualitas**
-   - Perbandingan dengan proses manual
+   - Ringkas metrik yang tersedia pada naskah (tanpa klaim angka lama).
 
 ### Persiapan Demo (Slide 12)
 Siapkan terminal dengan:
@@ -103,28 +99,27 @@ Siapkan terminal dengan:
 # Jalankan Paicode
 pai
 
-# Contoh perintah untuk demo:
-> buatkan proyek python sederhana: BMI Calculator
-> tampilkan struktur
-> tampilkan isi kode sumber
+# Contoh perintah untuk demo (format user):
+user> buatkan program BMI Calculator dengan python
+user> tampilkan struktur
+user> tampilkan isi kode sumber
 ```
 
 ### Antisipasi Pertanyaan
-1. **Kenapa 8-step?** → Struktur terukur, thinking phase, integrity check
+1. **Bagaimana arsitektur Single‑Shot bekerja?** → Intent → acknowledgment → planning JSON → adaptive execution → logging
 2. **Kenapa 500 baris threshold?** → Balance antara fokus & fleksibilitas, dapat dikonfigurasi
 3. **Bagaimana dengan privasi?** → Lokal: path security, API: bergantung penyedia
 4. **Perbandingan dengan Copilot/Cursor?** → CLI-based, stateful, surgical approach
-5. **Bagaimana evaluasi 30% & 40%?** → Skenario pengujian representatif, metrik terukur
+5. **Bagaimana evaluasi dilakukan?** → Skenario pengujian representatif; metrik: waktu, langkah, keberhasilan build/run, kepatuhan path security, ukuran diff
 
 ## 📊 Highlight Kontribusi
 
 ### Akademis
-- Arsitektur rujukan untuk agen AI berbasis CLI
-- 8-step workflow dengan thinking phase & integrity check
-- Metrik evaluasi kuantitatif
+- Arsitektur rujukan untuk agen AI berbasis CLI (Single‑Shot Intelligence)
+- Metrik evaluasi sesuai naskah
 
 ### Praktis
-- Alat bantu yang privacy-aware
+- Alat bantu yang privacy‑aware
 - Mudah diintegrasikan dengan berbagai IDE
 - Open source & dapat dikembangkan
 
@@ -158,7 +153,7 @@ File-file berikut adalah versi lama dan tidak digunakan:
 - **Mulai Presentasi**: [slide01_cover.html](slide01_cover.html)
 - **Index Semua Slide**: [index.html](index.html)
 - **Slide Kunci**:
-  - [Slide 7: Arsitektur 8-Step](slide07_arsitektur_8step.html)
+  - [Slide 7: Arsitektur Single‑Shot Intelligence](slide07_arsitektur_single_shot.html)
   - [Slide 9: Fitur Utama](slide09_fitur_utama.html)
   - [Slide 13: Hasil Evaluasi](slide13_hasil_evaluasi.html)
 
@@ -167,7 +162,7 @@ File-file berikut adalah versi lama dan tidak digunakan:
 - [ ] Test semua slide di browser yang akan digunakan
 - [ ] Pastikan navigasi keyboard berfungsi
 - [ ] Siapkan demo live Paicode
-- [ ] Hafalkan metrik kunci: 30%, 40%, 7.5/10
+- [ ] Hafalkan skenario & metrik yang digunakan (waktu, langkah, build/run, path security, diff)
 - [ ] Siapkan jawaban untuk pertanyaan umum
 - [ ] Backup: export PDF atau screenshot semua slide
 - [ ] Test koneksi internet (jika ada video/demo online)
