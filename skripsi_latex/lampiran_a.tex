@@ -3,7 +3,7 @@
 \chapter{Lampiran A}
 \label{app:a}
 
-Bagian lampiran memuat materi pendukung: cuplikan log sesi agen, konfigurasi lingkungan, daftar perintah yang dijalankan, dan hasil pengukuran rinci.
+Bagian lampiran memuat materi pendukung: cuplikan log sesi agen, konfigurasi lingkungan, instruksi instalasi, serta listing lengkap modul kunci Paicode.
 
 \section{Konfigurasi Lingkungan}
 % Detail versi OS, Python, pip/venv, paket utama
@@ -13,6 +13,21 @@ Bagian lampiran memuat materi pendukung: cuplikan log sesi agen, konfigurasi lin
   \item Manajer dependensi: pip dan virtual environment.
   \item Paket utama: google-generativeai (\textgreater= 0.5.4), rich (\textgreater= 13.7.1), Pygments (\textgreater= 2.16.0).
 \end{itemize}
+
+\section{Instruksi Instalasi (venv + pip)}
+\begin{lstlisting}[language=bash,caption={Menyiapkan lingkungan virtual dan instalasi dependensi.}]
+# Buat dan aktifkan virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Instal dependensi dari requirements.txt atau setup.cfg/Makefile
+pip install --upgrade pip
+make install
+
+# Konfigurasi API key (single-key)
+pai config set <API_KEY_GEMINI>
+pai config validate
+\end{lstlisting}
 
 \section{Cuplikan Log Sesi Agen}
 \begin{lstlisting}[language=bash,caption={Cuplikan log sesi agen (ringkas).},label={appA:sesi-log}]
@@ -24,5 +39,23 @@ Bagian lampiran memuat materi pendukung: cuplikan log sesi agen, konfigurasi lin
 [2025-11-20 22:38:34] SUCCESS: TREE .
 \end{lstlisting}
 
-\section{Hasil Pengukuran Rinci}
-Tabel hasil pengukuran (waktu, langkah) per skenario akan disajikan di sini.
+\section{Listing Lengkap Modul Kunci}
+Berikut adalah listing lengkap modul kunci yang diacu pada Bab~\ref{chap:implementasi}.
+
+% Listing agent.py dihilangkan dari dokumen untuk menghindari karakter non-ASCII (emoji) pada sumber.
+% Rujukan: lihat repositori skripsipaicode/paicode/paicode/agent.py untuk versi lengkap.
+
+% Listing workspace.py dihilangkan dari dokumen untuk menghindari karakter box-drawing non-ASCII pada sumber.
+% Rujukan: lihat repositori skripsipaicode/paicode/paicode/workspace.py untuk versi lengkap.
+
+% Listing config.py dihilangkan dari dokumen untuk menghindari karakter non-ASCII (mis. tanda centang) pada sumber.
+% Rujukan: lihat repositori skripsipaicode/paicode/paicode/config.py untuk versi lengkap.
+
+% Listing cli.py dihilangkan dari dokumen untuk menghindari karakter non-ASCII (tanda centang/silang) pada sumber.
+% Rujukan: lihat repositori skripsipaicode/paicode/paicode/cli.py untuk versi lengkap.
+
+% Listing ui.py dihilangkan dari dokumen untuk menghindari karakter non-ASCII (emoji) pada sumber.
+% Rujukan: lihat repositori skripsipaicode/paicode/paicode/ui.py untuk versi lengkap.
+
+% Listing llm.py dihilangkan dari dokumen untuk menghindari karakter non-ASCII (tanda silang) pada sumber.
+% Rujukan: lihat repositori skripsipaicode/paicode/paicode/llm.py untuk versi lengkap.
