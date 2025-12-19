@@ -11,14 +11,12 @@ Di sisi lain, \textit{Command Line Interface} (CLI) tetap menjadi lingkungan ker
 Penelitian ini menghadirkan \textbf{Paicode}, sebuah agen AI berbasis CLI yang dirancang untuk membantu proses pengembangan perangkat lunak secara interaktif dengan arsitektur \textit{Single-Shot Intelligence}. Paicode mampu: (i) mengobservasi struktur proyek (\texttt{TREE}, \texttt{LIST\_PATH}); (ii) membaca dan menulis berkas proyek (\texttt{READ}, \texttt{WRITE}); (iii) memodifikasi kode secara terarah dengan sistem perubahan berbasis \textit{diff} dengan threshold ganda: 500 baris absolut dan 50\% ratio maksimal (\texttt{MODIFY}); (iv) menegakkan kebijakan keamanan \textit{path} pada berkas proyek (memblokir akses ke direktori sensitif seperti \texttt{.git}, \texttt{venv}, dan \texttt{.env}); (v) melakukan klasifikasi intensi pengguna (\textit{chat} vs \textit{task}); (vi) mengoptimalkan efisiensi dengan sistem \textit{Single-Shot Intelligence} yang mencakup \textit{acknowledgment} dinamis, perencanaan JSON, dan eksekusi adaptif 1-3 subfase; serta (vii) menyediakan penanganan interupsi (\textit{interrupt handling}) untuk kontrol sesi yang lebih baik. Sistem diimplementasikan pada lingkungan Ubuntu dengan bahasa pemrograman Python, pengelolaan dependensi melalui pip dan virtual environment, manajemen API key tunggal dengan migrasi otomatis dari sistem multi-key, dan menggunakan API Gemini sebagai LLM.
 
 \section{Rumusan Masalah}
-Berdasarkan latar belakang tersebut, rumusan masalah yang diajukan adalah sebagai berikut:
+Berdasarkan latar belakang tersebut, rumusan masalah yang diajukan adalah:
 
-\begin{enumerate}
-  \item Bagaimana merancang arsitektur agen AI berbasis CLI dengan \textit{Single-Shot Intelligence} yang mencakup klasifikasi intensi, \textit{acknowledgment} dinamis, fase perencanaan JSON, dan fase eksekusi adaptif 1-3 subfase, disertai integrasi LLM melalui API dan manajemen API key tunggal dengan migrasi otomatis dari sistem multi-key?
-  \item Bagaimana mengimplementasikan kebijakan keamanan \textit{path} dan pembatasan perubahan berbasis \textit{diff} dengan threshold ganda (500 baris absolut dan 50\% ratio maksimal) untuk mencegah penimpaan berkas yang tidak diinginkan dan akses ke direktori sensitif?
-  \item Bagaimana mengintegrasikan kemampuan observasi proyek, manipulasi berkas, serta modifikasi kode terarah dengan mekanisme \textit{interrupt handling} (Ctrl+C) dan pencatatan sesi untuk pengalaman interaktif yang lebih baik?
-  \item Bagaimana mengevaluasi efektivitas Paicode dalam membantu tugas-tugas pemrograman dengan metrik efisiensi panggilan API, ketepatan hasil, dan kepatuhan keamanan \textit{path}?
-\end{enumerate}
+\vspace{0.3cm}
+
+\textit{Bagaimana merancang, mengimplementasikan, dan mengevaluasi agen AI berbasis CLI dengan arsitektur Single-Shot Intelligence yang mampu mengotomasi aktivitas pemrograman secara aman melalui kebijakan path security dan pembatasan perubahan berbasis diff, serta terintegrasi dengan LLM melalui API?}
+
 
 \section{Batasan Masalah}
 Agar fokus penelitian terjaga dan implementasi dapat dilakukan secara terukur, batasan-batasan berikut ditetapkan:
