@@ -55,6 +55,38 @@ Dibandingkan dengan solusi di atas, Paicode menawarkan kebaruan pada kombinasi a
     \item \textbf{Transparansi Rencana}: Pengguna dapat melihat rencana aksi (dalam format JSON) sebelum eksekusi masif dilakukan, memberikan kontrol lebih baik daripada model \textit{black-box}.
 \end{enumerate}
 
+\subsection{Perbandingan dengan Penelitian Sebelumnya}
+
+Tabel~\ref{tab:perbandingan-penelitian} merangkum perbedaan antara penelitian-penelitian terdahulu dengan penelitian yang akan dilakukan.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Perbandingan Penelitian Terdahulu dengan Penelitian yang Dilakukan}
+  \label{tab:perbandingan-penelitian}
+  \begin{tabular}{@{}p{0.22\textwidth}p{0.35\textwidth}p{0.35\textwidth}@{}}
+    \toprule
+    \textbf{Aspek} & \textbf{Penelitian Terdahulu} & \textbf{Penelitian Ini (Paicode)} \\
+    \midrule
+    \textbf{Platform} & IDE-based (Copilot), Web-based (ChatGPT Code Interpreter), Container-based (OpenDevin) & CLI native, berjalan langsung di terminal Linux tanpa container \\
+    \midrule
+    \textbf{Arsitektur Agen} & Chat-loop iteratif (10-20 API calls) atau fully autonomous & Single-Shot Intelligence (2 API calls: planning + execution) \\
+    \midrule
+    \textbf{Keamanan Lokal} & Sandboxed container (OpenDevin) atau tidak ada kontrol eksplisit (Copilot) & Path security policy + diff-based guardrails (threshold 500 baris, 50\% ratio) \\
+    \midrule
+    \textbf{Transparansi} & Black-box suggestions (Copilot) atau verbose logs (SWE-agent) & Explicit JSON planning phase dengan user approval \\
+    \midrule
+    \textbf{Efisiensi} & High token consumption (chat-loop) atau resource-intensive (full containers) & Token-optimized (60-70\% reduction) dan lightweight (native OS) \\
+    \midrule
+    \textbf{Interaktivitas} & Passive suggestions (Copilot) atau fully autonomous (OpenDevin) & Semi-autonomous dengan interrupt handling (Ctrl+C) \\
+    \midrule
+    \textbf{Fokus Penelitian} & General-purpose coding atau issue-solving automation & Secure, efficient, transparent automation untuk developer workflows \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Dari Tabel~\ref{tab:perbandingan-penelitian} terlihat bahwa penelitian ini mengisi \textit{gap} antara asisten pasif (seperti Copilot) dan agen otonom penuh (seperti OpenDevin) dengan menawarkan pendekatan \textit{semi-autonomous} yang efisien, aman, dan transparan. Kebaruan utama terletak pada kombinasi \textbf{Single-Shot Intelligence} untuk efisiensi token, \textbf{path security} untuk keamanan tanpa sandboxing, dan \textbf{explicit planning} untuk transparansi—aspek-aspek yang belum dieksplorasi secara bersamaan dalam penelitian sebelumnya.
+
+
 \section{Posisi Penelitian}
 Kontribusi penelitian ini ditempatkan pada ranah agentic AI untuk pengembangan perangkat lunak dengan karakteristik sebagai berikut:
 
