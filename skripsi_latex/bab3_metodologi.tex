@@ -3,7 +3,26 @@
 \label{chap:metodologi}
 
 \section{Metode Pengembangan}
-Penelitian ini menggunakan pendekatan \textit{Research and Development} (R\&D) dengan strategi \textit{prototyping} iteratif. Pendekatan tersebut dipilih karena kebutuhan eksplorasi desain agen AI yang bersifat \textit{stateful} dan interaktif, sehingga memerlukan siklus cepat: perancangan, implementasi, uji coba, dan perbaikan. Setiap iterasi menghasilkan artefak yang dapat diuji untuk memvalidasi asumsi dan menyempurnakan rancangan.
+Penelitian ini menggunakan pendekatan \textit{Research and Development} (R\&D) dengan strategi \textit{prototyping} iteratif. Pemilihan metode ini didasarkan pada beberapa pertimbangan:
+
+\begin{enumerate}
+    \item \textbf{Eksplorasi Desain Agen Stateful}: Berbeda dengan aplikasi konvensional yang bersifat \textit{stateless}, agen AI memerlukan manajemen konteks percakapan dan memori kerja yang kompleks. Pendekatan \textit{prototyping} memungkinkan eksperimen cepat terhadap berbagai strategi manajemen state (misalnya, ukuran context window, format log sesi) tanpa komitmen arsitektur jangka panjang.
+    
+    \item \textbf{Validasi Asumsi Keamanan}: Kebijakan \textit{path security} dan pembatasan \textit{diff} merupakan mekanisme novel yang belum teruji di konteks agen CLI. Siklus iteratif memungkinkan identifikasi edge case (seperti symbolic links, path traversal attacks) melalui pengujian langsung, yang sulit diprediksi hanya dari analisis teoritis.
+    
+    \item \textbf{Optimasi Efisiensi Token}: Arsitektur \textit{Single-Shot Intelligence} dikembangkan melalui iterasi bertahap—dimulai dari model \textit{chat-loop} konvensional (10-20 panggilan API per tugas), kemudian dipadatkan menjadi sistem 2-panggilan melalui eksperimen empiris terhadap berbagai strategi prompt engineering.
+\end{enumerate}
+
+\subsection{Trade-off Metodologis}
+Pendekatan \textit{prototyping} dipilih dibandingkan metode waterfall atau agile penuh dengan pertimbangan trade-off berikut:
+
+\begin{itemize}
+    \item \textbf{Kelebihan}: Fleksibilitas tinggi untuk mengubah desain berdasarkan temuan empiris; cocok untuk domain yang belum mature (agentic AI untuk CLI); memungkinkan validasi konsep sebelum investasi besar pada infrastruktur.
+    
+    \item \textbf{Kekurangan}: Dokumentasi arsitektur dapat tertinggal jika iterasi terlalu cepat; risiko \textit{scope creep} jika tidak ada batasan jelas per iterasi; potensi \textit{technical debt} jika refactoring tidak dilakukan secara disiplin.
+    
+    \item \textbf{Mitigasi}: Setiap iterasi dibatasi pada satu fitur utama (misalnya, iterasi 1: path security; iterasi 2: diff-aware modification; iterasi 3: Single-Shot Intelligence); dokumentasi arsitektur diperbarui setelah setiap iterasi stabil; code review dilakukan sebelum merge ke branch utama.
+\end{itemize}
 
 \section{Arsitektur Sistem}
 Arsitektur Paicode dirancang modular dan berlapis, dengan pembagian tanggung jawab yang jelas:
