@@ -85,16 +85,30 @@
 \newcommand{\Tahun}{2025}
 \newcommand{\TahunAngkatan}{2022}
 
+% --- Watermark Setup ---
+\newcommand{\WatermarkBackground}{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[opacity=0.15, inner sep=0pt] at (current page.center) {
+      \includegraphics[width=12cm]{assets/img/yellowscaleutdilogo.png}
+    };
+  \end{tikzpicture}%
+}
+
 \begin{document}
 
-% --- Cover (separate file) ---
+% --- Cover (Sampul Depan) ---
 \include{front_cover}
+
+% --- Title Page (Halaman Judul) ---
+\include{front_halaman_judul}
 
 % --- Front matter: roman page numbering ---
 \pagenumbering{roman}
 
-% --- Approval and preliminary pages (placeholders) ---
+% --- Approval Pages ---
+\include{front_persetujuan}
 \include{front_pengesahan}
+
 \include{front_pernyataan}
 \include{front_kata_pengantar}
 \include{front_ucapan_terima_kasih}
