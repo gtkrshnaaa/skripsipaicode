@@ -34,10 +34,26 @@ Paicode menggunakan pendekatan manajemen dependensi tradisional dengan pip dan v
 \subsection{Antarmuka Terminal dengan \texttt{rich} dan \texttt{prompt\_toolkit}}
 Paket \texttt{rich} dimanfaatkan untuk menyajikan hasil eksekusi secara terstruktur dan mudah dibaca (panel, warna, penyorotan sintaks, tabel, dan spinner status). Penyajian output yang jelas mendukung pengalaman interaktif dan penelusuran hasil tindakan agen. Selain itu, Paicode juga mengintegrasikan \texttt{prompt\_toolkit} (opsional) untuk pengalaman input yang lebih baik dengan dukungan multiline editing dan key bindings. Jika \texttt{prompt\_toolkit} tidak tersedia, sistem akan fallback ke \texttt{rich.prompt.Prompt}.
 
-\section{Penelitian Terkait}
-Berbagai alat bantu pengembangan perangkat lunak berbasis LLM telah diusulkan dan dikomersialisasi, antara lain asisten kode terintegrasi editor, agen otomatis untuk \textit{refactoring}, serta sistem tanya-jawab dokumentasi. Umumnya solusi tersebut beroperasi sebagai ekstensi editor atau layanan daring, sehingga kuat pada integrasi IDE namun bergantung pada antarmuka tertentu dan memproses konteks di luar mesin pengguna.
+\section{Penelitian Terkait dan State of the Art}
 
-Sebaliknya, Paicode menempatkan agen di lingkungan CLI dan beroperasi langsung pada \textbf{berkas proyek di workspace}, sementara inferensi dilakukan oleh LLM eksternal melalui API. Perintah agen disederhanakan ke dalam himpunan tindakan yang eksplisit (\texttt{MKDIR}, \texttt{TOUCH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{RM}, \texttt{MV}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{FINISH}) dengan \textit{policy} \textit{path security}. Penelitian terkait menunjukkan bahwa interaksi \textit{stateful} berbasis rencana aksi meningkatkan kualitas hasil pada tugas-tugas rekayasa perangkat lunak yang iteratif, sementara \textit{guardrail} sederhana (seperti pembatasan \textit{diff}) dapat menekan risiko penimpaan berkas secara tidak disengaja.
+Perkembangan alat bantu pemrograman berbasis AI berkembang pesat dalam beberapa tahun terakhir. Berikut adalah tinjauan terhadap beberapa solusi \textit{state-of-the-art} yang relevan dengan penelitian ini:
+
+\subsection{AI Coding Assistant Terintegrasi (IDE-based)}
+GitHub Copilot \cite{copilot2021} merupakan contoh paling prominen dari asisten pemrograman yang terintegrasi langsung ke dalam lingkungan pengembangan (IDE) seperti VS Code. Copilot unggul dalam memberikan saran \textit{autocomplete} real-time dan fungsi obrolan kontekstual. Namun, pendekatannya sangat bergantung pada antarmuka editor visual dan beroperasi sebagai "pilot pendamping" (copilot) alih-alih agen otonom yang dapat melakukan tugas kompleks lintas berkas secara mandiri tanpa intervensi pengguna untuk setiap langkahnya.
+
+\subsection{CLI-based AI Chat Tools}
+Alat seperti Aider \cite{gauthier2023aider} membawa kemampuan LLM ke dalam terminal (CLI). Aider memungkinkan pengguna untuk melakukan \textit{pair programming} dengan LLM langsung di terminal dan menerapkan perubahan pada git repository. Pendekatan ini mirip dengan Paicode dalam hal antarmuka berbasis teks. Perbedaannya, Paicode menekankan pada arsitektur \textit{Single-Shot Intelligence} dengan fase perencanaan JSON eksplisit sebelum eksekusi, serta penerapan kebijakan keamanan \textit{path} yang ketat untuk lingkungan korporasi atau sensitif, sedangkan banyak alat CLI lain berfokus pada kecepatan interaksi \textit{chat-apply} langsung.
+
+\subsection{Autonomous Software Engineers}
+Proyek seperti OpenDevin \cite{opendevin2024} dan SWE-agent \cite{li2024sweagent} bertujuan menciptakan agen yang sepenuhnya otonom, mampu menyelesaikan isu GitHub dari awal hingga akhir tanpa interaksi manusia. Meskipun sangat canggih, pendekatan ini seringkali memerlukan akses sumber daya yang besar (Docker container penuh) dan kompleksitas tinggi untuk penyiapan. Paicode mengambil posisi tengah (middle-ground) dengan menyediakan agen \textit{semi-autonomous} yang ringan (\textit{lightweight}), berjalan native di OS tanpa kontainer berat, namun tetap memiliki kemampuan perencanaan (\textit{planning}) untuk tugas multi-langkah.
+
+\subsection{Posisi Paicode}
+Dibandingkan dengan solusi di atas, Paicode menawarkan kebaruan pada kombinasi arsitektur \textit{local-first} yang ringan namun terstruktur:
+\begin{enumerate}
+    \item \textbf{Keamanan Terkendali}: Tidak seperti agen otonom penuh yang sering berjalan di sandboxed container karena risiko tinggi, Paicode dirancang aman untuk berjalan di \textit{host} utama berkat \textit{path security policy} dan \textit{diff-based guardrails}.
+    \item \textbf{Efisiensi Token}: Dengan arsitektur perencanaan \textit{single-shot}, Paicode mengurangi \textit{round-trip} percakapan yang tidak perlu, berbeda dengan model \textit{chat} standar.
+    \item \textbf{Transparansi Rencana}: Pengguna dapat melihat rencana aksi (dalam format JSON) sebelum eksekusi masif dilakukan, memberikan kontrol lebih baik daripada model \textit{black-box}.
+\end{enumerate}
 
 \section{Posisi Penelitian}
 Kontribusi penelitian ini ditempatkan pada ranah agentic AI untuk pengembangan perangkat lunak dengan karakteristik sebagai berikut:
