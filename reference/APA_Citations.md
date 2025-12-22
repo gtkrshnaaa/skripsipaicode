@@ -17,3 +17,9 @@ Berikut adalah sitasi gaya APA (American Psychological Association) edisi ke-7 u
 **Touvron, H., et al.** (2023). *LLaMA: Open and efficient foundation language models*. arXiv. https://doi.org/10.48550/arXiv.2302.13971
 
 **Yao, S., et al.** (2023). ReAct: Synergizing reasoning and acting in language models. *International Conference on Learning Representations (ICLR)*. https://openreview.net/forum?id=WE_vluYUL-X
+
+**Gauthier, P.** (2023). *Aider: AI pair programming in your terminal* [Computer software]. GitHub. https://github.com/paul-gauthier/aider
+
+**GitHub.** (2021). *GitHub Copilot: Your AI pair programmer* [Computer software]. https://github.com/features/copilot
+
+**OpenDevin Team.** (2024). *OpenDevin: An open source autonomous AI software engineer* [Computer software]. GitHub. https://github.com/OpenDevin/OpenDevin
