@@ -126,22 +126,34 @@ Berikut adalah diagram ketergantungan antar modul dalam sistem:
 Diagram alur interaksi umum dalam satu sesi (\textit{turn}) adalah sebagai berikut:
 
 % Tabel 3.2: Urutan interaksi (sequence) sesi agen
-\begin{longtable}{@{}p{0.10\textwidth}p{0.25\textwidth}p{0.60\textwidth}@{}}
-  \caption{Alur Eksekusi Perintah dalam Arsitektur Single-Shot}\label{tab:sequence-session}\\
-  \toprule
-  \textbf{Langkah} & \textbf{Komponen} & \textbf{Aksi} \\
-  \midrule
-  \endfirsthead
-  \toprule
-  \textbf{Langkah} & \textbf{Komponen} & \textbf{Aksi} \\
-  \midrule
-  \endhead
-  1 & User/CLI & Pengguna memasukkan instruksi tugas. \\
-  2 & Agen & Mengirim konteks + instruksi ke LLM untuk perencanaan. \\
-  3 & LLM & Mengembalikan rencana eksekusi dalam format JSON. \\
-  4 & Agen & Memvalidasi rencana dan menampilkan ke pengguna. \\
-  5 & Agen & Mengeksekusi langkah-langkah rencana (loop subfase). \\
-  6 & Workspace & Menjalankan operasi fisik (baca/tulis) dengan validasi keamanan. \\
-  7 & Agen & Menyimpan hasil ke riwayat percakapan. \\
-  \bottomrule
-\end{longtable}
+% Visualisasi Flowchart Alur Sistem (Menggantikan Tabel Sequence)
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[node distance=1.5cm, auto,
+    startstop/.style={rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=red!30},
+    process/.style={rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30},
+    io/.style={trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30},
+    decision/.style={diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30},
+    arrow/.style={thick,->,>=stealth}
+  ]
+
+    \node (start) [startstop] {Mulai};
+    \node (input) [io, below of=start] {Input Instruksi User};
+    \node (llm_plan) [process, below of=input] {LLM: Buat Rencana (JSON)};
+    \node (validate) [decision, below of=llm_plan, yshift=-1.5cm] {Validasi Rencana?};
+    \node (execute) [process, below of=validate, yshift=-1.5cm] {Eksekusi Langkah (Loop)};
+    \node (workspace) [process, below of=execute] {Operasi Workspace (I/O)};
+    \node (finish) [startstop, below of=workspace] {Selesai / Simpan History};
+
+    \draw[arrow] (start) -- (input);
+    \draw[arrow] (input) -- (llm_plan);
+    \draw[arrow] (llm_plan) -- (validate);
+    \draw[arrow] (validate.east) -- node[anchor=south] {Tolak} +(1,0) |- (input.east);
+    \draw[arrow] (validate) -- node[anchor=east] {Setuju} (execute);
+    \draw[arrow] (execute) -- (workspace);
+    \draw[arrow] (workspace) -- (finish);
+
+  \end{tikzpicture}
+  \caption{Flowchart alur eksekusi perintah dalam arsitektur \textit{Single-Shot} Paicode.}
+  \label{fig:flowchart-sistem}
+\end{figure}
