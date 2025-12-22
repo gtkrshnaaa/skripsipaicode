@@ -43,11 +43,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \end{lstlisting}
 
 \subsubsection{Implementasi Agen (Single-Shot Intelligence)}
-Agen diimplementasikan dalam \texttt{agent.py}. Alur kerja agen dimulai dengan klasifikasi intensi (\textit{intent classification}), dilanjutkan dengan fase perencanaan (\textit{planning}), dan diakhiri dengan eksekusi.
-
-Untuk memberikan pengalaman pengguna yang interaktif dan informatif, antarmuka terminal (TUI) dibangun menggunakan pustaka \texttt{rich}. Fitur ini memungkinkan penyajian output dalam bentuk \textit{Markdown}, panel informasi yang terstruktur, dan tabel rencana eksekusi yang rapi seperti yang diimplementasikan dalam fungsi \texttt{display\_planning\_results}. Hal ini memastikan pengguna dapat memahami langkah-langkah yang akan diambil agen sebelum eksekusi dilakukan.
-
-Berikut adalah cuplikan kode yang menunjukkan struktur data untuk fase perencanaan:
+Agen diimplementasikan dalam \texttt{agent.py}. Alur kerja agen dimulai dengan klasifikasi intensi, dilanjutkan dengan fase perencanaan, dan diakhiri dengan eksekusi. Berikut adalah cuplikan kode yang menunjukkan struktur data untuk fase perencanaan (Planning):
 
 \medskip
 \lstinputlisting[language=Python, captionpos=b, caption={Cuplikan agent.py (Struktur Planning JSON)}, firstline=640, lastline=660, label={lst:agent-planning}]{../paicode/paicode/agent.py}
@@ -84,16 +80,13 @@ Berikut adalah paparan hasil uji coba dari skenario-skenario di atas, ditampilka
 \subsubsection{Hasil Skenario 1: Pembuatan Proyek}
 Agen berhasil membuat struktur direktori dan file awal. Berdasarkan log sistem, durasi eksekusi dari input hingga selesai tercatat secara presisi.
 
-\begin{lstlisting}[language=bash,caption={Log: Pembuatan Proyek Kalkulator (Tampilan TUI)}, basicstyle=\ttfamily\scriptsize]
-[2025-11-20 22:38:05] Start Single-Shot Intelligence Session
-+-----+----------------------+------------------------------------------+
-| No  | Action               | Purpose                                  |
-+-----+----------------------+------------------------------------------+
-|  1  | WRITE calculator.py  | Implementasi fungsi dasar (add, sub...)  |
-|  2  | LIST_PATH .          | Verifikasi file berhasil dibuat          |
-|  3  | FINISH               | Konfirmasi selesai                       |
-+-----+----------------------+------------------------------------------+
-[2025-11-20 22:38:12] Mission Accomplished
+\begin{lstlisting}[language=bash,caption={Log: Pembuatan Proyek Kalkulator}]
+[2025-11-20 22:38:05] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
+[2025-11-20 22:38:10] EXECUTION PLAN (3 steps):
+  1. WRITE calculator.py ...
+  2. LIST_PATH . ...
+  3. FINISH Project creation complete ...
+[2025-11-20 22:38:12] SUCCESS: All steps completed.
 \end{lstlisting}
 
 \textbf{Analisis Log}:
@@ -107,16 +100,12 @@ Dalam waktu 7 detik, Paicode memproses bahasa alami, merancang struktur kode, da
 \subsubsection{Hasil Skenario 2: Modifikasi Kode}
 Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur.
 
-\begin{lstlisting}[language=bash,caption={Log: Modifikasi tambah fitur pangkat (Tampilan TUI)}, basicstyle=\ttfamily\scriptsize]
-[2025-11-20 22:40:26] Start Single-Shot Intelligence Session
-+-----+----------------------+------------------------------------------+
-| No  | Action               | Purpose                                  |
-+-----+----------------------+------------------------------------------+
-|  1  | READ calculator.py   | Analisis struktur kode saat ini          |
-|  2  | MODIFY calculator.py | Menambahkan fungsi def power(a,b)        |
-|  3  | FINISH               | Selesai                                  |
-+-----+----------------------+------------------------------------------+
-[2025-11-20 22:40:46] Mission Accomplished
+\begin{lstlisting}[language=bash,caption={Log: Modifikasi tambah fitur pangkat}]
+[2025-11-20 22:40:26] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
+[2025-11-20 22:40:35] EXECUTION PLAN (1 steps):
+  1. MODIFY calculator.py ...
+[2025-11-20 22:40:46] SUCCESS: MODIFY calculator.py
+[2025-11-20 22:40:46] OUTPUT: File modified: calculator.py
 \end{lstlisting}
 
 \textbf{Analisis Log}:
