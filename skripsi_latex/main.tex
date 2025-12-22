@@ -37,7 +37,7 @@
 \pgfplotsset{compat=1.18}
 
 % --- Page setup ---
-\geometry{a4paper, margin=1in}
+\geometry{a4paper, top=4cm, left=4cm, bottom=3cm, right=3cm}
 \onehalfspacing
 
 % --- Hyperref setup ---
@@ -119,8 +119,8 @@
 \include{front_ucapan_terima_kasih}
 
 % --- Abstract placeholders ---
-\chapter*{Abstrak}
-\addcontentsline{toc}{chapter}{Abstrak}
+\chapter*{INTISARI}
+\addcontentsline{toc}{chapter}{INTISARI}
 Penelitian ini mengusulkan \textbf{Paicode}, sebuah agen AI berbasis Command Line Interface (CLI) untuk membantu proses pengembangan perangkat lunak secara interaktif dengan arsitektur \textit{Single-Shot Intelligence}. Sistem berjalan pada lingkungan terminal lokal dan melakukan \textbf{operasi berkas tingkat-aplikasi di ruang kerja proyek (project workspace)}; namun \textbf{mengirimkan cuplikan kode/konteks ke layanan LLM (Gemini) melalui API} untuk keperluan inferensi. Oleh karena itu, aspek privasi dan kerahasiaan kode \textbf{bergantung pada kebijakan penyedia API}, sedangkan pengamanan lokal difokuskan pada kebijakan \textit{path security}. Himpunan perintah yang disediakan (mis. \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}) memungkinkan agen mengobservasi proyek, memanipulasi berkas, dan memodifikasi kode secara terarah dengan sistem perubahan berbasis \textit{diff}.
 
 Arsitektur \textit{Single-Shot Intelligence} mengoptimalkan efisiensi dengan sistem panggilan API yang terdiri dari: (1) klasifikasi intensi, (2) acknowledgment dinamis, (3) fase perencanaan untuk analisis mendalam dan perencanaan komprehensif dalam format JSON, (4) fase eksekusi adaptif yang dapat berjalan dalam 1-3 subfase berdasarkan kompleksitas tugas, dan (5) saran langkah berikutnya. Sistem mencakup manajemen API key tunggal dengan migrasi otomatis dari sistem multi-key, \textit{interrupt handling} (Ctrl+C), dan pencatatan sesi ke \texttt{.pai\_history}.
@@ -129,8 +129,8 @@ Metode yang digunakan adalah \textit{Research and Development} (R\&D) dengan pen
 
 \textbf{Kata kunci}: agentic AI, CLI, LLM, API, Single-Shot Intelligence, keamanan \textit{path}, pengembangan perangkat lunak.
 
-\chapter*{Abstract}
-\addcontentsline{toc}{chapter}{Abstract}
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{ABSTRACT}
 This thesis presents \textbf{Paicode}, an agentic AI for the Command Line Interface (CLI) that assists software development through interactive, stateful workflows with a \textit{Single-Shot Intelligence} architecture. The system runs on a local terminal and performs \textbf{application-level file operations within the project workspace}, while \textbf{sending code/context snippets to an external LLM (Gemini) via API} for inference. Consequently, privacy and confidentiality \textbf{depend on the provider's policy}, whereas local safeguards focus on path-security policies. A compact set of commands (e.g., \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}) enables the agent to observe the project, manipulate files, and apply targeted code modifications with \textit{diff}-based change system.
 
 The \textit{Single-Shot Intelligence} architecture optimizes efficiency through an API call system consisting of: (1) intent classification, (2) dynamic acknowledgment, (3) planning phase for deep analysis and comprehensive JSON-based planning, (4) adaptive execution phase that can run in 1-3 sub-phases based on task complexity, and (5) next-step suggestions. The system includes single API key management with automatic migration from multi-key systems, \textit{interrupt handling} (Ctrl+C), and session logging to \texttt{.pai\_history}.
