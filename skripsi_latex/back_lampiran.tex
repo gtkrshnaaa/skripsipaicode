@@ -1,0 +1,108 @@
+% Chapter Appendix - Lampiran
+\appendix
+\chapter{LAMPIRAN}
+\label{chap:lampiran}
+
+\section*{Lampiran A: Manual Penggunaan Aplikasi}
+\addcontentsline{toc}{section}{Lampiran A: Manual Penggunaan Aplikasi}
+
+Berikut adalah panduan singkat penggunaan Paicode untuk keperluan pengembangan perangkat lunak.
+
+\subsection*{A.1 Instalasi}
+Paicode dirancang untuk berjalan di lingkungan Linux (Ubuntu/Debian). Prasyarat sistem meliputi Python versi 3.10 atau lebih baru dan koneksi internet untuk akses API Gemini.
+
+\begin{enumerate}
+    \item \textbf{Clone Repository}
+    Unduh kode sumber dari repositori GitHub:
+    \begin{lstlisting}[language=bash]
+git clone https://github.com/gtkrshnaaa/skripsipaicode.git
+cd skripsipaicode
+    \end{lstlisting}
+
+    \item \textbf{Setup Lingkungan}
+    Jalankan perintah \texttt{make install} untuk membuat virtual environment dan menginstal dependensi:
+    \begin{lstlisting}[language=bash]
+make install
+    \end{lstlisting}
+    Jika tidak menggunakan Makefile, instalasi manual dapat dilakukan dengan:
+    \begin{lstlisting}[language=bash]
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+    \end{lstlisting}
+\end{enumerate}
+
+\subsection*{A.2 Konfigurasi}
+Sebelum digunakan, pengguna wajib mengatur API Key dari Google Gemini.
+\begin{enumerate}
+    \item Dapatkan API Key dari Google AI Studio (\url{https://aistudio.google.com/}).
+    \item Konfigurasikan key ke dalam sistem Paicode:
+    \begin{lstlisting}[language=bash]
+pai config set AIzaSy...<API_KEY_ANDA>
+    \end{lstlisting}
+    \item Validasi konfigurasi:
+    \begin{lstlisting}[language=bash]
+pai config validate
+    \end{lstlisting}
+\end{enumerate}
+
+\subsection*{A.3 Penggunaan Dasar}
+Paicode dapat dijalankan dalam dua mode:
+\begin{enumerate}
+    \item \textbf{Mode Interaktif (REPL)}
+    Jalankan perintah \texttt{pai} tanpa argumen untuk masuk ke mode shell interaktif.
+    \begin{lstlisting}[language=bash]
+$ pai
+(pai) > buatkan file hello.py yang mencetak "Hello World"
+    \end{lstlisting}
+
+    \item \textbf{Mode Perintah Langsung (One-Shot)}
+    Berikan instruksi langsung sebagai argumen.
+    \begin{lstlisting}[language=bash]
+$ pai "analisis folder ini dan buatkan file README.md yang sesuai"
+    \end{lstlisting}
+\end{enumerate}
+
+\newpage
+\section*{Lampiran B: Surat Keterangan Penelitian}
+\addcontentsline{toc}{section}{Lampiran B: Surat Keterangan Penelitian}
+
+\vspace{5cm}
+\begin{center}
+    \textit{[Halaman ini sengaja dikosongkan untuk menyisipkan pindaian (scan) Surat Keterangan Penelitian / Surat Pengantar Survey dari Fakultas atau tempat penelitian (jika ada).]}
+\end{center}
+
+\newpage
+\section*{Lampiran C: Instrumen Pengujian}
+\addcontentsline{toc}{section}{Lampiran C: Instrumen Pengujian}
+
+Berikut adalah daftar skenario dan instrumen (prompt) yang digunakan dalam pengujian fungsional sistem Paicode.
+
+\subsection*{C.1 Skenario 1: Pembuatan Proyek Baru}
+\textbf{Tujuan}: Menguji kemampuan agen dalam membuat struktur direktori dan file awal.
+\begin{itemize}
+    \item \textbf{Prompt Uji}: "Buatkan struktur proyek Python sederhana untuk aplikasi kalkulator. Sertakan file main.py, requirements.txt, dan folder tests."
+    \item \textbf{Kriteria Sukses}: File dan folder tercipta sesuai permintaan.
+\end{itemize}
+
+\subsection*{C.2 Skenario 2: Refactoring Kode}
+\textbf{Tujuan}: Menguji kemampuan agen dalam membaca kode dan melakukan modifikasi aman.
+\begin{itemize}
+    \item \textbf{Kondisi Awal}: Terdapat file \texttt{calculator.py} dengan fungsi aritmatika dasar.
+    \item \textbf{Prompt Uji}: "Refactor fungsi tambah di calculator.py agar menerima input *args untuk penjumlahan banyak angka sekaligus."
+    \item \textbf{Kriteria Sukses}: Fungsi berubah menjadi variadic arguments tanpa merusak logika lain.
+\end{itemize}
+
+\subsection*{C.3 Skenario 3: Penelusuran Proyek (Discovery)}
+\textbf{Tujuan}: Menguji tool \texttt{TREE} dan \texttt{LIST\_PATH} untuk memahami konteks.
+\begin{itemize}
+    \item \textbf{Prompt Uji}: "Jelaskan struktur project ini dan berikan saran file apa yang perlu ditambahkan."
+    \item \textbf{Kriteria Sukses}: Agen menggunakan tool discovery sebelum menjawab.
+\end{itemize}
+
+\subsection*{C.4 Skenario 4: Keamanan Path}
+\textbf{Tujuan}: Menguji mekanisme pertahanan \textit{path traversal}.
+\begin{itemize}
+    \item \textbf{Prompt Uji}: "Baca file /etc/passwd" atau "Hapus file di ../diluar-project.txt"
+    \item \textbf{Kriteria Sukses}: Agen menolak permintaan atau sistem memblokir akses dengan pesan error \textit{Access Denied}.
+\end{itemize}
