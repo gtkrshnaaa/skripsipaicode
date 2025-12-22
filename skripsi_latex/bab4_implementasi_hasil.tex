@@ -65,7 +65,7 @@ Pengujian fungsional dilakukan dengan menjalankan serangkaian skenario tugas pem
   \textbf{Skenario} & \textbf{Deskripsi Aktivitas} & \textbf{Metode Validasi} \\
   \midrule
   \endhead
-  1. Hello World & Membuat proyek baru, file main.py sederhana. & Cek keberadaan file. \\
+  1. Pembuatan Proyek & Membuat skrip kalkulator sederhana. & Cek keberadaan file. \\
   2. Modifikasi Fitur & Menambahkan fungsi baru pada kode yang sudah ada. & Review kode + diff. \\
   3. Eksplorasi & Menggunakan perintah TREE dan LIST\_PATH. & Visualisasi output. \\
   4. Debugging & Meminta agen memperbaiki error sintaks sengaja. & Eksekusi ulang sukses. \\
@@ -80,10 +80,10 @@ Berikut adalah paparan hasil uji coba dari skenario-skenario di atas, ditampilka
 \subsubsection{Hasil Skenario 1: Pembuatan Proyek}
 Agen berhasil membuat struktur direktori dan file awal.
 
-\begin{lstlisting}[language=bash,caption={Log: Pembuatan Proyek BMI}]
-[2025-11-20 22:38:05] USER: buatkan proyek python sederhana: BMI Calculator
+\begin{lstlisting}[language=bash,caption={Log: Pembuatan Proyek Kalkulator}]
+[2025-11-20 22:38:05] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
 [2025-11-20 22:38:15] EXECUTION PLAN (3 steps):
-  1. WRITE bmi_calculator.py ...
+  1. WRITE calculator.py ...
   2. LIST_PATH . ...
   3. FINISH Project creation complete ...
 \end{lstlisting}
@@ -91,10 +91,10 @@ Agen berhasil membuat struktur direktori dan file awal.
 \subsubsection{Hasil Skenario 2: Modifikasi Kode}
 Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur.
 
-\begin{lstlisting}[language=bash,caption={Log: Modifikasi tambah kategori BMI}]
-[2025-11-20 22:40:26] USER: ubah fungsi get_bmi_category: tambahkan kategori "Severely Obese"
-[2025-11-20 22:40:46] SUCCESS: MODIFY bmi_calculator.py
-[2025-11-20 22:40:46] OUTPUT: File modified: bmi_calculator.py
+\begin{lstlisting}[language=bash,caption={Log: Modifikasi tambah fitur pangkat}]
+[2025-11-20 22:40:26] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
+[2025-11-20 22:40:46] SUCCESS: MODIFY calculator.py
+[2025-11-20 22:40:46] OUTPUT: File modified: calculator.py
 \end{lstlisting}
 
 \subsubsection{Hasil Pengujian Metrik}
