@@ -1,0 +1,698 @@
+            TUGAS AKHIR
+
+           SKEMA SKRIPSI
+
+
+            JUDUL SKRIPSI
+
+
+
+
+           NAMA MAHASISWA
+               NIM : NIM
+
+
+  PROGRAM STUDI NAMA PROGRAM STUDI
+           PROGRAM SARJANA
+       FAKULTAS NAMA FAKULTAS
+UNIVERSITAS TEKNOLOGI DIGITAL INDONESIA
+             YOGYAKARTA
+   TAHUN PENYELESAIAN TUGAS AKHIR
+                       TUGAS AKHIR
+                      SKEMA SKRIPSI
+
+
+                      JUDUL SKRIPSI
+
+
+
+
+Diajukan sebagai salah satu syarat untuk menyelesaikan studi pada
+                        Program Sarjana
+              Program Studi Nama Program Studi
+                    Fakultas Nama Fakultas
+             Universitas Teknologi Digital Indonesia
+
+
+
+
+                          Disusun Oleh
+                     NAMA MAHASISWA
+                          NIM : NIM
+
+
+
+
+         PROGRAM STUDI NAMA PROGRAM STUDI
+                     PROGRAM SARJANA
+                FAKULTAS NAMA FAKULTAS
+     UNIVERSITAS TEKNOLOGI DIGITAL INDONESIA
+                        YOGYAKARTA
+           TAHUN PENYELESAIAN TUGAS AKHIR
+
+
+                               2
+       HALAMAN PERSETUJUAN UJIAN TUGAS AKHIR
+
+
+
+
+Judul​                 :​ Judul Tugas Akhir
+Nama​                  :​ Nama Mahasiswa
+NIM​                   :​ Nim
+Program Studi​         :​ Nama Program Studi
+Program​               :​ Sarjana
+Semester​              :​ Semester pada saat Ujian Tugas Akhir
+Tahun Akademik​        :​ Tahun Akademik saat Ujian Tugas Akhir
+
+
+
+
+                   Telah diperiksa dan disetujui untuk diujikan
+                     di hadapan Dewan Penguji Tugas Akhir
+
+
+
+                 Yogyakarta, 27 Oktober 2021 (tgl Persetujuan)
+                                Dosen Pembimbing,
+
+
+
+
+                 Nama Lengkap Dosen Pembimbing beserta gelar
+                               NIDN: NIDN
+
+
+
+
+                                        3
+                    HALAMAN PENGESAHAN
+
+
+                        JUDUL TUGAS AKHIR
+
+
+
+
+ Telah dipertahankan di depan Dewan Penguji dan dinyatakan diterima untuk
+             memenuhi sebagian persyaratan guna memperoleh
+                        Gelar Nama Gelar Sarjana
+                    Program Studi Nama Program Studi
+                          Fakultas Nama Fakultas
+                  Universitas Teknologi Digital Indonesia
+
+
+
+                   Yogyakarta, 1 Januari 2022 (tgl Ujian)
+
+
+
+Dewan Penguji                                        NIDN      Tandatangan
+1. Nama Dosen Penguji (Ketua)                        ………….     ………….
+
+2. Nama Dosen Pembimbing (Sekretaris)                ………….     ………….
+
+3. Nama Dosen Penguji (Anggota)                      ………….     ………….
+
+
+
+                                  Mengetahui
+                    Ketua Program Studi Program Studi
+
+
+
+
+                        Nama Ketua Program Studi
+                             NIDN : NIDN
+
+
+
+                                      4
+            PERNYATAAN KEASLIAN TUGAS AKHIR
+
+
+
+       Dengan ini saya menyatakan bahwa naskah Tugas Akhir ini belum pernah
+diajukan untuk memperoleh gelar Nama Gelar Sarjana di suatu Perguruan Tinggi,
+dan sepanjang pengetahuan saya tidak terdapat karya atau pendapat yang pernah
+ditulis atau diterbitkan oleh orang lain, kecuali yang secara sah diacu dalam
+naskah ini dan disebutkan dalam daftar pustaka.
+
+                                  Yogyakarta, 27 Oktober 2021 (tgl Persetujuan)
+
+                                                          Tanda Tangan Mahasiswa
+
+                                                              Nama Mahasiswa
+                                                                   NIM: Nim
+
+
+
+
+                                       5
+                    HALAMAN PERSEMBAHAN
+
+
+
+      Berisi persembahan kepada orang tertentu, misalnya orang tua, sahabat,
+dan lain-lain. Pengisian halaman ini dibatasi pada kata-kata ataupun kalimat.
+Tidak dibenarkan untuk menghiasinya dengan gambar-gambar tertentu. Pada
+bagian tengah bawah diketik nomor halaman dengan angka Romawi kecil.
+
+
+
+
+                                      6
+                                PRAKATA
+
+
+     Halaman ini memuat pengantar tentang penelitian dan ucapan terima kasih
+
+mahasiswa kepada mereka yang telah membantunya selama pendidikan. Kalimat-
+
+kalimatnya pendek, terdiri dari beberapa alinea, namun tidak lebih dari dua
+
+halaman.
+
+     Judul ”PRAKATA” diketik simetris di batas atas bidang pengetikan. Di
+
+akhir teks dicantumkan kata-kata kota penerbitan, bulan dan tahun, yang diikuti
+
+kata Penulis di kanan bawah. Di bagian tengah bawah diketik nomor halaman
+
+dengan angka Romawi kecil.
+
+
+
+
+                                       7
+                                   DAFTAR ISI
+
+
+​                                                                                  Hal
+
+HALAMAN JUDUL​                                                                            i
+HALAMAN PERSETUJUAN UJIAN TUGAS AKHIR​                                               iii
+HALAMAN PENGESAHAN​                                                                  iv
+PERNYATAAN KEASLIAN TUGAS AKHIR​                                                         v
+HALAMAN PERSEMBAHAN​                                                                 vi
+PRAKATA​                                                                             vii
+DAFTAR ISI​                                                                         viii
+DAFTAR GAMBAR​                                                                       ix
+DAFTAR TABEL​                                                                            x
+INTISARI​                                                                            xi
+ABSTRACT​                                                                            xii
+BAB I PENDAHULUAN​                                                                       1
+BAB II TINJAUAN PUSTAKA DAN DASAR TEORI​                                                 3
+BAB III METODE PENELITIAN​                                                               5
+BAB IV IMPLEMENTASI DAN PEMBAHASAN​                                                      6
+BAB V PENUTUP​                                                                           7
+DAFTAR PUSTAKA​                                                                          8
+
+
+
+Catatan:
+
+    1.​ Daftar isi berisi rincian pokok-pokok isi tugas akhir beserta halamannya, pokok
+        isi yang dicantumkan pada daftar isi maksimum sampai heading 3.
+
+    2.​ Daftar isi sudah dibuat otomatis, tinggal melakukan update halaman saja.
+
+    3.​ Jika melakukan UPDATE ENTIRE TABLE, wajib mengganti tulisan TUGAS
+        AKHIR menjadi HALAMAN JUDUL.
+
+
+
+
+                                           8
+                            DAFTAR GAMBAR
+
+
+
+                                                                             Hal
+Gambar 2.1 ​Judul Gambar​                                                ​   7
+
+
+Catatan :
+Daftar gambar berisi rincian-rincian gambar tercantum pada isi skripsi. Gunakan
+penomoran gambar otomatis dan diawali dengan nomor Bab, kemudian nomor
+urut gambar terletak di bagian bawah gambar dan terletak di tengah (Insert-
+Caption : MsWord)
+
+
+
+
+                                       9
+                                DAFTAR TABEL
+
+
+​                                                                             Hal
+Tabel 2.1 ​Judul Tabel​                                                   ​   7
+
+Catatan :
+Daftar tabel berisi rincian keterangan tentang tabel beserta nomor halamannya.
+Penomoran tabel pada naskah diletakkan di bagian atas tabel dan tengah.
+
+
+
+
+                                          10
+                                   INTISARI
+
+
+
+        Bagian ini memuat uraian singkat (tidak lebih dari 250 kata) tetapi padat
+dan jelas serta memberikan gambaran menyeluruh tentang isi tugas akhir. Intisari
+tugas akhir memuat apa dan mengapa penelitian dikerjakan, bagaimana
+dikerjakan, dan apa hasil penting yang diperoleh dari penelitian. Abstrak ditulis
+dengan 1 spasi, terdiri dari 3 atau 4 paragraf dan memiliki 3-5 katakunci yang
+dicetak miring yang ditulis urut abjad.
+
+Kata Kunci : kata1, kata2, kata3
+
+
+
+
+                                        11
+                                 ABSTRACT
+
+
+        This section contains a brief description (no more than 250 words) but is
+concise and clear and provides a comprehensive overview of the contents of the
+final assignment. The summary of the final assignment contains what and why the
+research was conducted, how it was done, and what important results were
+obtained from the research. The abstract is written with 1 space, consists of 3 or 4
+paragraphs and has 3-5 italicized keywords written in alphabetical order.
+
+
+Keywords: word1, word2, word3
+
+
+
+
+                                        12
+                                     BAB I​
+                                PENDAHULUAN
+
+
+
+1.1​ Latar Belakang
+       Berisi argumen atau alasan berdasarkan fakta atau sumber-sumber
+penelitian sebelumnya (bukan opini dari penulis), sehingga perlunya dibuat
+penelitian ini. Uraian dimulai dengan hal yang unik, fakta, masalah dan pendapat
+yang mendasari penelitian. Diuraikan juga alasan-alasan teoritis dan praktis
+perlunya penelitian ini dilakukan dan bagaimana masalah tersebut dipecahkan.
+
+
+1.2​ Rumusan Masalah
+       Berbekal latar belakang dan kerangka pikir, masalah yang diteliti dapat
+dirumuskan. Masalah yang dirumuskan harus jelas dan fokus pada kata kunci
+utama yang unik. Dalam merumuskan masalah, deskripsi lokasi studi terutama
+keunikannya    sudah termasuk dalam pertimbangan. Untuk               memperjelas
+perumusan masalah, dapat juga dibuat beberapa pertanyaan yang hendak dijawab
+dalam penelitian itu. Dalam uraian harus tercakup pendekatan yang digunakan
+dalam perumusan masalah. Untuk membantu mengikuti alur pikir secara
+skematis, dapat juga dibuat bagan alir kerangka proses dan rumusan masalah serta
+pencapaian tujuan penelitian.
+
+
+1.3 Ruang Lingkup
+       Berisi uraian yang menjelaskan kompleksitas atau lingkup obyek yang
+diteliti. Ruang lingkup berisi deskripsi pekerjaan yang akan dilakukan (bukan apa
+yang tidak dikerjakan). Contohnya variabel, kriteria, ciri, cara pengujian, metode,
+model dan lain-lain. Disajikan dalam bentuk pointer.
+
+
+1.4 Tujuan Penelitian
+
+
+                                         1
+                                                                           2
+
+       Menjelaskan tujuan yang akan dicapai sebagai upaya pemecahan masalah
+yang dijelaskan dalam latar belakang. Gunakan kata kerja yang hasilnya dapat
+diukur, bukan menunjukan syarat kelulusan.
+​
+1.5 Manfaat Penelitian
+       Menjelaskan manfaat atau kegunaan hasil penelitian bagi kepentingan
+pengembangan ipteks, pertimbangan dalam mengambil kebijakan, kepentingan
+profesi maupun masyarakat pada umumnya.
+
+
+1.6​ Sistematika Penulisan
+       Keterangan masing-masing isi bab secara ringkas. Gambaran umum tiap
+bab akan diterangkan pada subbab ini, dengan cara deskriptif, bukan dalam
+bentuk daftar. Jangan pindahkan Daftar Isi ke sini.
+                                     BAB II ​
+            TINJAUAN PUSTAKA DAN DASAR TEORI
+
+
+
+
+2.1​Tinjauan Pustaka
+      Pustaka yang digunakan dalam bab ini ialah acuan primer; diutamakan
+artikel berkala ilmiah yang relevan dengan bidang yang diteliti, terkini, dan asli
+(state of the art). Diktat dan buku ajar tidak termasuk acuan primer. Tinjauan
+pustaka memuat kajian singkat, jelas, dan sistematis tentang kerangka teoretis,
+kerangka pikir, temuan, prinsip, asumsi, dan hasil penelitian yang relevan yang
+melandasi masalah penelitian atau gagasan guna menggali pemahaman mengenai
+masalah penelitian dan pemecahan masalahnya. Oleh karena itu, dari tinjauan
+pustaka harus dapat diturunkan kerangka pikir, hipotesis penelitian, dan metode
+penelitian. Acuan yang relevan harus dimanfaatkan untuk membahas temuan
+yang dituangkan kemudian dalam Pembahasan. Kajian pustaka tidak sekadar
+berisi informasi umum seperti definisi, tetapi berisi informasi dasar yang
+berkaitan dengan inti penelitian. Kumpulan pustaka yang relevan dan mutakhir
+membantu penulis memahami perbedaan penelitiaannya dengan penelitian
+sebelumnya. Kumpulan pustaka yang memadai pasti akan meningkatkan
+kepercayaan diri penulis sewaktu memilih metode, melaksanakan penelitian, dan
+menyusun argumentasi dalam bab Pembahasan. Pustaka tidak boleh disitasi
+secara ekstensif, tetapi ditelaah dan diulas. Setiap pustaka yang diacu harus
+dicantumkan dalam Daftar Pustaka. Minimal memuat 5 artikel yang
+terpublikasikan dalam jurnal atau proceeding.
+
+
+
+2.2 Dasar Teori
+
+       Berisi tentang uraian, penjelasan, definisi, pengertian dasar dan ulasan
+yang didapat dari berbagai sumber atau referensi yang telah dipublikasikan
+
+
+                                         3
+                                                                                  4
+
+dalam media cetak maupun elektronik (buku teks, artikel, dan lain-lain) serta
+terkait dengan topic skripsi. Setiap pustaka yang diacu harus dicantumkan dalam
+Daftar Pustaka.
+                                   BAB III ​
+                         METODE PENELITIAN
+
+
+       Bagian ini menyajikan secara lengkap setiap langkah eksperimen yang
+dilakukan dalam penelitian menggunakan bentuk kalimat pasif yang antara lain
+meliputi :
+1.​ Bahan/Data. Semua bahan/data yang digunakan dikelompokkan sesuai
+    fungsinya berdasarkan kebutuhan analitis dan teknis.
+2.​ Peralatan. Semua peralatan yang digunakan untuk menjalankan penelitian
+    harus disebutkan dan diuraikan dengan jelas dan apabila perlu (terutama
+    peralatan yang dirancang khusus) dapat disertai dengan bagan dan keterangan
+    secukupnya. Peralatan terdiri dari hardware dan software. Hardware yang
+    diuraikan adalah peralatan yang mendukung implementasi dan pengujian.
+    Software merupakan perangkat lunak yang digunakan pada penelitian,
+    dilengkapi dengan versi dan kegunaan. Untuk instrumentasi khusus merk dan
+    tipe/spesifikasi   peralatan   harus   dicantumkan,     sedangkan   kondisi
+    pengoperasian disajikan pada bagian lain yang sesuai.
+3.​ Prosedur dan Pengumpulan Data. Pada bagian ini, variabel, prosedur,
+    organisasi dan lokasi yang akan dipelajari serta data yang akan dikumpulkan
+    diuraikan dengan jelas, termasuk sifat, satuan dan kisarannya. Untuk
+    pengujian dan pengolahan data diperlukan perancangan dan pengembangan
+    sistem.
+4.​ Analisis dan Rancangan Sistem. Pada bagian ini diuraikan analisis sistem
+    dijelaskansecara diskriptif dan dilengkapi dengan bagan. Selain itu juga
+    diuraikan kebutuhan sistem yang meliputi kebutuhan fungsional, kebutuhan
+    non fungsional sistem. Rancangan sistem meliputi rancangan arsitektur
+    sistem atau gambaran umum sistem, rancangan proses, rancangan prosedural,
+    rancangan data, dan rancangan user interface. Bebarapa kakas yang dapat
+    digunakan antara lain Flowchart, DAD, ERD, normalisasi,UML, dll.
+
+
+                                       5
+                                    BAB IV ​
+                IMPLEMENTASI DAN PEMBAHASAN
+
+​
+
+
+4.1​ Implementasi dan Uji Coba Sistem
+       Bagian ini menguraikan tentang implementasi sistem yang dianggap
+penting atau inti dari penelitian yang sesuai dengan rancangan dan berdasarkan
+koponen/tools/bahasa pemrograman yang dipakai. Hal-hal yang perlu ditunjukkan
+pada bagian ini adalah :
+    a.​ implementasi (potongan program) yang dirancang sesuai algoritma atau
+       flowchart di bab III
+    b.​ untuk pembuatan alat ditampilkan foto alat hasil rakitan
+    c.​ hasil uji coba dari inti penelitian yang sesuai dengan implementasi (uji
+       coba berdasarkan data yang dimasukkan). Pembuktian tentang hasil uji
+       coba (dapat dengan manual / dengan tool yang ada /quisioner).
+
+
+
+4.2​ Pembahasan
+
+       Pembahasan berisi hasil pengujian yang dikaitkan dengan penelitian
+lain/tinjauan pustaka atau dasar teori yang ada. Petunjuk penggunaan aplikasi
+tidak dimunculkan dalam pembahasan tetapi diletakkan pada lampiran.
+
+
+
+
+                                         6
+                                         BAB V ​
+                                      PENUTUP
+
+
+
+
+5.1 SIMPULAN
+
+​        Simpulan berisi hasil dari penelitian yang menjawab masalah dan tujuan
+serta keunggulan dan kelemahan sistem mengacu pada produk lain (kalau sudah
+ada).
+
+
+
+
+5.2 SARAN
+
+        Saran berisi alternatif pengembangan sistem lebih lanjut.​
+
+
+
+
+                                             7
+                            DAFTAR PUSTAKA
+
+
+Australian Surveying and Land Information Group. 1995. Products and Services.
+       http://www.auslig.gov.au/welcome.htm, 26 Agustus 2015.
+
+Kadir, A., 2004, Dasar Aplikasi Database MySQL-Delphi,CV.ANDI OFFSET,
+       Yogyakarta.
+
+Bergin, A, and D. Lawrence. 1993. Aboriginal and Torres Strait Islander Interests
+       in the Great Barrier Reef Marine Park. In Proceeding turning the tide:
+       Indigenous sea rights. Townville: Northern Territory University Law
+       School
+
+Hartati, S., B. Umar, dan T. Suprawoto, 2006, IDE NetBeans Berlisensi Sun
+        PublicLicense, CV.ANDI OFFSET, Yogyakarta.
+
+Hartoko, A. 1999. Pemetaan dinamis ekosistm ikan pelagis melalui analisis terpadu
+      karakter oseanografis di perairan laut Indonesia. Disertasi Doktor. Institut
+      Teknologi Bandung. Bandung
+
+Rabben, E.L. 1990. Fundamentals of Photo Interpretation. Manual of
+      PhotographicInterpretation. Colwell, R. ed. Virginia: Americam Society of
+      Photogrammetry. pp. 117-149.
+
+Republik Indonesia. 1992. Undang-Undang No. 24 Tahun 1992 tentang Penataan
+      Ruang. Lembaran Negara RI Tahun 1992, No. 115. Sekretariat Negara.
+      Jakarta.
+
+
+
+
+                                         8
+                                 LAMPIRAN
+
+
+
+Lampiran dalam bentuk berisi
+1.​ Manual Penggunaan aplikasi
+2.​ Copy Surat Pengantar Survey/pengambilan data dan surat keterangan hasil uji
+    cobatempat penelitian
+3.​ Instrumen pengujian atau pengambilan data (misal : kuesioner)
+
+
+
+
+                                       9
+                                                                                  10
+
+            KETENTUAN PENULISAN LAPORAN TUGAS AKHIR
+
+
+
+
+1.​ Penyajian Tabel
+          Judul tabel ditulis secara singkat tetapi jelas, dan ditempatkan di atas
+tabel, tanpa diakhiri dengan titik dan ditulis dengan tebal. Huruf pertama pada
+kata pertama judul ditulis kapital, kataselanjutnya dengan huruf kecil. Apabila
+judul tabel lebih dari satu baris maka harus ditulis satu spasi.Pada prinsipnya
+tabel tidak boleh dipenggal. Apabila tabel berukuran cukup besar maka, jika
+diperlukan, ukuran huruf dapat diperkecil tetapi harus tetap mudah terbaca.
+Apabila tabel terpaksa dipenggal, maka pada halaman lanjutan tabel
+dicantumkan nomor tabel dan ditulis kata (lanjutan) tanpa judul. Apabila tabel
+harus dibuat dalam bentuk horisontal (landscape), maka bagian atas tabel harus
+diletakkan di sebelah kiri. Jika tabel dikutip dari referensi maka sitasi dituliskan
+pada bagianterakhir judul. Perkecualian untuk tabel yang memodifikasi beberapa
+data yang berasal dari berbagai sumber, maka sitasi ditunjukkan dengan simbol
+pada data dan di bagian bawah tabel dituliskan referensi yang dimaksudkan.
+Tabel 2.1 merupakan Contoh Tabel.
+
+    Tabel 2.1 Data Penelitian yang Berhubungan dengan Penggunaan metode
+                         Peramalan Persediaan Barang
+                 Penulis   Dara (2010)       Kristiantoro   ... Penelitian
+ Parameter                                   (2013)              yang
+                                                                 dilakukan
+ Lokasi                    CV​ Adnan         Stmik Akakom   ... Loko Tani
+                           Mandiri Aditama
+ Objek                     Kayu              Peralatan      ...   Pupuk
+                                             Kantor
+ Metode                    Kuadrat, Least    ...            ...   Least Square
+                           Square
+ Metode​pengukuran         SKF               ...            ...   MAD
+ (dapat diganti sesuai
+ topik)
+ Bahasa Pemrograman        Php               ...            ...   Java
+
+
+
+Jika tabel merupakan lanjutan dari tabel sebelumnya dikarenakan
+pemenggalan halaman.
+                                                                                        11
+
+
+                                 Tabel 2.1 (Lanjutan)
+                 Penulis Dara (2010) Kristiantoro (2013)   ... Penelitian Yang
+ Parameter                                                      dilakukan
+ Kriteria lain
+
+
+
+
+Penyajian Gambar
+
+       Gambar dalam skripsi meliputi : bagan alir, grafik, peta, foto, dan diagram kerja.
+
+Penyajian gambar dalam penyusunan naskah skripsi mengikuti ketentuan berikut. Judul
+
+gambar diletakkan di bawah gambar, tanpa diakhiri dengan titik dan ditulis dengan huruf
+
+tebal. Huruf pertama pada kata pertama judul ditulis kapital, kata selanjutnya dengan
+
+huruf kecil. Apabila judul gambar lebih darisatu baris maka harus ditulis satu spasi.
+
+Keterangan gambar dituliskan pada tempat-tempat yang kosong di dalam gambar dan
+
+jangan pada halaman lain. Bila gambar disajikan melebar sepanjang tinggi kertas, maka
+
+bagian atas gambar diletakkan di sebelah kiri.
+
+       Untuk gambar yang terdiri dari beberapa bagian harus digunakan keterangan
+
+urutan menggunakan (a), (b), dan seterusnya, dengan keterangan yang tercakup pada
+
+bagian judul gambar. Seluruh gambar harus diatur pada satu halaman yang sama. Untuk
+
+gambar berwarna hendaknya dapat dicetak warna atau diatur dengan pewarnaan yang
+
+kontras.
+
+       Jika gambar dikutip dari referensi maka sitasi dituliskan pada bagian terakhir
+
+judul gambar.Untuk gambar yang dikutip dari internet, hendaknya diperhatikan resolusi
+
+dan ketajaman gambar. Untuk gambar yang berasal dari hasil scanning harap
+
+diperhatikan tingkat resolusi dan ketajaman gambar. Jika diperlukan, hasil scan dapat
+
+dilengkapi dengan teks tertentu. Penamaan gambar ditulis dibagian bawah gambar
+
+letak center. Gambar 2.1 Merupakan contoh gambar Tugu Jogja.
+                                                                                    12
+
+
+
+
+                          Gambar 2.1 Tugu Jogja Istimewa
+
+2. Sitasi Pustaka
+
+       Untuk pencantuman pustaka yang melibatkan nama penulis berjumlah lebih dari
+dua digunakan nama belakang penulis pertama diikuti dengan dkk. atau et al. (pilih
+salah satu secara konsisten). Jika artikelditulis oleh dua orang, nama belakang kedua
+penulis harus dicantumkan. Contoh:
+
+   a.​ Penulis tunggal:
+
+
+       Ross (2004) menyatakan ...
+       Menurut Ross (2004) ...
+       Himpunan A subset n kompak jika dan hanya jika ... (Lang, 2007).
+
+
+   b.​ Penulis dua orang:
+
+
+       Brauer dan Castillo (2001) menyatakan bahwa ...
+
+
+           Jika titik ekuilibrium sistem non linear hiperbolik, maka ... (Nayfeh
+           dan Balachandra, 1995).
+       c.​ Penulis lebih dari dua orang atau lebih hanya ditulis nama penulis
+          pertamasaja:
+                                                                                     13
+
+          Nagle et al. (2004)
+          menyatakan bahwa ... Nagle
+          dkk. (2004) menyatakan
+          bahwa ...
+      d.​ Jika sitasi terpaksa dilakukan tidak dari sumber asli:
+         Dalam Hirsch dan Smale (1999), Liapunov menyatakan bahwa, jika
+         terdapat fungsi Liapunov yang terdefinisi pada persekitaran suatu titik
+         ekuilibrium, maka ...
+
+
+
+3. Aturan Penulisan
+      Ketentuan umum penulisan Laporan Skripsi:
+
+   a.​ Laporan skrispsi harus dicetak (tidak boleh bolak-balik) pada kertas HVS 70
+      g/m2, berukuran kuarto atau A4 (21 cm x 28 cm), dan dijilid rapi dengan
+      menggunakan sampul laminasi kertas buffalo berwarna putih.
+   b.​ Naskah lengkap laporan skripsi disusun dalam bahasa Indonesia yang baku,
+      sesuai dengan ketentuan ejaan bahasa Indonesia yang disempurnakan. Apabila
+      penulisan dalam bahasa Inggris, pedoman penulisan ejaan dan tata-bahasa
+      mengikuti sistem spelling dan grammar berdasarkan tipe US/British English
+      terkait dengan software yang digunakan.
+   c.​ Semua kalimat ditulis menggunakan tata bahasa baku. Penggunaan kata ganti
+      orang dihindari (digunakan kalimat pasif) dan sedapat mungkin menggunakan
+      istilah Indonesia. Apabila, karena sesuatu hal, terpaksa harus menggunakan
+      istilah asing atau istilah daerah, istilah tersebut harus ditulis miring secara
+      konsisten.
+   d.​ Dalam penulisan usulan penelitian atau tugas akhir, sebaiknya digunakan
+      kalimat atau alinea penyambung antara definisi/teorema yang satu dengan
+      definisi/teorema yang lain, sehingga alur isi usulan penelitian atau tugas akhir
+      menjadi jelas. Hindari penulisan yang hanya mendaftar definisi, teorema dan
+      lain-lainnya.
+      Beberapa ketentuan tata tulis berikut perlu diperhatikan dalam penulisan usulan
+      penelitian atau tugas akhir:
+                                                                       14
+
+1.​ Kata hubung, misalnya “maka”, “sehingga”, “sedangkan” tidak boleh
+   digunakan sebagai awal suatu kalimat.
+2.​ Penerjemahan kata “where”, “when”, dan “of” dalam bahasa Inggris
+   tidak selalu menjadi kata “di mana”, “ketika”, dan “dari” dalam bahasa
+   Indonesia, tetapi harus diterjemahkan/ diartikan dengan tepat, sesuai
+   dengan bahasa Indonesia baku.
+3.​ Perlu diperhatikan bahwa penulisan “ke” dan “di” sebagai awalan, harus
+   dibedakan dengan penulisan “ke” dan “di” sebagai kata depan.
+4.​ Pemenggalan kata harus dilakukan secara cermat, sesuai dengan kaidah
+   penulisan Bahasa Indonesia yang benar.
+5.​ Bilangan yang mengawali suatu kalimat harus dieja, misalnya : Sepuluh
+   ekor tikus.
+
+6.​ Simbol atau rumus tidak boleh berada di awal kalimat.
+
+7.​ Tanda baca dan penulisan anak kalimat mengikuti EYD.
+
