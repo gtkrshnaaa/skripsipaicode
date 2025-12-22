@@ -153,21 +153,17 @@ Pada Gambar~\ref{fig:state-feedback-loop} divisualisasikan hubungan antara masuk
   \centering
   \caption{Ilustrasi komparasi konseptual antara pendekatan ekstensi editor, layanan daring, dan CLI dengan integrasi LLM via API.}
   \label{fig:komparasi-tools}
-  \begin{tabular}{@{}p{0.28\textwidth}p{0.30\textwidth}p{0.30\textwidth}@{}}
+  \begin{tabular}{@{}p{0.15\textwidth}p{0.26\textwidth}p{0.26\textwidth}p{0.26\textwidth}@{}}
     \toprule
-    & \textbf{Ekstensi Editor} & \textbf{Layanan Daring} \\
+    \textbf{Aspek} & \textbf{Ekstensi Editor} & \textbf{Layanan Daring} & \textbf{Paicode (CLI)} \\
     \midrule
-    \textbf{Integrasi} & Sangat terintegrasi dengan IDE & Antarmuka web/remote \\
-    \textbf{Konteks} & Di editor, tergantung API & Di server; unggah/ sinkron \\
-    \textbf{Privasi} & Bergantung vendor & Bergantung vendor \\
-    \textbf{Portabilitas} & Terikat IDE & Perlu akses internet \\
+    \textbf{Integrasi} & Sangat terintegrasi dengan IDE & Antarmuka web/remote & Agen di terminal lokal; akses langsung workspace \\
     \midrule
-    & \multicolumn{2}{c}{\textbf{CLI + LLM via API (Paicode)}} \\
+    \textbf{Konteks} & Di editor, tergantung API & Di server; perlu unggah/sinkron & Lokal; cuplikan dikirim ke LLM via API \\
     \midrule
-    \textbf{Integrasi} & \multicolumn{2}{c}{Agen berjalan di terminal lokal; perubahan langsung pada workspace} \\
-    \textbf{Konteks} & \multicolumn{2}{c}{Konteks lokal; cuplikan dikirim ke LLM via API} \\
-    \textbf{Privasi} & \multicolumn{2}{c}{Tergantung kebijakan penyedia API; guardrail lokal} \\
-    \textbf{Portabilitas} & \multicolumn{2}{c}{Editor-agnostic; cukup terminal Linux} \\
+    \textbf{Privasi} & Bergantung vendor & Bergantung vendor & Kebijakan API + guardrail lokal \\
+    \midrule
+    \textbf{Portabilitas} & Terikat IDE spesifik & Perlu browser & Editor-agnostic; terminal Linux \\
     \bottomrule
   \end{tabular}
 \end{table}
