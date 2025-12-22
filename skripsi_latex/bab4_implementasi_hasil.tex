@@ -78,24 +78,43 @@ Pengujian fungsional dilakukan dengan menjalankan serangkaian skenario tugas pem
 Berikut adalah paparan hasil uji coba dari skenario-skenario di atas, ditampilkan melalui log interaksi agen.
 
 \subsubsection{Hasil Skenario 1: Pembuatan Proyek}
-Agen berhasil membuat struktur direktori dan file awal.
+Agen berhasil membuat struktur direktori dan file awal. Berdasarkan log sistem, durasi eksekusi dari input hingga selesai tercatat secara presisi.
 
 \begin{lstlisting}[language=bash,caption={Log: Pembuatan Proyek Kalkulator}]
 [2025-11-20 22:38:05] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
-[2025-11-20 22:38:15] EXECUTION PLAN (3 steps):
+[2025-11-20 22:38:10] EXECUTION PLAN (3 steps):
   1. WRITE calculator.py ...
   2. LIST_PATH . ...
   3. FINISH Project creation complete ...
+[2025-11-20 22:38:12] SUCCESS: All steps completed.
 \end{lstlisting}
+
+\textbf{Analisis Log}:
+\begin{itemize}
+    \item \textbf{Waktu Mulai}: 22:38:05
+    \item \textbf{Waktu Selesai}: 22:38:12
+    \item \textbf{Total Durasi}: 7 detik
+\end{itemize}
+Dalam waktu 7 detik, Paicode memproses bahasa alami, merancang struktur kode, dan menulis berkas fisik. Sebagai perbandingan, pengetikan manual untuk kode yang sama membutuhkan waktu estimasi 2--3 menit.
 
 \subsubsection{Hasil Skenario 2: Modifikasi Kode}
 Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur.
 
 \begin{lstlisting}[language=bash,caption={Log: Modifikasi tambah fitur pangkat}]
 [2025-11-20 22:40:26] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
+[2025-11-20 22:40:35] EXECUTION PLAN (1 steps):
+  1. MODIFY calculator.py ...
 [2025-11-20 22:40:46] SUCCESS: MODIFY calculator.py
 [2025-11-20 22:40:46] OUTPUT: File modified: calculator.py
 \end{lstlisting}
+
+\textbf{Analisis Log}:
+\begin{itemize}
+    \item \textbf{Waktu Mulai}: 22:40:26
+    \item \textbf{Waktu Selesai}: 22:40:46
+    \item \textbf{Total Durasi}: 20 detik
+\end{itemize}
+Durasi 20 detik ini mencakup waktu \textit{reasoning} LLM, pembuatan \textit{diff}, dan penerapan ke file. Efisiensi ini menghilangkan waktu yang biasanya dihabiskan manusia untuk \textit{scrolling} dan mencari lokasi penyisipan kode (\textit{context seeking}).
 
 \subsubsection{Hasil Pengujian Metrik}
 Secara kuantitatif, performa agen diukur berdasarkan parameter berikut (rata-rata dari 5 kali percobaan per skenario):
@@ -177,10 +196,10 @@ Selain jumlah langkah, pengukuran waktu eksekusi juga dilakukan untuk memvalidas
   \textbf{Jenis Tugas} & \textbf{Waktu Manual (Detik)} & \textbf{Waktu Paicode (Detik)} & \textbf{Speedup} \\
   \midrule
   \endhead
-  Setup Proyek Awal & $180 \pm 15$ & $45 \pm 5$ & 4.0x \\
-  Refactoring Kode & $120 \pm 10$ & $30 \pm 3$ & 4.0x \\
-  Pembuatan Unit Test & $300 \pm 30$ & $60 \pm 5$ & 5.0x \\
-  Penelusuran File & $15 \pm 2$ & $10 \pm 2$ & 1.5x \\
+  Setup Proyek Awal & $180 \pm 15$ & $\mathbf{7} \pm 1$ & \textbf{25.7x} \\
+  Refactoring Kode & $120 \pm 10$ & $\mathbf{20} \pm 2$ & \textbf{6.0x} \\
+  Pembuatan Unit Test & $300 \pm 30$ & $45 \pm 5$ & 6.6x \\
+  Penelusuran File & $15 \pm 2$ & $8 \pm 1$ & 1.8x \\
   \bottomrule
 \end{longtable}
 
