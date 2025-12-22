@@ -79,6 +79,28 @@
   {\vspace{1ex}\centering}
 \titlespacing*{\chapter}{0pt}{0pt}{20pt}
 
+% --- Section/Subsection format (Force 12pt as per requirement) ---
+\titleformat{\section}
+  {\bfseries\normalsize} % 12pt Bold
+  {\thesection}
+  {1em}
+  {}
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+
+\titleformat{\subsection}
+  {\bfseries\normalsize} % 12pt Bold
+  {\thesubsection}
+  {1em}
+  {}
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
+
+\titleformat{\subsubsection}
+  {\bfseries\normalsize} % 12pt Bold
+  {\thesubsubsection}
+  {1em}
+  {}
+\titlespacing*{\subsubsection}{0pt}{12pt}{6pt}
+
 % --- Document meta (edit these) ---
 \newcommand{\JudulSkripsi}{PAICODE: AGENTIC AI BERBASIS CLI UNTUK OTOMASI AKTIVITAS PEMROGRAMAN DAN PENGEMBANGAN PERANGKAT LUNAK DI LINUX YANG DITENAGAI LLM MELALUI API}
 \newcommand{\NamaMahasiswa}{I PUTU GEDE GILANG TEJA KRISHNA}
