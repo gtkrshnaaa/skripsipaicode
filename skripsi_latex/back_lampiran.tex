@@ -48,20 +48,22 @@ pai config validate
 \end{enumerate}
 
 \subsection*{A.3 Penggunaan Dasar}
-Paicode dapat dijalankan dalam dua mode:
+Paicode beroperasi menggunakan dua sub-perintah utama:
+
 \begin{enumerate}
-    \item \textbf{Mode Interaktif (REPL)}
-    Jalankan perintah \texttt{pai} tanpa argumen untuk masuk ke mode shell interaktif.
+    \item \textbf{Konfigurasi (Config)}
+    Digunakan untuk mengatur kredensial API.
     \begin{lstlisting}[language=bash]
-$ pai
-(pai) > buatkan file hello.py yang mencetak "Hello World"
+pai config set <API_KEY_ANDA>
     \end{lstlisting}
 
-    \item \textbf{Mode Perintah Langsung (One-Shot)}
-    Berikan instruksi langsung sebagai argumen.
+    \item \textbf{Mode Otomatis (Auto)}
+    Masuk ke sesi agen interaktif dimana pengguna dapat memberikan perintah natural atau tugas pemrograman.
     \begin{lstlisting}[language=bash]
-$ pai "analisis folder ini dan buatkan file README.md yang sesuai"
+pai auto
     \end{lstlisting}
+    
+    Dalam mode ini, pengguna akan disuguhi antarmuka terminal (TUI) interaktif. Ketik perintah atau permintaan Anda, dan tekan \textbf{Enter}. Untuk keluar, ketik \texttt{exit} atau \texttt{quit}.
 \end{enumerate}
 
 \newpage
