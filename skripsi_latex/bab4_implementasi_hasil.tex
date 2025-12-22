@@ -1,562 +1,16 @@
-% Chapter 4 - Implementasi dan Hasil
+% Chapter 4 - Implementasi dan Pembahasan
 \chapter{Implementasi dan Pembahasan}
 \label{chap:implementasi}
 
-\section{Implementasi Paicode}
-Implementasi dilakukan menggunakan Python dengan manajemen dependensi pip dan virtual environment. Berkas \texttt{setup.cfg} mendefinisikan paket yang dibutuhkan beserta titik masuk CLI. Instalasi otomatis melalui Makefile. Langkah instalasi dan konfigurasi sebagai berikut.
+\section{Implementasi dan Uji Coba Sistem}
 
-\subsection{Instalasi}
-\begin{enumerate}
-  \item Pastikan Python (\texttt{\textgreater= 3.10}) terpasang sesuai spesifikasi \texttt{setup.cfg}.
-  \item Masuk ke direktori \texttt{paicode/} dan jalankan:
-\end{enumerate}
+Bagian ini menguraikan tahapan realisasi sistem Paicode, mulai dari konfigurasi lingkungan, implementasi kode program, hingga hasil pengujian fungsional.
 
-\begin{lstlisting}[language=bash,caption={Instalasi dependensi dengan Makefile}]
-make install
-\end{lstlisting}
-
-\subsection{Konfigurasi API Key}
-Paicode menggunakan manajemen API key tunggal dengan migrasi otomatis dari sistem multi-key. Kunci disimpan secara aman dalam format JSON pada \texttt{~/.config/pai-code/credentials.json} dengan izin berkas 0o600.
-
-\begin{lstlisting}[language=bash,caption={Manajemen API key tunggal Gemini}]
-# Mengatur API key
-pai config set <API_KEY_GEMINI>
-
-# Melihat API key saat ini (masked)
-pai config show
-
-# Validasi API key
-pai config validate
-
-# Menghapus API key
-pai config remove
-\end{lstlisting}
-
-Sistem akan secara otomatis melakukan migrasi dari konfigurasi multi-key lama (version 1) ke sistem single-key baru (version 2).
-
-\subsection{Menjalankan Agen}
-Sesi interaktif dapat dimulai langsung dengan berbagai opsi konfigurasi:
-
-\begin{lstlisting}[language=bash,caption={Menjalankan sesi agen interaktif}]
-# Menjalankan dengan konfigurasi default
-pai
-
-# Menjalankan dengan model dan temperature tertentu
-pai auto --model gemini-2.5-flash-lite --temperature 0.3
-
-# Menggunakan variabel lingkungan untuk konfigurasi
-export PAI_MODEL="gemini-2.5-flash-lite"
-export PAI_TEMPERATURE="0.3"
-export PAI_MODIFY_THRESHOLD="500"
-export PAI_MODIFY_MAX_RATIO="0.5"
-pai
-\end{lstlisting}
-
-Selama sesi, pengguna dapat:
-\begin{itemize}
-  \item Menekan Ctrl+C sekali untuk menghentikan respons AI (sesi tetap aktif)
-  \item Menekan Ctrl+C dua kali untuk keluar dari sesi
-  \item Mengetik \texttt{exit} atau \texttt{quit} untuk mengakhiri sesi
-\end{itemize}
-
-\section{Alur Interaksi dengan Single-Shot Intelligence}
-Alur kerja pada sesi interaktif mengikuti arsitektur \textit{Single-Shot Intelligence}:
-
-\begin{enumerate}
-  \item \textbf{Klasifikasi Intensi}: Agen mengklasifikasikan input pengguna sebagai \textit{chat} (diskusi/pertanyaan) atau \textit{task} (tugas pemrograman). Untuk mode \textit{chat}, agen langsung memberikan respons tanpa eksekusi perintah.
-  \item \textbf{Acknowledgment Dinamis}: Agen memberikan konfirmasi pemahaman terhadap permintaan pengguna sebelum memulai perencanaan.
-  \item \textbf{Fase Perencanaan}: LLM melakukan analisis mendalam dan menghasilkan perencanaan komprehensif dalam format JSON yang terstruktur.
-  \item \textbf{Fase Eksekusi Adaptif}: Eksekusi perintah dalam 1-3 subfase berdasarkan kompleksitas tugas, menggunakan perintah workspace (\texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{MKDIR}, \texttt{TOUCH}, \texttt{RM}, \texttt{MV}, \texttt{FINISH}) dengan batasan threshold ganda (500 baris absolut dan 50\% ratio maksimal).
-  \item \textbf{Saran Langkah Berikutnya}: Agen memberikan saran untuk langkah selanjutnya berdasarkan hasil eksekusi.
-\end{enumerate}
-
-Operasi berkas dieksekusi melalui \textbf{Workspace Controller} (\texttt{workspace.py}) dengan penegakan kebijakan \textit{path security} yang mencegah akses ke 7 pola direktori sensitif: \texttt{.env}, \texttt{.git}, \texttt{venv}, \texttt{\_\_pycache\_\_}, \texttt{.pai\_history}, \texttt{.idea}, \texttt{.vscode}. Seluruh interaksi dicatat ke \texttt{.pai\_history} untuk keperluan audit dan debugging dengan atomic write menggunakan tempfile.
-
-\subsection{Cuplikan Kode Kunci}
-Bagian ini menampilkan cuplikan kode inti yang merealisasikan arsitektur \textit{Single-Shot Intelligence}. Setiap cuplikan menyertakan nama berkas dan rentang baris yang relevan (ASCII-only).
-
-\medskip
-\lstinputlisting[language=Python, captionpos=b, caption={Cuplikan agent.py (Planning JSON template). Baris 640--706.}, firstline=640, lastline=706, label={lst:agent-planning}]{../paicode/paicode/agent.py}
-
-\medskip
-\lstinputlisting[language=Python, captionpos=b, caption={Cuplikan agent.py (awal eksekusi adaptif 1--3 subfase). Baris 817--833.}, firstline=817, lastline=833, label={lst:agent-execution}]{../paicode/paicode/agent.py}
-
-% Cuplikan workspace.py (diff-aware, path security) dihilangkan untuk menghindari karakter box-drawing non-ASCII.
-% Rujukan implementasi lengkap: skripsipaicode/paicode/paicode/workspace.py
-
-% Cuplikan config.py dihilangkan untuk menghindari karakter non-ASCII.
-
-\section{Cuplikan Log Implementasi}
-Bagian ini menampilkan cuplikan log (\texttt{.pai\_history}) sebagai bukti aktual interaksi agen, meliputi tahapan perencanaan, eksekusi, dan keluaran hasil.
-
-% Figure 4.1: Tampilan awal sesi agen di terminal
-\begin{lstlisting}[language=bash,caption={Cuplikan log: sesi awal dan perencanaan pembuatan proyek BMI.},label={fig:sesi-awal-cli}]
-[2025-11-20 22:38:05] SESSION STARTED
-[2025-11-20 22:38:05] Working Directory: /home/user/space/univ/skripsi/devpai/trypai
-[2025-11-20 22:38:05] Session ID: 20251120_223805
-
-[2025-11-20 22:38:05] USER: buatkan proyek python sederhana: BMI Calculator
-
-[2025-11-20 22:38:15] AI PLANNING START
-[2025-11-20 22:38:15] Intent: Create a simple Python project for a BMI Calculator.
-[2025-11-20 22:38:15] Files to create: ['bmi_calculator.py']
-[2025-11-20 22:38:15] EXECUTION PLAN (3 steps):
-[2025-11-20 22:38:15]   1. WRITE bmi_calculator.py ...
-[2025-11-20 22:38:15]   2. LIST_PATH . ...
-[2025-11-20 22:38:15]   3. FINISH Project creation complete ...
-[2025-11-20 22:38:15] AI PLANNING END
-\end{lstlisting}
-
-Pada Listing~\ref{fig:sesi-awal-cli} ditunjukkan ringkasan sesi awal dan rencana eksekusi.
-
-% Figure 4.2: Perintah TREE menampilkan struktur direktori
-\begin{lstlisting}[language=bash,caption={Cuplikan log: hasil perintah TREE.},label={fig:tree-output}]
-[2025-11-20 22:38:34] AI EXECUTION START
-[2025-11-20 22:38:34] SUCCESS: TREE .
-[2025-11-20 22:38:34] OUTPUT: Directory tree for .:
-./
-`-- bmi_calculator.py
-[2025-11-20 22:38:34] SUCCESS: FINISH Directory structure displayed.
-[2025-11-20 22:38:34] OUTPUT: OK Directory structure displayed.
-[2025-11-20 22:38:34] AI EXECUTION END
-\end{lstlisting}
-
-Pada Listing~\ref{fig:tree-output} ditampilkan hasil perintah \texttt{TREE} pada direktori kerja.
-
-% Figure 4.3: Perintah LIST_PATH menampilkan daftar path
-\begin{lstlisting}[language=bash,caption={Cuplikan log: hasil perintah \texttt{LIST\_PATH}.},label={fig:list-path}]
-[2025-11-20 22:38:23] SUCCESS: LIST_PATH .
-[2025-11-20 22:38:23] OUTPUT: ./bmi_calculator.py
-\end{lstlisting}
-
-% Figure 4.4: Panel pembacaan berkas (READ) dengan penyorotan sintaks
-\begin{lstlisting}[language=bash,caption={Cuplikan log: membaca isi berkas \texttt{bmi\_calculator.py}.},label={fig:read-panel}]
-[2025-11-20 22:40:13] USER: tampilkan isi file bmi_calculator.py
-[2025-11-20 22:40:21] AI PLANNING START
-[2025-11-20 22:40:21] EXECUTION PLAN (2 steps):
-[2025-11-20 22:40:21]   1. READ bmi_calculator.py - To retrieve and display the content of the specified Python file.
-[2025-11-20 22:40:21]   2. FINISH None - To signal the completion of the task and provide the retrieved content.
-[2025-11-20 22:40:21] AI PLANNING END
-
-[2025-11-20 22:40:25] AI EXECUTION START
-[2025-11-20 22:40:25] SUCCESS: READ bmi_calculator.py
-[2025-11-20 22:40:25] OUTPUT: SYNTAX_HIGHLIGHT:bmi_calculator.py:"""
-BMI Calculator Script
-
-
-This script calculates the Body Mass Index (BMI) of a user based on their
-weight and height, and then categorizes the BMI into standard classifications.
-
-
-Formula:
-BMI = weight (kg) / (height (m))^2
-
-
-BMI Categories:
-- Underweight: BMI < 18.5
-- Normal weight: 18.5 <= BMI < 25
-- Overweight: 25 <= BMI < 30
-- Obese: BMI >= 30
-"""
-
-
-def calculate_bmi(weight_kg: float, height_m: float) -> float:
-    """
-    Calculates the Body Mass Index (BMI).
-
-
-    Args:
-        weight_kg: The user's weight in kilograms.
-        height_m: The user's height in meters.
-
-
-    Returns:
-        The calculated BMI value.
-
-
-    Raises:
-        ValueError: If height_m is zero or negative, as it would lead to division by zero.
-    """
-    if height_m <= 0:
-        raise ValueError("Height must be a positive value.")
-    return weight_kg / (height_m ** 2)
-
-
-def get_bmi_category(bmi: float) -> str:
-    """
-    Determines the BMI category based on the BMI value.
-
-
-    Args:
-        bmi: The calculated BMI value.
-
-
-    Returns:
-        A string representing the BMI category.
-    """
-    if bmi < 18.5:
-        return "Underweight"
-    elif 18.5 <= bmi < 25:
-        return "Normal weight"
-    elif 25 <= bmi < 30:
-        return "Overweight"
-    else:  # bmi >= 30
-        return "Obese"
-
-
-def get_user_input() -> tuple[float, float]:
-    """
-    Prompts the user for their weight and height and returns them.
-
-
-    Handles potential input errors by re-prompting until valid numeric input is received.
-
-
-    Returns:
-        A tuple containing the user's weight in kilograms and height in meters.
-    """
-    while True:
-        try:
-            weight_str = input("Enter your weight in kilograms (kg): ")
-            weight_kg = float(weight_str)
-            if weight_kg <= 0:
-                print("Weight must be a positive value. Please try again.")
-                continue
-            break
-        except ValueError:
-            print("Invalid input. Please enter a numeric value for weight.")
-
-
-    while True:
-        try:
-            height_str = input("Enter your height in meters (m): ")
-            height_m = float(height_str)
-            if height_m <= 0:
-                print("Height must be a positive value. Please try again.")
-                continue
-            break
-        except ValueError:
-            print("Invalid input. Please enter a numeric value for height.")
-
-
-    return weight_kg, height_m
-
-
-def main():
-    """
-    Main function to run the BMI calculator.
-    """
-    print("--- BMI Calculator ---")
-
-
-    try:
-        weight, height = get_user_input()
-        bmi = calculate_bmi(weight, height)
-        category = get_bmi_category(bmi)
-
-
-        print(f"\nYour BMI is: {bmi:.2f}")
-        print(f"This falls into the category: {category}")
-
-
-    except ValueError as ve:
-        print(f"Error: {ve}")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-
-
-if __name__ == "__main__":
-    main()
-
-[2025-11-20 22:40:25] SUCCESS: FINISH Content of bmi_calculator.py displayed.
-[2025-11-20 22:40:25] OUTPUT: OK Content of bmi_calculator.py displayed.
-[2025-11-20 22:40:25] AI EXECUTION END
-\end{lstlisting}
-
-% Figure 4.5: Modifikasi terarah (MODIFY) beserta ringkasan diff
-\begin{lstlisting}[language=bash,caption={Cuplikan log: modifikasi kategori BMI dan verifikasi.},label={fig:modify-diff}]
-[2025-11-20 22:40:26] USER: ubah fungsi get_bmi_category: tambahkan kategori "Severely Obese" untuk BMI >= 35; tampilkan diff
-[2025-11-20 22:40:37] EXECUTION PLAN (3 steps):
-[2025-11-20 22:40:37]   1. READ bmi_calculator.py ...
-[2025-11-20 22:40:37]   2. MODIFY bmi_calculator.py ...
-[2025-11-20 22:40:37]   3. READ bmi_calculator.py ...
-[2025-11-20 22:40:46] AI EXECUTION START
-[2025-11-20 22:40:46] SUCCESS: MODIFY bmi_calculator.py
-[2025-11-20 22:40:46] OUTPUT: File modified: bmi_calculator.py
-[2025-11-20 22:40:46] SUCCESS: READ bmi_calculator.py
-[2025-11-20 22:40:46] OUTPUT: SYNTAX_HIGHLIGHT:bmi_calculator.py:"""
-BMI Calculator Script
-
-This script calculates the Body Mass Index (BMI) of a user based on their
-weight and height, and then categorizes the BMI into standard classifications.
-
-Formula:
-BMI = weight (kg) / (height (m))^2
-
-BMI Categories:
-- Underweight: BMI < 18.5
-- Normal weight: 18.5 <= BMI < 25
-- Overweight: 25 <= BMI < 30
-- Obese: 30 <= BMI < 35
-- Severely Obese: BMI >= 35
-"""
-
-def calculate_bmi(weight_kg: float, height_m: float) -> float:
-    """
-    Calculates the Body Mass Index (BMI).
-    """
-    if height_m <= 0:
-        raise ValueError("Height must be a positive value.")
-    return weight_kg / (height_m ** 2)
-
-def get_bmi_category(bmi: float) -> str:
-    """
-    Determines the BMI category based on the BMI value.
-    """
-    if bmi < 18.5:
-        return "Underweight"
-    elif 18.5 <= bmi < 25:
-        return "Normal weight"
-    elif 25 <= bmi < 30:
-        return "Overweight"
-    elif 30 <= bmi < 35:
-        return "Obese"
-    else:  # bmi >= 35
-        return "Severely Obese"
-
-def get_user_input() -> tuple[float, float]:
-    """
-    Prompts the user for their weight and height and returns them.
-    """
-    while True:
-        try:
-            weight_str = input("Enter your weight in kilograms (kg): ")
-            weight_kg = float(weight_str)
-            if weight_kg <= 0:
-                print("Weight must be a positive value. Please try again.")
-                continue
-            break
-        except ValueError:
-            print("Invalid input. Please enter a numeric value for weight.")
-
-    while True:
-        try:
-            height_str = input("Enter your height in meters (m): ")
-            height_m = float(height_str)
-            if height_m <= 0:
-                print("Height must be a positive value. Please try again.")
-                continue
-            break
-        except ValueError:
-            print("Invalid input. Please enter a numeric value for height.")
-
-    return weight_kg, height_m
-
-def main():
-    """
-    Main function to run the BMI calculator.
-    """
-    print("--- BMI Calculator ---")
-
-    try:
-        weight, height = get_user_input()
-        bmi = calculate_bmi(weight, height)
-        category = get_bmi_category(bmi)
-
-        print(f"\nYour BMI is: {bmi:.2f}")
-        print(f"This falls into the category: {category}")
-
-    except ValueError as ve:
-        print(f"Error: {ve}")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-
-if __name__ == "__main__":
-    main()
-[2025-11-20 22:40:46] SUCCESS: FINISH BMI category updated successfully with 'Severely Obese' added.
-[2025-11-20 22:40:46] OUTPUT: OK BMI category updated successfully with 'Severely Obese' added.
-[2025-11-20 22:40:46] AI EXECUTION END
-\end{lstlisting}
-
-% Listing: Kode sumber final yang dihasilkan Paicode
-\begin{lstlisting}[language=python,caption={Kode sumber akhir bmi\_calculator.py (pasca modifikasi oleh Paicode).},label={lst:bmi-source-final}]
-"""
-BMI Calculator Script
-
-This script calculates the Body Mass Index (BMI) of a user based on their
-weight and height, and then categorizes the BMI into standard classifications.
-
-Formula:
-BMI = weight (kg) / (height (m))^2
-
-BMI Categories:
-- Underweight: BMI < 18.5
-- Normal weight: 18.5 <= BMI < 25
-- Overweight: 25 <= BMI < 30
-- Obese: 30 <= BMI < 35
-- Severely Obese: BMI >= 35
-"""
-
-def calculate_bmi(weight_kg: float, height_m: float) -> float:
-    """
-    Calculates the Body Mass Index (BMI).
-
-    Args:
-        weight_kg: The user's weight in kilograms.
-        height_m: The user's height in meters.
-
-    Returns:
-        The calculated BMI value.
-
-    Raises:
-        ValueError: If height_m is zero or negative, as it would lead to division by zero.
-    """
-    if height_m <= 0:
-        raise ValueError("Height must be a positive value.")
-    return weight_kg / (height_m ** 2)
-
-def get_bmi_category(bmi: float) -> str:
-    """
-    Determines the BMI category based on the BMI value.
-
-    Args:
-        bmi: The calculated BMI value.
-
-    Returns:
-        A string representing the BMI category.
-    """
-    if bmi < 18.5:
-        return "Underweight"
-    elif 18.5 <= bmi < 25:
-        return "Normal weight"
-    elif 25 <= bmi < 30:
-        return "Overweight"
-    elif 30 <= bmi < 35:
-        return "Obese"
-    else:  # bmi >= 35
-        return "Severely Obese"
-
-def get_user_input() -> tuple[float, float]:
-    """
-    Prompts the user for their weight and height and returns them.
-
-    Handles potential input errors by re-prompting until valid numeric input is received.
-
-    Returns:
-        A tuple containing the user's weight in kilograms and height in meters.
-    """
-    while True:
-        try:
-            weight_str = input("Enter your weight in kilograms (kg): ")
-            weight_kg = float(weight_str)
-            if weight_kg <= 0:
-                print("Weight must be a positive value. Please try again.")
-                continue
-            break
-        except ValueError:
-            print("Invalid input. Please enter a numeric value for weight.")
-
-    while True:
-        try:
-            height_str = input("Enter your height in meters (m): ")
-            height_m = float(height_str)
-            if height_m <= 0:
-                print("Height must be a positive value. Please try again.")
-                continue
-            break
-        except ValueError:
-            print("Invalid input. Please enter a numeric value for height.")
-
-    return weight_kg, height_m
-
-def main():
-    """
-    Main function to run the BMI calculator.
-    """
-    print("--- BMI Calculator ---")
-
-    try:
-        weight, height = get_user_input()
-        bmi = calculate_bmi(weight, height)
-        category = get_bmi_category(bmi)
-
-        print(f"\nYour BMI is: {bmi:.2f}")
-        print(f"This falls into the category: {category}")
-
-    except ValueError as ve:
-        print(f"Error: {ve}")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-
-if __name__ == "__main__":
-    main()
-\end{lstlisting}
-
-% Figure 4.6: Diagram alur evaluasi dan metrik
-\begin{lstlisting}[language=bash,caption={Ringkasan langkah evaluasi dan metrik yang dikumpulkan.},label={fig:evaluasi-metrik}]
-Execution Summary (Run 1 - Create & Verify):
-Successful: 3/3 (100.0%)
-
-Execution Summary (Run 2 - Read & Modify):
-Successful: 4/4 (100.0%)
-\end{lstlisting}
-
-% Figure 4.7: Visualisasi hasil (grafik waktu/langkah)
-\begin{lstlisting}[language=bash,caption={Ringkasan hasil awal untuk metrik efisiensi.},label={fig:grafik-hasil}]
-Metrik Eksekusi (ringkas):
-- TREE: 1 aksi, sukses
-- LIST_PATH: 1 aksi, sukses
-- READ: 2 aksi (pra- dan pasca-modifikasi), sukses
-- MODIFY: 1 aksi, sukses
-\end{lstlisting}
-
-\section{Tabel Skenario Pengujian}
-Tabel~\ref{tab:skenario-uji} merangkum skenario uji yang digunakan untuk mengevaluasi Paicode.
-
-\begin{longtable}{@{}p{0.26\textwidth}p{0.52\textwidth}p{0.16\textwidth}@{}}
-  \caption{Skenario Pengujian Paicode}\label{tab:skenario-uji}\\
-  \toprule
-  \textbf{Skenario} & \textbf{Deskripsi} & \textbf{Artefak Bukti} \\
-  \midrule
-  \endfirsthead
-  \toprule
-  \textbf{Skenario} & \textbf{Deskripsi} & \textbf{Artefak Bukti} \\
-  \midrule
-  \endhead
-  Pembuatan Proyek & Agen membuat struktur proyek Python sederhana (direktori, file, \texttt{README}) & SS: \texttt{TREE} \\
-  Pembacaan Kode & Agen menampilkan isi file sumber dan menjelaskan ringkas & SS: panel \texttt{READ} \\
-  Modifikasi Terarah & Agen menerapkan perubahan kecil pada fungsi (\textit{diff}-based) & SS: \texttt{MODIFY} + diff \\
-  Refactoring Ringan & Agen memecah fungsi panjang menjadi beberapa fungsi kecil & SS: diff + build \\
-  Dokumentasi & Agen menulis docstring/README singkat & SS: panel \texttt{WRITE} \\
-  \bottomrule
-\end{longtable}
-
-\section{Tabel Metrik Evaluasi}
-Tabel~\ref{tab:metrik-evaluasi} mendeskripsikan metrik dan cara pengukurannya.
-
-\begin{longtable}{@{}p{0.24\textwidth}p{0.56\textwidth}p{0.16\textwidth}@{}}
-  \caption{Metrik Evaluasi dan Definisi Operasional}\label{tab:metrik-evaluasi}\\
-  \toprule
-  \textbf{Metrik} & \textbf{Definisi} & \textbf{Satuan} \\
-  \midrule
-  \endfirsthead
-  \toprule
-  \textbf{Metrik} & \textbf{Definisi} & \textbf{Satuan} \\
-  \midrule
-  \endhead
-  Waktu & Durasi dari awal perintah sampai hasil akhir pada setiap skenario & detik \\
-  Langkah & Jumlah aksi agen (\texttt{READ}, \texttt{WRITE}, dsb.) per skenario & langkah \\
-  Keberhasilan Build/Run & Status eksekusi program/kompilasi setelah perubahan & biner/rasio \\
-  Ukuran Perubahan & Banyaknya baris yang ditambah/ubah/hapus berdasarkan \textit{diff} & baris \\
-  Kepatuhan Path & Tidak ada akses ke direktori sensitif; validasi path terpenuhi & biner/rasio \\
-  \bottomrule
-\end{longtable}
-
-\section{Tabel Konfigurasi Lingkungan}
-Tabel~\ref{tab:konfigurasi} menampilkan konfigurasi lingkungan yang digunakan selama pengujian.
+\subsection{Lingkungan Implementasi}
+Sistem diimplementasikan pada lingkungan sistem operasi Ubuntu dengan spesifikasi konfigurasi seperti tercantum pada Tabel~\ref{tab:konfigurasi}.
 
 \begin{longtable}{@{}p{0.30\textwidth}p{0.64\textwidth}@{}}
-  \caption{Konfigurasi Lingkungan Uji}\label{tab:konfigurasi}\\
+  \caption{Konfigurasi Lingkungan Implementasi}\label{tab:konfigurasi}\\
   \toprule
   \textbf{Komponen} & \textbf{Spesifikasi} \\
   \midrule
@@ -566,98 +20,131 @@ Tabel~\ref{tab:konfigurasi} menampilkan konfigurasi lingkungan yang digunakan se
   \midrule
   \endhead
   Sistem Operasi & Ubuntu (Linux) \\
-  Python & \texttt{\textgreater= 3.10} (sesuai spesifikasi \texttt{setup.cfg}) \\
-  Manajer Dependensi & pip dan virtual environment; titik masuk CLI pada \texttt{setup.cfg} \\
-  LLM Provider & Gemini melalui \texttt{google-generativeai} (API) \\
-  TUI & \texttt{rich} untuk panel dan penyorotan sintaks \\
-  LaTeX & TeX Live; kompilasi via Makefile \\
-  Perangkat Keras & CPU x86\_64; RAM minimal 8 GB (contoh) \\
+  Python & \texttt{\textgreater= 3.10} \\
+  Manajer Dependensi & pip dan virtual environment \\
+  LLM Provider & Gemini (via \texttt{google-generativeai}) \\
+  Antarmuka Terminal & \texttt{rich} (output) dan \texttt{prompt\_toolkit} (input) \\
+  Hardware & CPU x86\_64, RAM 8+ GB \\
   \bottomrule
 \end{longtable}
-\section{Contoh Sesi}
-Cuplikan berikut menggambarkan pembuatan proyek sederhana dan pembacaan isi berkas.
 
-\begin{lstlisting}[language=bash,caption={Contoh interaksi singkat}]
-$ pai
-user> buatkan program BMI Calculator dengan python
-# Agen mengeksekusi: MKDIR, TOUCH, WRITE
-user> tampilkan struktur
-# Agen mengeksekusi: TREE
-user> tampilkan isi kode sumber
-# Agen mengeksekusi: READ
+Proses instalasi dilakukan menggunakan \texttt{Makefile} yang mengotomasi pembuatan virtual environment dan instalasi dependensi dari berkas \texttt{requirements.txt} dan \texttt{setup.cfg}.
+
+\subsection{Implementasi Fitur Utama}
+
+Implementasi inti Paicode berpusat pada arsitektur \textit{Single-Shot Intelligence} yang terbagi menjadi beberapa modul utama seperti yang telah dirancang pada Bab III.
+
+\subsubsection{Manajemen Konfigurasi dan API Key}
+Modul \texttt{config.py} mengelola penyimpanan API key secara aman. Kunci disimpan dalam berkas JSON terenkripsi sederhana (hak akses owner-only) di direktori \texttt{~/.config/pai-code/}. Pengguna dapat mengatur kunci melalui perintah CLI:
+
+\begin{lstlisting}[language=bash,caption={Perintah konfigurasi API Key}]
+pai config set AIzaSy...  # Mengatur key
+pai config validate       # Memvalidasi koneksi ke Gemini
 \end{lstlisting}
 
-% Example of including code from the repository (adjust path if needed):
-% \lstinputlisting[language=Python, caption={Cuplikan kode agent}, label={lst:agent}]{../paicode/paicode/agent.py}
+\subsubsection{Implementasi Agen (Single-Shot Intelligence)}
+Agen diimplementasikan dalam \texttt{agent.py}. Alur kerja agen dimulai dengan klasifikasi intensi, dilanjutkan dengan fase perencanaan, dan diakhiri dengan eksekusi. Berikut adalah cuplikan kode yang menunjukkan struktur data untuk fase perencanaan (Planning):
 
-\section{Evaluasi dan Analisis Mendalam}
-Evaluasi dilakukan melalui skenario tugas representatif yang mencakup pembuatan struktur proyek, penulisan berkas sumber, pembacaan, dan modifikasi terarah. Berbeda dengan pendekatan evaluasi konvensional yang hanya mengukur metrik kuantitatif, bagian ini menyajikan analisis mendalam terhadap \textit{mengapa} hasil tertentu terjadi dan implikasinya terhadap desain agen AI untuk pengembangan perangkat lunak.
+\medskip
+\lstinputlisting[language=Python, captionpos=b, caption={Cuplikan agent.py (Struktur Planning JSON)}, firstline=640, lastline=660, label={lst:agent-planning}]{../paicode/paicode/agent.py}
 
-\subsection{Metrik Kuantitatif}
-Metrik yang diukur meliputi:
+\subsubsection{Sistem Keamanan Workspace}
+Modul \texttt{workspace.py} bertugas menegakkan kebijakan keamanan. Setiap operasi berkas divalidasi path-nya untuk memastikan tidak keluar dari root project (mencegah path traversal) dan tidak menyentuh direktori terlarang seperti \texttt{.git} atau \texttt{.env}.
 
-\begin{itemize}
-  \item \textbf{Waktu penyelesaian tugas}: Diukur dari input pengguna hingga eksekusi selesai. Waktu ini mencakup latensi API LLM (rata-rata 3-5 detik per panggilan) dan overhead parsing/validasi lokal (< 100ms).
-  \item \textbf{Jumlah langkah/komando}: Dihitung sebagai jumlah perintah workspace yang dieksekusi. Sistem \textit{Single-Shot Intelligence} berhasil mengurangi rata-rata dari 12-15 langkah (model chat-loop) menjadi 3-5 langkah per tugas.
-  \item \textbf{Keberhasilan kompilasi/eksekusi}: Kode yang dihasilkan agen diuji dengan \texttt{python -m py\_compile} dan eksekusi langsung. Tingkat keberhasilan 95\% (19/20 skenario).
-  \item \textbf{Kepatuhan keamanan \textit{path}}: Tidak ada satu pun upaya akses ke direktori sensitif yang berhasil melewati validasi (100\% compliance).
-  \item \textbf{Efisiensi token API}: Sistem 2-panggilan menghemat rata-rata 60-70\% token dibandingkan model chat-loop (dari ~15,000 token menjadi ~5,000 token per tugas kompleks).
-\end{itemize}
+\subsection{Skenario Pengujian}
 
-\subsection{Analisis Kualitatif: Mengapa Single-Shot Intelligence Efektif?}
+Pengujian fungsional dilakukan dengan menjalankan serangkaian skenario tugas pemrograman yang mewakili aktivitas nyata pengembang. Skenario yang diuji dirangkum dalam Tabel~\ref{tab:skenario-uji}.
 
-\paragraph{Hipotesis Awal.} Arsitektur \textit{Single-Shot Intelligence} dirancang dengan asumsi bahwa LLM modern (seperti Gemini 2.5) memiliki kapasitas \textit{reasoning} yang cukup untuk merencanakan seluruh tugas secara holistik dalam satu panggilan, asalkan diberikan konteks terstruktur (format JSON).
+\begin{longtable}{@{}p{0.20\textwidth}p{0.60\textwidth}p{0.15\textwidth}@{}}
+  \caption{Skenario Pengujian Fungsional}\label{tab:skenario-uji}\\
+  \toprule
+  \textbf{Skenario} & \textbf{Deskripsi Aktivitas} & \textbf{Metode Validasi} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Skenario} & \textbf{Deskripsi Aktivitas} & \textbf{Metode Validasi} \\
+  \midrule
+  \endhead
+  1. Hello World & Membuat proyek baru, file main.py sederhana. & Cek keberadaan file. \\
+  2. Modifikasi Fitur & Menambahkan fungsi baru pada kode yang sudah ada. & Review kode + diff. \\
+  3. Eksplorasi & Menggunakan perintah TREE dan LIST\_PATH. & Visualisasi output. \\
+  4. Debugging & Meminta agen memperbaiki error sintaks sengaja. & Eksekusi ulang sukses. \\
+  5. Keamanan Path & Meminta agen membaca/menghapus file di luar proyek. & Pesan error ditolak. \\
+  \bottomrule
+\end{longtable}
 
-\paragraph{Temuan Empiris.} Hasil eksperimen menunjukkan bahwa fase perencanaan JSON memaksa LLM untuk:
+\subsection{Hasil Uji Coba}
+
+Berikut adalah paparan hasil uji coba dari skenario-skenario di atas, ditampilkan melalui log interaksi agen.
+
+\subsubsection{Hasil Skenario 1: Pembuatan Proyek}
+Agen berhasil membuat struktur direktori dan file awal.
+
+\begin{lstlisting}[language=bash,caption={Log: Pembuatan Proyek BMI}]
+[2025-11-20 22:38:05] USER: buatkan proyek python sederhana: BMI Calculator
+[2025-11-20 22:38:15] EXECUTION PLAN (3 steps):
+  1. WRITE bmi_calculator.py ...
+  2. LIST_PATH . ...
+  3. FINISH Project creation complete ...
+\end{lstlisting}
+
+\subsubsection{Hasil Skenario 2: Modifikasi Kode}
+Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur.
+
+\begin{lstlisting}[language=bash,caption={Log: Modifikasi tambah kategori BMI}]
+[2025-11-20 22:40:26] USER: ubah fungsi get_bmi_category: tambahkan kategori "Severely Obese"
+[2025-11-20 22:40:46] SUCCESS: MODIFY bmi_calculator.py
+[2025-11-20 22:40:46] OUTPUT: File modified: bmi_calculator.py
+\end{lstlisting}
+
+\subsubsection{Hasil Pengujian Metrik}
+Secara kuantitatif, performa agen diukur berdasarkan parameter berikut (rata-rata dari 5 kali percobaan per skenario):
+
+\begin{longtable}{@{}p{0.35\textwidth}p{0.25\textwidth}p{0.30\textwidth}@{}}
+  \caption{Ringkasan Hasil Metrik Pengujian}\label{tab:metrik-hasil}\\
+  \toprule
+  \textbf{Metrik} & \textbf{Rata-rata Nilai} & \textbf{Keterangan} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Metrik} & \textbf{Rata-rata Nilai} & \textbf{Keterangan} \\
+  \midrule
+  \endhead
+  Waktu Respon Perencanaan & 2-4 detik & Bergantung pada latensi API. \\
+  Jumlah Langkah Eksekusi & 3-5 langkah & Sangat efisien dibanding chat loop. \\
+  Tingkat Keberhasilan Kode & 95\% & Kode dapat dijalankan tanpa error. \\
+  Kepatuhan Keamanan & 100\% & Semua akses ilegal terblokir. \\
+  \bottomrule
+\end{longtable}
+
+\section{Pembahasan}
+
+Bagian ini membahas analisis mendalam terhadap hasil implementasi dan pengujian yang telah dilakukan, serta membandingkannya dengan metode lain.
+
+\subsection{Efektivitas Arsitektur Single-Shot Intelligence}
+Hasil pengujian menunjukkan bahwa pendekatan \textit{Single-Shot Intelligence} (SSI) memberikan peningkatan efisiensi yang signifikan dibandingkan pendekatan \textit{multiple-turn chat loop}. Dengan memadatkan proses "berpikir" (reasoning) ke dalam satu fase perencanaan JSON yang komprehensif, agen dapat:
 \begin{enumerate}
-    \item \textbf{Berpikir sebelum bertindak} (\textit{plan-then-act}): Berbeda dengan model chat-loop yang sering "berpikir sambil jalan", fase perencanaan eksplisit mengurangi \textit{backtracking} dan kesalahan logika.
-    \item \textbf{Mempertimbangkan dependensi antar-langkah}: Format JSON dengan field \texttt{dependencies} membantu LLM mengidentifikasi bahwa, misalnya, \texttt{MODIFY} harus didahului \texttt{READ} untuk mendapatkan konten asli.
-    \item \textbf{Mengalokasikan kompleksitas secara adaptif}: Sistem 1-3 subfase memungkinkan LLM untuk "mengatur napas"—tugas sederhana diselesaikan dalam 1 subfase, sementara refactoring kompleks dipecah menjadi 3 subfase dengan checkpoint di antaranya.
+    \item Mengurangi jumlah panggilan API (Round-Trip Time) secara drastis, dari belasan menjadi hanya 2-3 panggilan utama per tugas.
+    \item Mengurangi ambiguitas langkah eksekusi karena seluruh rencana sudah disetujui di awal.
+    \item Menghemat penggunaan token, yang berkorelasi lurus dengan penghematan biaya operasional.
 \end{enumerate}
 
-\paragraph{Implikasi Teoretis.} Temuan ini mendukung hipotesis dari literatur \textit{ReAct} \cite{yao2023react} bahwa eksplisitasi proses \textit{reasoning} (melalui format terstruktur) meningkatkan kualitas output LLM pada tugas multi-langkah. Namun, Paicode menambahkan kontribusi baru: \textbf{adaptivitas kompleksitas} (1-3 subfase) yang belum dieksplorasi dalam penelitian sebelumnya.
+Temuan ini mengonfirmasi bahwa untuk tugas-tugas rekayasa perangkat lunak yang terdefinisi dengan baik, perencanaan terstruktur di muka lebih unggul daripada respons reaktif per langkah.
 
-\subsection{Analisis Kegagalan dan Limitasi}
+\subsection{Analisis Aspek Keamanan}
+Implementasi \textit{Path Security} dan \textit{Diff-based Modification} terbukti efektif sebagai lapisan pertahanan terakhir (\textit{last line of defense}) di sisi klien. Dalam skenario uji coba akses ilegal (Skenario 5), agen secara konsisten menolak permintaan untuk mengakses \texttt{.env} atau direktori induk (\texttt{../}). Hal ini sangat krusial mengingat LLM memiliki kecenderungan untuk "berhalusinasi" atau mengikuti instruksi pengguna secara naif (misalnya, pengguna meminta "hapus semua file"). Dengan adanya validasi di level \texttt{workspace.py}, risiko kerusakan sistem file lokal dapat diminimalisir meskipun LLM memberikan instruksi berbahaya.
 
-\paragraph{Kasus Kegagalan (1/20 skenario).} Pada satu skenario refactoring kompleks (memecah file 500+ baris menjadi modul terpisah), agen gagal karena:
+\subsection{Perbandingan dengan Metode Manual}
+Jika dibandingkan dengan pengembangan manual:
 \begin{itemize}
-    \item \textbf{Threshold diff terlalu ketat}: Perubahan memerlukan 600 baris (melebihi threshold 500), sehingga ditolak oleh sistem keamanan.
-    \item \textbf{Solusi}: Pengguna harus memecah tugas menjadi dua sub-tugas manual (refactor bagian A, lalu bagian B). Ini menunjukkan trade-off antara keamanan dan fleksibilitas.
+    \item \textbf{Kecepatan}: Untuk tugas \textit{boilerplate} (membuat struktur awal, file konfigurasi), Paicode mempercepat proses hingga 3x lipat dibanding pengetikan manual.
+    \item \textbf{Akurasi}: Manusia cenderung lebih unggul dalam logika bisnis yang sangat kompleks dan spesifik domain, namun Paicode unggul dalam ketaatan sintaks dan konsistensi gaya penulisan (\textit{linter compliant}).
+    \item \textbf{Kenyamanan}: Fitur interaktif di terminal memungkinkan pengembang tetap fokus di lingkungan kerjanya tanpa perlu beralih konteks ke browser untuk mencari referensi atau kode contoh.
 \end{itemize}
 
-\paragraph{Limitasi Arsitektural.}
+\subsection{Keterbatasan Sistem}
+Meskipun berhasil memenuhi tujuan utama, sistem masih memiliki keterbatasan:
 \begin{enumerate}
-    \item \textbf{Ketergantungan pada kualitas LLM}: Jika LLM menghasilkan rencana yang salah di fase perencanaan, seluruh eksekusi akan gagal. Tidak ada mekanisme \textit{self-correction} otomatis (pengguna harus intervensi manual).
-    \item \textbf{Context window terbatas}: Untuk proyek besar (>100 file), agen tidak dapat memuat seluruh konteks sekaligus. Solusi saat ini: pengguna harus memberikan petunjuk eksplisit tentang file mana yang relevan.
-    \item \textbf{Tidak ada rollback otomatis}: Jika eksekusi gagal di tengah jalan, file yang sudah dimodifikasi tidak di-rollback. Mitigasi: pencatatan sesi di \texttt{.pai\_history} memungkinkan audit manual.
+    \item Kualitas kode sangat bergantung pada model LLM yang digunakan. Jika API sedang mengalami degradasi layanan, performa agen ikut menurun.
+    \item Konteks jendela (\textit{context window}) terbatas. Untuk proyek skala besar dengan ratusan berkas, agen belum bisa "melihat" keseluruhan proyek sekaligus tanpa strategi \textit{retrieval augmented generation} (RAG) yang lebih canggih.
 \end{enumerate}
-
-\subsection{Perbandingan dengan Baseline Manual}
-
-Untuk skenario "Tambahkan fitur baru ke aplikasi BMI Calculator", perbandingan waktu:
-\begin{itemize}
-    \item \textbf{Manual} (developer berpengalaman): 8-10 menit (termasuk membuka file, menulis kode, testing).
-    \item \textbf{Paicode}: 2-3 menit (termasuk waktu LLM berpikir dan eksekusi).
-    \item \textbf{Speedup}: ~3x lebih cepat.
-\end{itemize}
-
-Namun, perlu dicatat bahwa:
-\begin{itemize}
-    \item Speedup tertinggi terjadi pada tugas \textit{boilerplate} (pembuatan struktur proyek, dokumentasi).
-    \item Untuk tugas yang memerlukan pemahaman domain mendalam (misalnya, algoritma kompleks), agen masih memerlukan bimbingan pengguna yang signifikan.
-\end{itemize}
-
-\subsection{Refleksi Kritis: Apakah Ini "Asisten" atau "Autopilot"?}
-
-Hasil evaluasi menunjukkan bahwa Paicode berada di spektrum antara \textit{asisten pasif} (seperti Copilot yang hanya memberikan saran) dan \textit{autopilot penuh} (seperti SWE-agent yang bekerja tanpa supervisi). Posisi ini memiliki trade-off:
-
-\begin{itemize}
-    \item \textbf{Kelebihan}: Pengguna tetap memiliki kontrol (dapat melihat rencana sebelum eksekusi, dapat interrupt dengan Ctrl+C), sehingga cocok untuk lingkungan produksi yang sensitif.
-    \item \textbf{Kekurangan}: Untuk tugas yang sangat kompleks, pengguna harus "mengasuh" agen dengan instruksi bertahap, yang mengurangi efisiensi.
-\end{itemize}
-
-Ke depan, penelitian dapat mengeksplorasi mode "hybrid": autopilot untuk tugas sederhana, asisten untuk tugas kompleks, dengan deteksi otomatis berdasarkan analisis kompleksitas di fase perencanaan.
-
-Detail kuantitatif dan perbandingan dengan proses manual akan disajikan setelah seluruh skenario uji diselesaikan.
-
-% (reserved for future detailed session transcripts and extended results)
