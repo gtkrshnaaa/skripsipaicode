@@ -103,26 +103,40 @@
 \include{front_cover}
 
 % --- Title Page (Halaman Judul) ---
+% Start Roman numbering from here (i)
+\pagenumbering{roman}
 \include{front_halaman_judul}
 
-% --- Front matter: roman page numbering ---
-\pagenumbering{roman}
+% Skip page ii (blank/hidden) so Approval starts at iii
+\stepcounter{page}
 
-% --- Approval Pages ---
+% --- Approval Pages (iii, iv) ---
 \include{front_persetujuan}
 \include{front_pengesahan}
 
-% --- Declaration of Authenticity ---
+% --- Declaration of Authenticity (v) ---
 \include{front_pernyataan}
 
-% --- Dedication ---
+% --- Dedication (vi) ---
 \include{front_motto_persembahan}
 
-% --- Preface ---
+% --- Preface (vii) ---
 \include{front_kata_pengantar}
 
+% --- Table of contents & lists (viii, ix, x) ---
+\cleardoublepage
+\addcontentsline{toc}{chapter}{DAFTAR ISI}
+\tableofcontents
 
-% --- Abstract placeholders ---
+\cleardoublepage
+\addcontentsline{toc}{chapter}{DAFTAR GAMBAR}
+\listoffigures
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{DAFTAR TABEL}
+\listoftables
+
+% --- Abstract (xi, xii) ---
 \chapter*{INTISARI}
 \addcontentsline{toc}{chapter}{INTISARI}
 Penelitian ini mengusulkan \textbf{Paicode}, sebuah agen AI berbasis Command Line Interface (CLI) untuk membantu proses pengembangan perangkat lunak secara interaktif dengan arsitektur \textit{Single-Shot Intelligence}. Sistem berjalan pada lingkungan terminal lokal dan melakukan \textbf{operasi berkas tingkat-aplikasi di ruang kerja proyek (project workspace)}; namun \textbf{mengirimkan cuplikan kode/konteks ke layanan LLM (Gemini) melalui API} untuk keperluan inferensi. Oleh karena itu, aspek privasi dan kerahasiaan kode \textbf{bergantung pada kebijakan penyedia API}, sedangkan pengamanan lokal difokuskan pada kebijakan \textit{path security}. Himpunan perintah yang disediakan (mis. \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{TREE}, \texttt{LIST\_PATH}) memungkinkan agen mengobservasi proyek, memanipulasi berkas, dan memodifikasi kode secara terarah dengan sistem perubahan berbasis \textit{diff}.
@@ -143,12 +157,6 @@ We adopt a Research and Development approach with iterative prototyping. The eva
 
 \textbf{Keywords}: agentic AI, CLI, LLM, API, Single-Shot Intelligence, path security, software engineering.
 
-% --- Table of contents & lists ---
-
-
-\tableofcontents
-\listoffigures
-\listoftables
 
 % --- Switch to arabic numbering for main content ---
 \cleardoublepage
@@ -160,7 +168,6 @@ We adopt a Research and Development approach with iterative prototyping. The eva
 \include{bab3_metodologi}
 \include{bab4_implementasi_hasil}
 \include{bab5_kesimpulan_saran}
-
 
 
 % --- Bibliography ---
