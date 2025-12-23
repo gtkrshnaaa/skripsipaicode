@@ -48,8 +48,28 @@ Agen diimplementasikan dalam \texttt{agent.py}. Alur kerja agen dimulai dengan k
 \medskip
 \lstinputlisting[language=Python, captionpos=b, caption={Cuplikan agent.py (Struktur Planning JSON)}, firstline=640, lastline=660, label={lst:agent-planning}]{../paicode/paicode/agent.py}
 
+Selain format data, agen juga dibekali instruksi sistem (\textit{System Prompt}) yang mendefinisikan persona dan batasan arsitektur \textit{Single-Shot} agar model fokus pada perencanaan yang presisi:
+
+\medskip
+\lstinputlisting[language=Python, captionpos=b, caption={System Prompt untuk Fase Perencanaan}, firstline=542, lastline=560, label={lst:agent-prompt}]{../paicode/paicode/agent.py}
+
+Selanjutnya, untuk fase eksekusi, sistem menerapkan pemilihan strategi adaptif (1 hingga 3 fase) berdasarkan kompleksitas tugas:
+
+\medskip
+\lstinputlisting[language=Python, captionpos=b, caption={Logika Strategi Eksekusi Adaptif}, firstline=836, lastline=878, label={lst:agent-strategy}]{../paicode/paicode/agent.py}
+
 \subsubsection{Sistem Keamanan Workspace}
 Modul \texttt{workspace.py} bertugas menegakkan kebijakan keamanan. Setiap operasi berkas divalidasi path-nya untuk memastikan tidak keluar dari root project (mencegah path traversal) dan tidak menyentuh direktori terlarang seperti \texttt{.git} atau \texttt{.env}.
+
+Berikut adalah implementasi fungsi \texttt{\_is\_safe\_path} yang menjadi gerbang validasi utama:
+
+\medskip
+\lstinputlisting[language=Python, captionpos=b, caption={Validasi Path (\_is\_safe\_path)}, firstline=36, lastline=61, label={lst:workspace-security}]{../paicode/paicode/workspace.py}
+
+Selain validasi path, sistem juga menerapkan pembatasan modifikasi berbasis \textit{diff} untuk mencegah perubahan masif yang berisiko:
+
+\medskip
+\lstinputlisting[language=Python, captionpos=b, caption={Logika Threshold Modifikasi (Diff-based)}, firstline=270, lastline=293, label={lst:workspace-diff}]{../paicode/paicode/workspace.py}
 
 \subsection{Skenario Pengujian}
 
