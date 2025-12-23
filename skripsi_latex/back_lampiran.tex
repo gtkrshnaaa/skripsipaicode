@@ -18,12 +18,14 @@ Paicode dirancang untuk berjalan di lingkungan Linux (Ubuntu/Debian). Prasyarat 
     \begin{lstlisting}[language=bash]
 git clone https://github.com/gtkrshnaaa/paicode.git
 cd paicode
+git checkout finalthesis
     \end{lstlisting}
 
     \item \textbf{Setup Lingkungan}
-    Jalankan perintah \texttt{make install} untuk membuat virtual environment dan menginstal dependensi:
+    Jalankan perintah \texttt{make install} dan \texttt{make install-cli} untuk membuat virtual environment dan menginstal dependensi:
     \begin{lstlisting}[language=bash]
 make install
+make install-cli
     \end{lstlisting}
     Jika tidak menggunakan Makefile, instalasi manual dapat dilakukan dengan:
     \begin{lstlisting}[language=bash]
