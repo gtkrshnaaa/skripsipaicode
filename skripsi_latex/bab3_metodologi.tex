@@ -56,7 +56,7 @@ Penelitian ini menggunakan pendekatan \textit{Research and Development} (R\&D) d
   \item \textbf{Pengujian dan Evaluasi}:
   \begin{itemize}
       \item Menjalankan skenario tugas pemrograman representatif (pembuatan proyek, modifikasi fitur).
-      \item Mengumpulkan data metrik efisiensi (waktu eksekusi, jumlah panggilan API) dan kualitas (keberhasilan kompilasi).
+      \item Mengumpulkan data operasional (waktu eksekusi, jumlah langkah) dan kualitas (keberhasilan kompilasi).
       \item Mengevaluasi keamanan dengan mencoba skenario akses ilegal ke direktori sensitif.
   \end{itemize}
   
@@ -117,7 +117,7 @@ Berikut adalah rincian tanggung jawab dari setiap modul dalam sistem:
   \texttt{cli.py} & Entry point, parsing argumen. \\
   \texttt{agent.py} & Logika bisnis utama, perencanaan (\textit{planning}), eksekusi (\textit{execution loop}). \\
   \texttt{llm.py} & Abstraksi API Gemini, manajemen token. \\
-  \texttt{workspace.py} & Operasi I/O berkas, validasi keamanan path, penerapan \textit{diff}. \\
+  \texttt{workspace.py} & Operasi I/O berkas, penegakan kebijakan path, penerapan \textit{diff}. \\
   \texttt{config.py} & Penyimpanan dan validasi API Key. \\
   \texttt{ui.py} & Rendering output, spinner status, syntax highlighting. \\
   \bottomrule
