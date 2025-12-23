@@ -13,7 +13,7 @@ Berdasarkan implementasi dan evaluasi awal, beberapa poin kesimpulan dapat diran
   \item Mekanisme pembatasan perubahan berbasis \textit{diff} pada perintah \texttt{MODIFY} dengan threshold ganda (500 baris absolut dan 50\% ratio maksimal, dapat dikonfigurasi via \texttt{PAI\_MODIFY\_THRESHOLD} dan \texttt{PAI\_MODIFY\_MAX\_RATIO}) membantu mengurangi risiko penimpaan besar yang tidak diinginkan dengan atomic write menggunakan tempfile.
   \item Fase perencanaan JSON dalam \textit{Single-Shot Intelligence} membantu LLM merencanakan pendekatan yang lebih fokus dan terstruktur, meningkatkan kualitas hasil eksekusi.
   \item Sistem eksekusi adaptif dengan 1-3 subfase berdasarkan kompleksitas tugas teramati lebih efisien secara operasional dibandingkan pendekatan tradisional yang memerlukan banyak panggilan API berulang.
-  \item Manajemen API key tunggal dengan migrasi otomatis dari sistem multi-key (version 1 ke version 2) menyederhanakan konfigurasi dan meningkatkan keandalan sistem.
+  \item Manajemen API key tunggal menyederhanakan konfigurasi dan meningkatkan keandalan sistem.
   \item Fitur interaktif seperti \textit{interrupt handling} (Ctrl+C) dan pencatatan sesi ke \texttt{.pai\_history} meningkatkan pengalaman pengguna dan memudahkan debugging.
   \item Kebijakan keamanan path berhasil memblokir akses ke direktori sensitif (mis. \texttt{.git}, \texttt{venv}, \texttt{.env}) dan mencegah \textit{path traversal}, mendukung aspek privasi dan kendali lokal.
   \item Pemakaian pip/venv, Makefile, dan LaTeX mendukung keterulangan eksperimen serta dokumentasi terstruktur untuk keperluan akademik.
