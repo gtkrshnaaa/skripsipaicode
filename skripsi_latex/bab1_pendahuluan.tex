@@ -33,7 +33,7 @@ Agar fokus penelitian terjaga dan implementasi dapat dilakukan secara terukur, b
 Tujuan penelitian ini adalah membangun dan menguji fungsionalitas sebuah agen AI berbasis CLI yang dapat membantu pengembang dalam proses pemrograman secara interaktif dengan arsitektur \textit{Single-Shot Intelligence}. Secara khusus, penelitian menargetkan:
 
 \begin{enumerate}
-  \item Merancang arsitektur Paicode yang mencakup modul agen dengan \textit{Single-Shot Intelligence} (klasifikasi intensi, fase perencanaan, dan fase eksekusi dalam 2 panggilan API), jembatan LLM dengan manajemen API key tunggal, antarmuka CLI dengan \textit{interrupt handling}, lapisan keamanan \textit{path} pada berkas proyek, serta komponen tampilan terminal berbasis \texttt{rich}.
+  \item Merancang arsitektur Paicode yang mencakup modul agen dengan \textit{Single-Shot Intelligence} (klasifikasi intensi, fase perencanaan, dan fase eksekusi dalam 2 fase utama), jembatan LLM dengan manajemen API key tunggal, antarmuka CLI dengan \textit{interrupt handling}, lapisan keamanan \textit{path} pada berkas proyek, serta komponen tampilan terminal berbasis \texttt{rich}.
   \item Mengimplementasikan kemampuan observasi proyek, manipulasi berkas, dan modifikasi kode terarah dengan mekanisme \textit{diff}-aware yang mencegah penimpaan berkas tidak diinginkan dan memblokir akses ke direktori sensitif.
   \item Mengintegrasikan fitur-fitur interaktif seperti pencatatan sesi ke \texttt{.pai\_history}, penanganan interupsi (Ctrl+C), dan antarmuka terminal yang responsif dengan dukungan input multiline.
   \item Menyusun prosedur evaluasi dengan skenario tugas pemrograman yang representatif dan mengukur efisiensi panggilan API, ketepatan hasil, serta kepatuhan keamanan \textit{path}.
