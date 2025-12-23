@@ -36,7 +36,7 @@ Tabel~\ref{tab:perbandingan-penelitian} merangkum perbedaan antara penelitian-pe
     \midrule
     \textbf{Platform} & IDE-based (Copilot), Web-based (ChatGPT Code Interpreter), Container-based (OpenDevin) & CLI native, berjalan langsung di terminal Linux tanpa container \\
     \midrule
-    \textbf{Arsitektur Agen} & Chat-loop iteratif (10-20 API calls) atau fully autonomous & Single-Shot Intelligence (2 API calls: planning + execution) \\
+    \textbf{Arsitektur Agen} & Chat-loop iteratif (10-20 API calls) atau fully autonomous & Single-Shot Intelligence (2 phases: planning + execution) \\
     \midrule
     \textbf{Keamanan Lokal} & Sandboxed container (OpenDevin) atau tidak ada kontrol eksplisit (Copilot) & Path security policy + diff-based guardrails (threshold 500 baris, 50\% ratio) \\
     \midrule
@@ -59,7 +59,7 @@ Kontribusi penelitian ini ditempatkan pada ranah agentic AI untuk pengembangan p
 
 \begin{itemize}
   \item \textbf{CLI lokal dengan integrasi LLM via API}: agen berjalan di terminal, tindakan langsung tercermin pada \textbf{berkas proyek di workspace}; sementara inferensi dilakukan oleh LLM eksternal sehingga kebijakan data mengikuti penyedia API.
-  \item \textbf{Arsitektur Single-Shot Intelligence}: alur kerja efisien yang mengoptimalkan penggunaan API dengan tepat 2 panggilan (perencanaan dan eksekusi), menggantikan pendekatan tradisional yang memerlukan 10-20 panggilan API.
+  \item \textbf{Arsitektur Single-Shot Intelligence}: alur kerja efisien yang mengoptimalkan penggunaan API dengan 2 fase utama (perencanaan dan eksekusi), menggantikan pendekatan tradisional yang memerlukan 10-20 panggilan API.
   \item \textbf{Manajemen API key tunggal}: sistem manajemen API key yang disederhanakan untuk kemudahan penggunaan.
   \item \textbf{Keamanan berkas}: kebijakan pelarangan akses \textit{path} sensitif dan validasi \textit{path} mencegah \textit{path traversal} dan operasi berisiko pada direktori seperti \texttt{.git}, \texttt{venv}, dan \texttt{.env}.
   \item \textbf{Modifikasi terarah berbasis diff}: perintah \texttt{MODIFY} memanfaatkan sistem \textit{diff}-aware untuk membatasi ruang perubahan dan mencegah penimpaan berkas tidak diinginkan.
