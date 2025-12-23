@@ -138,17 +138,17 @@ Secara kuantitatif, performa agen diukur berdasarkan parameter berikut (rata-rat
 
 \section{Pembahasan}
 
-Bagian ini membahas analisis mendalam terhadap hasil implementasi dan pengujian yang telah dilakukan, serta membandingkannya dengan metode lain. Analisis ini didukung oleh data log sistem yang merekam waktu eksekusi secara presisi (\textit{timestamped logs}), memberikan landasan kuantitatif yang kuat untuk klaim efisiensi yang diajukan.
+Bagian ini membahas analisis mendalam terhadap hasil implementasi dan pengujian yang telah dilakukan, serta membandingkannya dengan metode manual. Analisis ini didukung oleh data log sistem yang merekam waktu eksekusi secara presisi (\textit{timestamped logs}), memberikan landasan kuantitatif yang kuat untuk klaim efisiensi yang diajukan.
 
-\subsection{Efektivitas Arsitektur Single-Shot Intelligence}
-Hasil pengujian menunjukkan bahwa pendekatan \textit{Single-Shot Intelligence} (SSI) memberikan peningkatan efisiensi yang signifikan dibandingkan pendekatan \textit{multiple-turn chat loop}. Dengan memadatkan proses "berpikir" (reasoning) ke dalam satu fase perencanaan JSON yang komprehensif, agen dapat:
+\subsection{Efisiensi Mekanisme Perencanaan Otomatis}
+Hasil pengujian menunjukkan bahwa arsitektur \textit{Single-Shot Intelligence} (SSI) mampu menyelesaikan tugas pemrograman kompleks dengan interaksi minimal. Dengan memadatkan proses "berpikir" (\textit{reasoning}) ke dalam satu fase perencanaan yang komprehensif, sistem dapat:
 \begin{enumerate}
-    \item Mengurangi jumlah panggilan API (Round-Trip Time) secara drastis, dari belasan menjadi hanya 2-3 panggilan utama per tugas.
-    \item Mengurangi ambiguitas langkah eksekusi karena seluruh rencana sudah disetujui di awal.
-    \item Menghemat penggunaan token, yang berkorelasi lurus dengan penghematan biaya operasional.
+    \item Menghasilkan rencana eksekusi lengkap yang dapat diverifikasi pengguna sebelum dijalankan, meningkatkan kepercayaan dan kontrol.
+    \item Mengurangi beban kognitif pengguna karena tidak perlu membimbing agen langkah demi langkah secara manual.
+    \item Mengeksekusi serangkaian operasi file secara presisi tanpa intervensi tambahan setelah persetujuan rencana.
 \end{enumerate}
 
-Temuan ini mengonfirmasi bahwa untuk tugas-tugas rekayasa perangkat lunak yang terdefinisi dengan baik, perencanaan terstruktur di muka lebih unggul daripada respons reaktif per langkah.
+Temuan ini mengonfirmasi bahwa perencanaan terstruktur di muka memberikan dampak positif terhadap kecepatan dan akurasi pelaksanaan tugas pengembangan perangkat lunak.
 
 \subsection{Analisis Aspek Keamanan}
 Implementasi \textit{Path Security} dan \textit{Diff-based Modification} terbukti efektif sebagai lapisan pertahanan terakhir (\textit{last line of defense}) di sisi klien. Dalam skenario uji coba akses ilegal (Skenario 5), agen secara konsisten menolak permintaan untuk mengakses \texttt{.env} atau direktori induk (\texttt{../}). Hal ini sangat krusial mengingat LLM memiliki kecenderungan untuk "berhalusinasi" atau mengikuti instruksi pengguna secara naif (misalnya, pengguna meminta "hapus semua file"). Dengan adanya validasi di level \texttt{workspace.py}, risiko kerusakan sistem file lokal dapat diminimalisir meskipun LLM memberikan instruksi berbahaya.
