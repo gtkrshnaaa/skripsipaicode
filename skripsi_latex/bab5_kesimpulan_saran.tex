@@ -19,10 +19,10 @@ Berdasarkan implementasi dan evaluasi awal, beberapa poin kesimpulan dapat diran
   \item Pemakaian pip/venv, Makefile, dan LaTeX mendukung keterulangan eksperimen serta dokumentasi terstruktur untuk keperluan akademik.
 \end{enumerate}
 
-Mengacu pada produk sejenis lainnya, Paicode memiliki keunggulan dan kelemahan sebagai berikut:
+Secara arsitektural, Paicode memiliki karakteristik keunggulan dan batasan sebagai berikut:
 \begin{itemize}
-    \item \textbf{Keunggulan}: Dibandingkan dengan ekstensi editor (misalnya Google Gemini Code Assist di VS Code), Paicode menawarkan otonomi eksekusi multi-langkah di terminal lokal tanpa memerlukan setup kontainer berat (seperti OpenDevin), serta memberikan transparansi rencana eksekusi (JSON planning) yang seringkali tidak tersedia pada agen kotak-hitam lain. Desain \textit{lightweight} membuatnya dapat berjalan di lingkungan \textit{headless} server.
-    \item \textbf{Kelemahan}: Paicode masih bergantung penuh pada ketersediaan API LLM eksternal (tidak bisa offline) dan belum memiliki integrasi mendalam ke fitur spesifik IDE (seperti debugging visual) yang dimiliki alat bantu terintegrasi.
+    \item \textbf{Keunggulan}: Paicode menawarkan otonomi eksekusi multi-langkah di terminal lokal yang memberikan transparansi penuh melalui mekanisme rencana eksekusi (\textit{JSON planning}). Desainnya yang minimalis dan berbasis CLI memungkinkan aplikasi ini berjalan di lingkungan server tanpa antarmuka grafis (\textit{headless}), serta mudah diintegrasikan ke dalam skrip otomatisasi.
+    \item \textbf{Batasan}: Sebagai aplikasi berbasis CLI yang berfokus pada otonomi, Paicode belum menyediakan fitur debugging visual interaktif seperti pada Integrated Development Environment (IDE). Selain itu, ketergantungan penuh pada konektivitas API LLM eksternal mengharuskan adanya koneksi internet aktif selama penggunaan.
 \end{itemize}
 
 Kinerja dan kualitas hasil tetap bergantung pada kemampuan LLM eksternal (Gemini) serta kejelasan instruksi yang diberikan. Hal ini menunjukkan pentingnya perancangan prompt dan strategi umpan balik yang baik dalam alur kerja agen.
