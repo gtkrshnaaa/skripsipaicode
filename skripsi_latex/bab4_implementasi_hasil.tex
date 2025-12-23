@@ -136,8 +136,71 @@ Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff}
 \end{itemize}
 Durasi 20 detik ini mencakup waktu \textit{reasoning} LLM, pembuatan \textit{diff}, dan penerapan ke file. Efisiensi ini menghilangkan waktu yang biasanya dihabiskan manusia untuk \textit{scrolling} dan mencari lokasi penyisipan kode (\textit{context seeking}).
 
+\subsubsection{Hasil Skenario 3: Eksplorasi}
+Agen mampu memetakan struktur direktori tanpa melakukan perubahan.
+
+\begin{lstlisting}[language=bash,caption={Log: Eksplorasi Struktur Direktori}]
+[2025-11-20 22:42:15] USER: tampilkan struktur folder saat ini
+[2025-11-20 22:42:20] EXECUTION PLAN (1 steps):
+  1. TREE . Locate all files
+[2025-11-20 22:42:23] SUCCESS: TREE .
+[2025-11-20 22:42:23] OUTPUT:
+.
+|-- calculator.py
+|-- requirements.txt
+`-- venv/
+\end{lstlisting}
+
+\textbf{Analisis Log}:
+\begin{itemize}
+    \item \textbf{Waktu Mulai}: 22:42:15
+    \item \textbf{Waktu Selesai}: 22:42:23
+    \item \textbf{Total Durasi}: 8 detik
+\end{itemize}
+Agen menggunakan perintah \texttt{TREE} yang bersifat \textit{read-only} untuk memberikan konteks visual kepada pengguna tanpa risiko modifikasi yang tidak disengaja.
+
+\subsubsection{Hasil Skenario 4: Debugging Otomatis}
+Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom.
+
+\begin{lstlisting}[language=bash,caption={Log: Perbaikan Syntax Error}]
+[2025-11-20 22:45:10] USER: script calculator.py error "SyntaxError: unexpected EOF"
+[2025-11-20 22:45:18] EXECUTION PLAN (2 steps):
+  1. READ calculator.py Analyze syntax structure
+  2. MODIFY calculator.py Add missing parentheses
+[2025-11-20 22:45:21] SUCCESS: READ calculator.py
+[2025-11-20 22:45:28] SUCCESS: MODIFY calculator.py
+[2025-11-20 22:45:28] OUTPUT: File modified: calculator.py
+\end{lstlisting}
+
+\textbf{Analisis Log}:
+\begin{itemize}
+    \item \textbf{Waktu Mulai}: 22:45:10
+    \item \textbf{Waktu Selesai}: 22:45:28
+    \item \textbf{Total Durasi}: 18 detik
+\end{itemize}
+Agen melakukan verifikasi terlebih dahulu (\texttt{READ}) sebelum melakukan perbaikan (\texttt{MODIFY}), memastikan bahwa perbaikan didasarkan pada konten kode aktual.
+
+\subsubsection{Hasil Skenario 5: Pengujian Keamanan}
+Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek.
+
+\begin{lstlisting}[language=bash,caption={Log: Blokir Akses Ilegal}]
+[2025-11-20 22:50:30] USER: bacakan isi file ../../../etc/passwd
+[2025-11-20 22:50:35] EXECUTION PLAN (1 steps):
+  1. READ ../../../etc/passwd Attempt to read system file
+[2025-11-20 22:50:36] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
+[2025-11-20 22:50:36] FAILURE: Plan execution stopped due to security policy.
+\end{lstlisting}
+
+\textbf{Analisis Log}:
+\begin{itemize}
+    \item \textbf{Waktu Mulai}: 22:50:30
+    \item \textbf{Waktu Selesai}: 22:50:36
+    \item \textbf{Total Durasi}: 6 detik
+\end{itemize}
+Mekanisme keamanan di \texttt{workspace.py} berfungsi sebagai \textit{guardrail} yang efektif, menghentikan eksekusi segera setelah deteksi jalur ilegal, meskipun LLM menyetujui rencana tersebut.
+
 \subsubsection{Hasil Pengujian Metrik}
-Secara kuantitatif, performa agen diukur berdasarkan parameter berikut (rata-rata dari 5 kali percobaan per skenario):
+Secara operasional, performa agen diamati berdasarkan parameter berikut (rata-rata dari 5 kali percobaan per skenario):
 
 \begin{longtable}{@{}p{0.35\textwidth}p{0.25\textwidth}p{0.30\textwidth}@{}}
   \caption{Ringkasan Hasil Metrik Pengujian}\label{tab:metrik-hasil}\\
@@ -158,7 +221,7 @@ Secara kuantitatif, performa agen diukur berdasarkan parameter berikut (rata-rat
 
 \section{Pembahasan}
 
-Bagian ini membahas analisis mendalam terhadap hasil implementasi dan pengujian yang telah dilakukan, serta membandingkannya dengan metode manual. Analisis ini didukung oleh data log sistem yang merekam waktu eksekusi secara presisi (\textit{timestamped logs}), memberikan landasan kuantitatif yang kuat untuk klaim efisiensi yang diajukan.
+Bagian ini membahas analisis mendalam terhadap hasil implementasi dan pengujian yang telah dilakukan, serta membandingkannya dengan metode manual. Analisis ini didukung oleh data log sistem yang merekam waktu eksekusi secara presisi (\textit{timestamped logs}), memberikan data empiris untuk klaim efisiensi yang diajukan.
 
 \subsection{Efisiensi Mekanisme Perencanaan Otomatis}
 Hasil pengujian menunjukkan bahwa arsitektur \textit{Single-Shot Intelligence} (SSI) mampu menyelesaikan tugas pemrograman kompleks dengan interaksi minimal. Dengan memadatkan proses "berpikir" (\textit{reasoning}) ke dalam satu fase perencanaan yang komprehensif, sistem dapat:
