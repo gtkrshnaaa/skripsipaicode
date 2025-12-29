@@ -26,10 +26,12 @@
 \usepackage{nameref}
 \usepackage{indentfirst} % Ensure first paragraph is indented
 % Bibliography using BibTeX (simple and Ubuntu-friendly)
-\usepackage[round]{natbib}
+\usepackage{natbib}
 \renewcommand{\bibname}{DAFTAR PUSTAKA}
 % Support for Unicode box-drawing characters in monospaced text
 \usepackage{pmboxdraw}
+% Highlight text
+\usepackage{soul}
 % String manipulation for dynamic text
 \usepackage{xstring}
 % Native diagram and plotting packages (no external images)
@@ -103,7 +105,7 @@
 \titlespacing*{\subsubsection}{0pt}{12pt}{6pt}
 
 % --- Document meta (edit these) ---
-\newcommand{\JudulSkripsi}{PAICODE: AGENTIC AI BERBASIS CLI UNTUK OTOMASI AKTIVITAS PEMROGRAMAN DAN PENGEMBANGAN PERANGKAT LUNAK DI LINUX YANG DITENAGAI LLM MELALUI API}
+\newcommand{\JudulSkripsi}{\hl{PAICODE: AGENTIC AI BERBASIS CLI UNTUK OTOMASI AKTIVITAS PEMROGRAMAN DAN PENGEMBANGAN PERANGKAT LUNAK DI LINUX YANG DITENAGAI LLM MELALUI API}}
 \newcommand{\NamaMahasiswa}{I PUTU GEDE GILANG TEJA KRISHNA}
 \newcommand{\NIM}{225410001}
 \newcommand{\Prodi}{Informatika}
