@@ -3,23 +3,23 @@
 \label{chap:tinjauan}
 
 \section{Tinjauan Pustaka}
-Perkembangan alat bantu pemrograman berbasis AI berkembang pesat dalam beberapa tahun terakhir. Berikut adalah tinjauan terhadap beberapa solusi \textit{state-of-the-art} yang relevan dengan penelitian ini:
+\hl{Perkembangan alat bantu pemrograman berbasis AI berkembang pesat dalam beberapa tahun terakhir. Berikut adalah tinjauan terhadap beberapa solusi \textit{state-of-the-art} yang relevan dengan penelitian ini:}
 
 \subsection{AI Coding Assistant Terintegrasi (IDE-based)}
-\citet{copilot2021} menghadirkan GitHub Copilot sebagai asisten pemrograman yang terintegrasi langsung ke dalam lingkungan pengembangan (IDE) seperti VS Code. Copilot unggul dalam memberikan saran \textit{autocomplete} real-time dan fungsi obrolan kontekstual. Namun, pendekatannya sangat bergantung pada antarmuka editor visual dan beroperasi sebagai "pilot pendamping" (copilot) alih-alih agen otonom.
+\hl{\citet{copilot2021} menghadirkan GitHub Copilot sebagai asisten pemrograman yang terintegrasi langsung ke dalam lingkungan pengembangan (IDE) seperti VS Code. Copilot unggul dalam memberikan saran \textit{autocomplete} real-time dan fungsi obrolan kontekstual. Namun, pendekatannya sangat bergantung pada antarmuka editor visual dan beroperasi sebagai "pilot pendamping" (copilot) alih-alih agen otonom.}
 
 \subsection{CLI-based AI Chat Tools}
-\citet{gauthier2023aider} mengembangkan Aider untuk membawa kemampuan LLM ke dalam terminal (CLI). Aider memungkinkan pengguna untuk melakukan \textit{pair programming} dengan LLM langsung di terminal dan menerapkan perubahan pada git repository. Pendekatan ini mirip dengan Paicode dalam hal antarmuka berbasis teks. Perbedaannya, Paicode menekankan pada arsitektur \textit{Single-Shot Intelligence} dengan fase perencanaan JSON eksplisit sebelum eksekusi.
+\hl{\citet{gauthier2023aider} mengembangkan Aider untuk membawa kemampuan LLM ke dalam terminal (CLI). Aider memungkinkan pengguna untuk melakukan \textit{pair programming} dengan LLM langsung di terminal dan menerapkan perubahan pada git repository. Pendekatan ini mirip dengan Paicode dalam hal antarmuka berbasis teks. Perbedaannya, Paicode menekankan pada arsitektur \textit{Single-Shot Intelligence} dengan fase perencanaan JSON eksplisit sebelum eksekusi.}
 
 \subsection{Autonomous Software Engineers}
-\citet{opendevin2024} dan \citet{li2024sweagent} masing-masing meluncurkan proyek OpenDevin dan SWE-agent yang bertujuan menciptakan agen yang sepenuhnya otonom, mampu menyelesaikan isu GitHub dari awal hingga akhir tanpa interaksi manusia. Meskipun sangat canggih, pendekatan ini seringkali memerlukan akses sumber daya yang besar (Docker container penuh). Paicode mengambil posisi tengah (\textit{middle-ground}) dengan menyediakan agen \textit{semi-autonomous} yang ringan.
+\hl{\citet{opendevin2024} dan \citet{li2024sweagent} masing-masing meluncurkan proyek OpenDevin dan SWE-agent yang bertujuan menciptakan agen yang sepenuhnya otonom, mampu menyelesaikan isu GitHub dari awal hingga akhir tanpa interaksi manusia. Meskipun sangat canggih, pendekatan ini seringkali memerlukan akses sumber daya yang besar (Docker container penuh). Paicode mengambil posisi tengah (\textit{middle-ground}) dengan menyediakan agen \textit{semi-autonomous} yang ringan.}
 
 \subsection{Posisi Paicode}
-Dibandingkan dengan solusi di atas, Paicode menawarkan kebaruan pada kombinasi arsitektur \textit{local-first} yang ringan namun terstruktur:
+\hl{Dibandingkan dengan solusi di atas, Paicode menawarkan kebaruan pada kombinasi arsitektur \textit{local-first} yang ringan namun terstruktur:}
 \begin{enumerate}
-    \item \textbf{Keamanan Terkendali}: Tidak seperti agen otonom penuh yang sering berjalan di sandboxed container karena risiko tinggi, Paicode dirancang aman untuk berjalan di \textit{host} utama berkat \textit{path security policy} dan \textit{diff-based guardrails}.
-    \item \textbf{Efisiensi Token}: Dengan arsitektur perencanaan \textit{single-shot}, Paicode mengurangi \textit{round-trip} percakapan yang tidak perlu, berbeda dengan model \textit{chat} standar.
-    \item \textbf{Transparansi Rencana}: Pengguna dapat melihat rencana aksi (dalam format JSON) sebelum eksekusi masif dilakukan, memberikan kontrol lebih baik daripada model \textit{black-box}.
+    \item \hl{\textbf{Keamanan Terkendali}: Tidak seperti agen otonom penuh yang sering berjalan di sandboxed container karena risiko tinggi, Paicode dirancang aman untuk berjalan di \textit{host} utama berkat \textit{path security policy} dan \textit{diff-based guardrails}.}
+    \item \hl{\textbf{Efisiensi Token}: Dengan arsitektur perencanaan \textit{single-shot}, Paicode mengurangi \textit{round-trip} percakapan yang tidak perlu, berbeda dengan model \textit{chat} standar.}
+    \item \hl{\textbf{Transparansi Rencana}: Pengguna dapat melihat rencana aksi (dalam format JSON) sebelum eksekusi masif dilakukan, memberikan kontrol lebih baik daripada model \textit{black-box}.}
 \end{enumerate}
 
 \subsection{Perbandingan dengan Penelitian Sebelumnya}
@@ -51,7 +51,7 @@ Tabel~\ref{tab:perbandingan-penelitian} merangkum perbedaan antara penelitian-pe
   \end{tabular}
 \end{table}
 
-Dari Tabel~\ref{tab:perbandingan-penelitian} terlihat bahwa penelitian ini mengisi \textit{gap} antara asisten pasif (seperti Copilot) dan agen otonom penuh (seperti OpenDevin) dengan menawarkan pendekatan \textit{semi-autonomous} yang efisien, aman, dan transparan. Kebaruan utama terletak pada kombinasi \textbf{Single-Shot Intelligence} untuk efisiensi token, \textbf{path security} untuk keamanan tanpa sandboxing, dan \textbf{explicit planning} untuk transparansi—aspek-aspek yang belum dieksplorasi secara bersamaan dalam penelitian sebelumnya.
+\hl{Dari Tabel~\ref{tab:perbandingan-penelitian} terlihat bahwa penelitian ini mengisi \textit{gap} antara asisten pasif (seperti Copilot) dan agen otonom penuh (seperti OpenDevin) dengan menawarkan pendekatan \textit{semi-autonomous} yang efisien, aman, dan transparan. Kebaruan utama terletak pada kombinasi \textbf{Single-Shot Intelligence} untuk efisiensi token, \textbf{path security} untuk keamanan tanpa sandboxing, dan \textbf{explicit planning} untuk transparansi—aspek-aspek yang belum dieksplorasi secara bersamaan dalam penelitian sebelumnya.}
 
 
 \subsection{Posisi Penelitian}
