@@ -169,18 +169,24 @@
 % --- Table of contents & lists (viii, ix, x) ---
 \cleardoublepage
 \addcontentsline{toc}{chapter}{DAFTAR ISI}
+\begingroup
+\let\ps@plain\ps@frontmatterstyle
 \tableofcontents
-\thispagestyle{frontmatterstyle}
+\endgroup
 
 \cleardoublepage
 \addcontentsline{toc}{chapter}{DAFTAR GAMBAR}
+\begingroup
+\let\ps@plain\ps@frontmatterstyle
 \listoffigures
-\thispagestyle{frontmatterstyle}
+\endgroup
 
 \cleardoublepage
 \addcontentsline{toc}{chapter}{DAFTAR TABEL}
+\begingroup
+\let\ps@plain\ps@frontmatterstyle
 \listoftables
-\thispagestyle{frontmatterstyle}
+\endgroup
 
 % --- Abstract (xi, xii) ---
 \chapter*{INTISARI}
