@@ -35,25 +35,25 @@ Proses instalasi dilakukan menggunakan \texttt{Makefile} yang mengotomasi pembua
 Implementasi inti Paicode berpusat pada arsitektur \textit{Single-Shot Intelligence} yang terbagi menjadi beberapa modul utama seperti yang telah dirancang pada Bab III.
 
 \subsubsection{Manajemen Konfigurasi dan API Key}
-Modul \texttt{config.py} mengelola penyimpanan API key secara aman. Kunci disimpan dalam berkas JSON terenkripsi sederhana (hak akses owner-only) di direktori \texttt{~/.config/pai-code/}. Pengguna dapat mengatur kunci melalui perintah CLI:
+Modul \texttt{config.py} mengelola penyimpanan API key secara aman. Kunci disimpan dalam berkas JSON terenkripsi sederhana (hak akses owner-only) di direktori \texttt{~/.config/pai-code/}. Kunci API ini penting untuk otentikasi dengan layanan Gemini. Perintah yang digunakan untuk mengatur dan memvalidasi konfigurasi kunci API ditunjukkan pada Listing~\ref{lst:config-cmd}.
 
-\begin{lstlisting}[language=bash,caption={Perintah konfigurasi API Key}]
+\begin{lstlisting}[language=bash,caption={Perintah konfigurasi API Key}, label={lst:config-cmd}]
 pai config set AIzaSy...  # Mengatur key
 pai config validate       # Memvalidasi koneksi ke Gemini
 \end{lstlisting}
 
 \subsubsection{Implementasi Agen (Single-Shot Intelligence)}
-Agen diimplementasikan dalam \texttt{agent.py}. Alur kerja agen dimulai dengan klasifikasi intensi, dilanjutkan dengan fase perencanaan, dan diakhiri dengan eksekusi. Berikut adalah cuplikan kode yang menunjukkan struktur data untuk fase perencanaan (Planning):
+Agen diimplementasikan dalam \texttt{agent.py}. Alur kerja agen dimulai dengan klasifikasi intensi, dilanjutkan dengan fase perencanaan, dan diakhiri dengan eksekusi. Struktur data JSON yang digunakan untuk merepresentasikan rencana eksekusi agen dapat dilihat pada Listing~\ref{lst:agent-planning}.
 
 \medskip
 \lstinputlisting[language=Python, captionpos=b, caption={Cuplikan agent.py (Struktur Planning JSON)}, firstline=640, lastline=660, label={lst:agent-planning}]{../paicode/paicode/agent.py}
 
-Selain format data, agen juga dibekali instruksi sistem (\textit{System Prompt}) yang mendefinisikan persona dan batasan arsitektur \textit{Single-Shot} agar model fokus pada perencanaan yang presisi:
+Selain format data, agen juga dibekali instruksi sistem (\textit{System Prompt}) yang mendefinisikan persona dan batasan arsitektur \textit{Single-Shot} agar model fokus pada perencanaan yang presisi. Definisi persona dan instruksi sistem tersebut diimplementasikan dalam kode program sebagaimana ditampilkan pada Listing~\ref{lst:agent-prompt}.
 
 \medskip
 \lstinputlisting[language=Python, captionpos=b, caption={System Prompt untuk Fase Perencanaan}, firstline=542, lastline=560, label={lst:agent-prompt}]{../paicode/paicode/agent.py}
 
-Selanjutnya, untuk fase eksekusi, sistem menerapkan pemilihan strategi adaptif (1 hingga 3 fase) berdasarkan kompleksitas tugas:
+Selanjutnya, untuk fase eksekusi, sistem menerapkan pemilihan strategi adaptif (1 hingga 3 fase) berdasarkan kompleksitas tugas. Logika pemrograman untuk pemilihan strategi eksekusi adaptif ini ditunjukkan secara rinci pada Listing~\ref{lst:agent-strategy}.
 
 \medskip
 \lstinputlisting[language=Python, captionpos=b, caption={Logika Strategi Eksekusi Adaptif}, firstline=836, lastline=878, label={lst:agent-strategy}]{../paicode/paicode/agent.py}
@@ -61,12 +61,12 @@ Selanjutnya, untuk fase eksekusi, sistem menerapkan pemilihan strategi adaptif (
 \subsubsection{Sistem Keamanan Workspace}
 Modul \texttt{workspace.py} bertugas menegakkan kebijakan keamanan. Setiap operasi berkas divalidasi path-nya untuk memastikan tidak keluar dari root project (mencegah path traversal) dan tidak menyentuh direktori terlarang seperti \texttt{.git} atau \texttt{.env}.
 
-Berikut adalah implementasi fungsi \texttt{\_is\_safe\_path} yang menjadi gerbang validasi utama:
+Berikut adalah implementasi fungsi \texttt{\_is\_safe\_path} yang menjadi gerbang validasi utama. Implementasi fungsi utama \texttt{\_is\_safe\_path} yang bertugas memvalidasi keamanan jalur berkas diperlihatkan pada Listing~\ref{lst:workspace-security}.
 
 \medskip
 \lstinputlisting[language=Python, captionpos=b, caption={Validasi Path (\_is\_safe\_path)}, firstline=36, lastline=61, label={lst:workspace-security}]{../paicode/paicode/workspace.py}
 
-Selain validasi path, sistem juga menerapkan pembatasan modifikasi berbasis \textit{diff} untuk mencegah perubahan masif yang berisiko:
+Selain validasi path, sistem juga menerapkan pembatasan modifikasi berbasis \textit{diff} untuk mencegah perubahan masif yang berisiko. Mekanisme pembatasan jumlah baris yang dimodifikasi (threshold) diimplementasikan melalui kode pada Listing~\ref{lst:workspace-diff}.
 
 \medskip
 \lstinputlisting[language=Python, captionpos=b, caption={Logika Threshold Modifikasi (Diff-based)}, firstline=270, lastline=293, label={lst:workspace-diff}]{../paicode/paicode/workspace.py}
@@ -98,9 +98,9 @@ Pengujian fungsional dilakukan dengan menjalankan serangkaian skenario tugas pem
 Berikut adalah paparan hasil uji coba dari skenario-skenario di atas, ditampilkan melalui log interaksi agen.
 
 \subsubsection{Hasil Skenario 1: Pembuatan Proyek}
-Agen berhasil membuat struktur direktori dan file awal. Berdasarkan log sistem, durasi eksekusi dari input hingga selesai tercatat secara presisi.
+Agen berhasil membuat struktur direktori dan file awal. Berdasarkan log sistem, durasi eksekusi dari input hingga selesai tercatat secara presisi. Detail log interaksi untuk skenario pembuatan proyek ini ditampilkan pada Listing~\ref{lst:log-scenario-1}.
 
-\begin{lstlisting}[language=bash,caption={Log: Pembuatan Proyek Kalkulator}]
+\begin{lstlisting}[language=bash,caption={Log: Pembuatan Proyek Kalkulator}, label={lst:log-scenario-1}]
 [2025-11-20 22:38:05] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
 [2025-11-20 22:38:10] EXECUTION PLAN (3 steps):
   1. WRITE calculator.py ...
@@ -118,9 +118,9 @@ Agen berhasil membuat struktur direktori dan file awal. Berdasarkan log sistem, 
 Dalam waktu 7 detik, Paicode memproses bahasa alami, merancang struktur kode, dan menulis berkas fisik. Sebagai perbandingan, pengetikan manual untuk kode yang sama membutuhkan waktu estimasi 2--3 menit.
 
 \subsubsection{Hasil Skenario 2: Modifikasi Kode}
-Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur.
+Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur. Proses modifikasi kode untuk penambahan fitur pangkat terekam dalam log sistem pada Listing~\ref{lst:log-scenario-2}.
 
-\begin{lstlisting}[language=bash,caption={Log: Modifikasi tambah fitur pangkat}]
+\begin{lstlisting}[language=bash,caption={Log: Modifikasi tambah fitur pangkat}, label={lst:log-scenario-2}]
 [2025-11-20 22:40:26] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
 [2025-11-20 22:40:35] EXECUTION PLAN (1 steps):
   1. MODIFY calculator.py ...
@@ -137,9 +137,9 @@ Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff}
 Durasi 20 detik ini mencakup waktu \textit{reasoning} LLM, pembuatan \textit{diff}, dan penerapan ke file. Efisiensi ini menghilangkan waktu yang biasanya dihabiskan manusia untuk \textit{scrolling} dan mencari lokasi penyisipan kode (\textit{context seeking}).
 
 \subsubsection{Hasil Skenario 3: Eksplorasi}
-Agen mampu memetakan struktur direktori tanpa melakukan perubahan.
+Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Listing~\ref{lst:log-scenario-3} memperlihatkan output perintah eksplorasi direktori yang dihasilkan oleh agen.
 
-\begin{lstlisting}[language=bash,caption={Log: Eksplorasi Struktur Direktori}]
+\begin{lstlisting}[language=bash,caption={Log: Eksplorasi Struktur Direktori}, label={lst:log-scenario-3}]
 [2025-11-20 22:42:15] USER: tampilkan struktur folder saat ini
 [2025-11-20 22:42:20] EXECUTION PLAN (1 steps):
   1. TREE . Locate all files
@@ -160,9 +160,9 @@ Agen mampu memetakan struktur direktori tanpa melakukan perubahan.
 Agen menggunakan perintah \texttt{TREE} yang bersifat \textit{read-only} untuk memberikan konteks visual kepada pengguna tanpa risiko modifikasi yang tidak disengaja.
 
 \subsubsection{Hasil Skenario 4: Debugging Otomatis}
-Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom.
+Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Interaksi agen dalam mendeteksi dan memperbaiki kesalahan sintaks secara otomatis ditunjukkan pada Listing~\ref{lst:log-scenario-4}.
 
-\begin{lstlisting}[language=bash,caption={Log: Perbaikan Syntax Error}]
+\begin{lstlisting}[language=bash,caption={Log: Perbaikan Syntax Error}, label={lst:log-scenario-4}]
 [2025-11-20 22:45:10] USER: script calculator.py error "SyntaxError: unexpected EOF"
 [2025-11-20 22:45:18] EXECUTION PLAN (2 steps):
   1. READ calculator.py Analyze syntax structure
@@ -181,9 +181,9 @@ Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom.
 Agen melakukan verifikasi terlebih dahulu (\texttt{READ}) sebelum melakukan perbaikan (\texttt{MODIFY}), memastikan bahwa perbaikan didasarkan pada konten kode aktual.
 
 \subsubsection{Hasil Skenario 5: Pengujian Keamanan}
-Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek.
+Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek. Listing~\ref{lst:log-scenario-5} menunjukkan respons sistem yang menolak permintaan akses ilegal demi alasan keamanan.
 
-\begin{lstlisting}[language=bash,caption={Log: Blokir Akses Ilegal}]
+\begin{lstlisting}[language=bash,caption={Log: Blokir Akses Ilegal}, label={lst:log-scenario-5}]
 [2025-11-20 22:50:30] USER: bacakan isi file ../../../etc/passwd
 [2025-11-20 22:50:35] EXECUTION PLAN (1 steps):
   1. READ ../../../etc/passwd Attempt to read system file
@@ -200,7 +200,7 @@ Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup 
 Mekanisme keamanan di \texttt{workspace.py} berfungsi sebagai \textit{guardrail} yang efektif, menghentikan eksekusi segera setelah deteksi jalur ilegal, meskipun LLM menyetujui rencana tersebut.
 
 \subsubsection{Hasil Pengujian Metrik}
-Secara operasional, performa agen diamati berdasarkan parameter berikut (rata-rata dari 5 kali percobaan per skenario):
+Secara operasional, performa agen diamati berdasarkan parameter berikut (rata-rata dari 5 kali percobaan per skenario). Ringkasan hasil pengukuran metrik performa untuk kelima skenario tersebut disajikan dalam Tabel~\ref{tab:metrik-hasil}.
 
 \begin{longtable}{@{}p{0.35\textwidth}p{0.25\textwidth}p{0.30\textwidth}@{}}
   \caption{Ringkasan Hasil Metrik Pengujian}\label{tab:metrik-hasil}\\
