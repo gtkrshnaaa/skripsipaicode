@@ -21,13 +21,13 @@ Bagaimana merancang, mengimplementasikan, dan mengevaluasi agen AI berbasis CLI 
 \section{Ruang Lingkup}
 Agar fokus penelitian terjaga dan implementasi dapat dilakukan secara terukur, batasan-batasan berikut ditetapkan:
 
-\begin{itemize}
+\begin{enumerate}
   \item Lingkungan target adalah sistem operasi Ubuntu (Linux) dengan antarmuka CLI.
   \item Bahasa pemrograman utama adalah Python; contoh dan skenario uji berfokus pada ekosistem Python/Unix.
   \item Layanan LLM eksternal menggunakan API Gemini; kualitas respons bergantung pada model dan tidak menjadi ruang lingkup untuk dioptimasi ulang.
   \item Dukungan multi-pengguna, kolaborasi real-time, dan integrasi langsung dengan editor tidak dibahas pada versi ini.
   \item Aspek visual seperti diagram dan ilustrasi antarmuka ditunda pada tahap akhir; fokus laporan adalah narasi dan hasil teknis.
-\end{itemize}
+\end{enumerate}
 
 \section{Tujuan Penelitian}
 Tujuan penelitian ini adalah membangun dan menguji fungsionalitas sebuah agen AI berbasis CLI yang dapat membantu pengembang dalam proses pemrograman secara interaktif dengan arsitektur \textit{Single-Shot Intelligence}. Secara khusus, penelitian menargetkan:
@@ -42,7 +42,7 @@ Tujuan penelitian ini adalah membangun dan menguji fungsionalitas sebuah agen AI
 \section{Manfaat Penelitian}
 Manfaat yang diharapkan dari penelitian ini meliputi:
 
-\begin{itemize}
+\begin{enumerate}
   \item \textbf{Akademis:} menyediakan studi kasus dan arsitektur rujukan untuk pengembangan agen AI berbasis CLI dengan integrasi LLM melalui API, serta memperkaya literatur mengenai integrasi LLM dalam alur kerja rekayasa perangkat lunak.
   \item \textbf{Praktis:} menghadirkan alat bantu pengembangan perangkat lunak dengan kelebihan spesifik sebagai berikut:
     \begin{enumerate}
@@ -50,7 +50,7 @@ Manfaat yang diharapkan dari penelitian ini meliputi:
         \item \textbf{Keamanan Terkendali}: Menerapkan kebijakan keamanan \textit{path} (path security) yang memblokir akses ke direktori sensitif (seperti \texttt{.git}, \texttt{.env}) dan mekanisme modifikasi berbasis \textit{diff} untuk mencegah perubahan destruktif masif.
         \item \textbf{Fleksibilitas Lingkungan}: Beroperasi sebagai utilitas CLI yang ringan dan agnostik terhadap editor kode (IDE-agnostic), sehingga dapat digunakan di server tanpa antarmuka grafis (headless) maupun sebagai pendamping editor apa pun di OS berbasis Linux.
     \end{enumerate}
-\end{itemize}
+\end{enumerate}
 
 \section{Sistematika Penulisan}
 Laporan tugas akhir ini disusun dalam lima bab yang saling berkaitan. Bab I (Pendahuluan) memaparkan latar belakang masalah, rumusan masalah yang akan diselesaikan, ruang lingkup penelitian, tujuan yang ingin dicapai, manfaat penelitian bagi aspek akademis maupun praktis, serta sistematika penulisan laporan ini.

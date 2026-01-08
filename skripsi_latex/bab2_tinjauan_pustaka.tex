@@ -54,7 +54,7 @@ Dari Tabel~\ref{tab:perbandingan-penelitian} terlihat bahwa penelitian ini mengi
 \subsection{Posisi Penelitian}
 Kontribusi penelitian ini ditempatkan pada ranah agentic AI untuk pengembangan perangkat lunak dengan karakteristik sebagai berikut:
 
-\begin{itemize}
+\begin{enumerate}
   \item \textbf{CLI lokal dengan integrasi LLM via API}: agen berjalan di terminal, tindakan langsung tercermin pada \textbf{berkas proyek di workspace}; sementara inferensi dilakukan oleh LLM eksternal sehingga kebijakan data mengikuti penyedia API.
   \item \textbf{Arsitektur Single-Shot Intelligence}: alur kerja efisien yang mengefisienkan penggunaan API dengan 2 fase utama (perencanaan dan eksekusi), menggantikan pendekatan tradisional yang memerlukan 10-20 panggilan API.
   \item \textbf{Manajemen API key tunggal}: sistem manajemen API key yang disederhanakan untuk kemudahan penggunaan.
@@ -62,7 +62,7 @@ Kontribusi penelitian ini ditempatkan pada ranah agentic AI untuk pengembangan p
   \item \textbf{Modifikasi terarah berbasis diff}: perintah \texttt{MODIFY} memanfaatkan sistem \textit{diff}-aware untuk membatasi ruang perubahan dan mencegah penimpaan berkas tidak diinginkan.
   \item \textbf{Fitur interaktif}: \textit{interrupt handling} (Ctrl+C) untuk menghentikan respons AI tanpa keluar dari sesi, pencatatan sesi lengkap ke \texttt{.pai\_history}, dan antarmuka terminal responsif dengan dukungan input multiline.
   \item \textbf{Keterulangan eksperimen}: penggunaan pip, virtual environment, dan Makefile memudahkan replikasi lingkungan dan dokumentasi langkah instalasi.
-\end{itemize}
+\end{enumerate}
 
 \section{Dasar Teori}
 Bagian ini membahas konsep yang menjadi landasan penelitian: \textit{Command Line Interface} (CLI), agen kecerdasan buatan (AI Agent), \textit{Large Language Model} (LLM), arsitektur dan kebijakan data (integrasi LLM melalui API dan implikasi privasi), \textit{Single-Shot Intelligence} untuk agen interaktif, sistem klasifikasi intensi, serta perangkat bantu yang digunakan seperti pip dan virtual environment untuk manajemen dependensi, \texttt{rich} dan \texttt{prompt\_toolkit} untuk antarmuka terminal.
@@ -81,11 +81,11 @@ LLM merupakan model generatif berskala besar yang mampu memahami instruksi dan m
 \subsection{Perbedaan LLM dan Agen AI}
 \label{subsec:llm-vs-agent}
 Pada skripsi ini penting untuk membedakan \textit{Large Language Model} (LLM) dan \textit{Agen AI}:
-\begin{itemize}
+\begin{enumerate}
   \item \textbf{LLM}: model generatif yang menghasilkan keluaran berbasis teks/kode dari masukan. LLM \emph{tidak} menjalankan aksi pada berkas secara langsung; ia hanya memberikan saran/hasil teks.
   \item \textbf{Agen AI}: komponen perangkat lunak yang \emph{mengatur alur kerja} (melakukan perencanaan, memanggil LLM, dan mengeksekusi aksi nyata). Pada konteks ini, agen mengontrol perintah CLI untuk melakukan \textbf{operasi berkas tingkat-aplikasi pada workspace proyek}.
   \item \textbf{Hubungan}: agen memanfaatkan LLM untuk penalaran/generasi, lalu menerjemahkan hasilnya menjadi aksi yang terkontrol. Pengamanan lokal ditegakkan melalui \textit{path security} (keamanan \textit{path}) dan pembatasan perubahan berbasis \textit{diff}.
-\end{itemize}
+\end{enumerate}
 
 \subsection{Arsitektur dan Kebijakan Data}
 Paicode dijalankan pada terminal lokal dan melakukan tindakan langsung pada \textbf{berkas proyek di workspace}. Akan tetapi, untuk kebutuhan inferensi, cuplikan kode atau konteks \textbf{dikirim ke layanan LLM melalui API}. Implikasinya, privasi dan kerahasiaan kode \textbf{bergantung pada kebijakan penyedia API}. Pengamanan di sisi lokal diterapkan melalui kebijakan \textit{path security} (keamanan \textit{path}) serta pembatasan perubahan berbasis \textit{diff} agar operasi berkas lebih terkendali.

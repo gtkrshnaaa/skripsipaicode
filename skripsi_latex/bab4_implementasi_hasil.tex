@@ -110,11 +110,11 @@ Agen berhasil membuat struktur direktori dan file awal. Berdasarkan log sistem, 
 \end{lstlisting}
 
 \textbf{Analisis Log}:
-\begin{itemize}
+\begin{enumerate}
     \item \textbf{Waktu Mulai}: 22:38:05
     \item \textbf{Waktu Selesai}: 22:38:12
     \item \textbf{Total Durasi}: 7 detik
-\end{itemize}
+\end{enumerate}
 Dalam waktu 7 detik, Paicode memproses bahasa alami, merancang struktur kode, dan menulis berkas fisik. Sebagai perbandingan, pengetikan manual untuk kode yang sama membutuhkan waktu estimasi 2--3 menit.
 
 \subsubsection{Hasil Skenario 2: Modifikasi Kode}
@@ -129,11 +129,11 @@ Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff}
 \end{lstlisting}
 
 \textbf{Analisis Log}:
-\begin{itemize}
+\begin{enumerate}
     \item \textbf{Waktu Mulai}: 22:40:26
     \item \textbf{Waktu Selesai}: 22:40:46
     \item \textbf{Total Durasi}: 20 detik
-\end{itemize}
+\end{enumerate}
 Durasi 20 detik ini mencakup waktu \textit{reasoning} LLM, pembuatan \textit{diff}, dan penerapan ke file. Efisiensi ini menghilangkan waktu yang biasanya dihabiskan manusia untuk \textit{scrolling} dan mencari lokasi penyisipan kode (\textit{context seeking}).
 
 \subsubsection{Hasil Skenario 3: Eksplorasi}
@@ -152,11 +152,11 @@ Agen mampu memetakan struktur direktori tanpa melakukan perubahan.
 \end{lstlisting}
 
 \textbf{Analisis Log}:
-\begin{itemize}
+\begin{enumerate}
     \item \textbf{Waktu Mulai}: 22:42:15
     \item \textbf{Waktu Selesai}: 22:42:23
     \item \textbf{Total Durasi}: 8 detik
-\end{itemize}
+\end{enumerate}
 Agen menggunakan perintah \texttt{TREE} yang bersifat \textit{read-only} untuk memberikan konteks visual kepada pengguna tanpa risiko modifikasi yang tidak disengaja.
 
 \subsubsection{Hasil Skenario 4: Debugging Otomatis}
@@ -173,11 +173,11 @@ Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom.
 \end{lstlisting}
 
 \textbf{Analisis Log}:
-\begin{itemize}
+\begin{enumerate}
     \item \textbf{Waktu Mulai}: 22:45:10
     \item \textbf{Waktu Selesai}: 22:45:28
     \item \textbf{Total Durasi}: 18 detik
-\end{itemize}
+\end{enumerate}
 Agen melakukan verifikasi terlebih dahulu (\texttt{READ}) sebelum melakukan perbaikan (\texttt{MODIFY}), memastikan bahwa perbaikan didasarkan pada konten kode aktual.
 
 \subsubsection{Hasil Skenario 5: Pengujian Keamanan}
@@ -192,11 +192,11 @@ Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup 
 \end{lstlisting}
 
 \textbf{Analisis Log}:
-\begin{itemize}
+\begin{enumerate}
     \item \textbf{Waktu Mulai}: 22:50:30
     \item \textbf{Waktu Selesai}: 22:50:36
     \item \textbf{Total Durasi}: 6 detik
-\end{itemize}
+\end{enumerate}
 Mekanisme keamanan di \texttt{workspace.py} berfungsi sebagai \textit{guardrail} yang efektif, menghentikan eksekusi segera setelah deteksi jalur ilegal, meskipun LLM menyetujui rencana tersebut.
 
 \subsubsection{Hasil Pengujian Metrik}

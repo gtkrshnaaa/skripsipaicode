@@ -20,17 +20,17 @@ Berdasarkan implementasi dan evaluasi awal, beberapa poin kesimpulan dapat diran
 \end{enumerate}
 
 Secara arsitektural, Paicode memiliki karakteristik keunggulan dan batasan sebagai berikut:
-\begin{itemize}
+\begin{enumerate}
     \item \textbf{Keunggulan}: Paicode menawarkan otonomi eksekusi multi-langkah di terminal lokal yang memberikan transparansi penuh melalui mekanisme rencana eksekusi (\textit{JSON planning}) dan pencatatan log aktivitas yang terstruktur. Desainnya yang minimalis dan berbasis CLI memungkinkan aplikasi ini berjalan di lingkungan Linux tanpa antarmuka grafis (\textit{headless}).
     \item \textbf{Batasan}: Sebagai aplikasi berbasis CLI yang berfokus pada otonomi, Paicode belum menyediakan fitur debugging visual interaktif seperti pada Integrated Development Environment (IDE). Selain itu, ketergantungan penuh pada konektivitas API LLM eksternal mengharuskan adanya koneksi internet aktif selama penggunaan.
-\end{itemize}
+\end{enumerate}
 
 Kinerja dan kualitas hasil tetap bergantung pada kemampuan LLM eksternal (Gemini) serta kejelasan instruksi yang diberikan. Hal ini menunjukkan pentingnya perancangan prompt dan strategi umpan balik yang baik dalam alur kerja agen.
 
 \section{SARAN}
 Beberapa saran pengembangan lanjutan yang dapat dilakukan antara lain:
 
-\begin{itemize}
+\begin{enumerate}
   \item \textbf{Dukungan multi-LLM}: menambahkan opsi pemilihan model dan penyedia LLM alternatif (OpenAI GPT, Anthropic Claude, Llama, dll.) sesuai kebutuhan (akurasi/biaya/latensi), dengan konfigurasi per-provider yang fleksibel.
   \item \textbf{Optimasi fase perencanaan}: mengembangkan mekanisme caching untuk hasil perencanaan JSON yang serupa, mengurangi waktu respons untuk tugas berulang.
   \item \textbf{Peningkatan validasi hasil}: menambahkan automated testing (unit test, integration test) sebagai bagian dari validasi hasil eksekusi untuk verifikasi kualitas yang lebih objektif.
@@ -41,4 +41,4 @@ Beberapa saran pengembangan lanjutan yang dapat dilakukan antara lain:
   \item \textbf{Adaptive threshold}: mengembangkan sistem yang secara otomatis menyesuaikan threshold modifikasi (\texttt{PAI\_MODIFY\_THRESHOLD}) berdasarkan ukuran file dan kompleksitas perubahan.
   \item \textbf{Evaluasi lanjutan}: melakukan pengujian terstandardisasi dengan skenario lebih beragam, termasuk proyek nyata berskala kecil-menengah, untuk memperoleh gambaran dampak produktivitas yang lebih komprehensif.
   \item \textbf{Dashboard monitoring}: menambahkan dashboard web untuk memantau penggunaan API key, statistik sesi, skor kualitas rata-rata, dan metrik performa lainnya.
-\end{itemize}
+\end{enumerate}
