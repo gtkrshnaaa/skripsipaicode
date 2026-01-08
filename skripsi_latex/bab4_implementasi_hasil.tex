@@ -342,56 +342,13 @@ Selain jumlah langkah, pengukuran waktu eksekusi juga dilakukan untuk memvalidas
 
 Peningkatan kecepatan paling teramati terjadi pada tugas-tugas generatif (seperti setup proyek awal), di mana kecepatan mengetik manusia menjadi hambatan utama (\textit{bottleneck}) dibandingkan kecepatan generasi teks oleh LLM.
 
-\subsubsection{Visualisasi Alur Kerja}
-Perbedaan fundamental dalam alur kerja divisualisasikan pada Gambar~\ref{fig:workflow-comparison}. Pada metode manual, manusia bertindak sebagai eksekutor yang harus berpindah-pindah konteks antara berpikir, mengetik, dan mengecek referensi. Pada metode Paicode, manusia bertindak sebagai \textit{supervisor} yang hanya memberikan intensi dan memvalidasi hasil.
+\subsubsection{Transformasi Alur Kerja Pengembangan}
+Perbandingan ini tidak hanya sekadar masalah waktu atau jumlah langkah, melainkan perubahan fundamental dalam model interaksi manusia dan komputer. Pada metode konvensional, pengembang bertindak sebagai eksekutor yang harus terus-menerus memindahkan konteks (\textit{context switching}) antara merancang logika, menulis sintaks, dan melihat dokumentasi.
 
-\begin{figure}[htbp]
-  \centering
-  \begin{tikzpicture}[node distance=1.5cm, auto,
-    manual/.style={rectangle, draw=black, minimum width=2.5cm, minimum height=0.8cm, text centered},
-    agent/.style={rectangle, draw=black, minimum width=2.5cm, minimum height=0.8cm, text centered, rounded corners},
-    arrow/.style={thick,->,>=stealth}
-  ]
-    % Manual Flow
-    \node (m_start) [manual] {Mulai};
-    \node (m_think) [manual, below of=m_start] {Analisis};
-    \node (m_switch) [manual, below of=m_think] {Switch Context};
-    \node (m_type) [manual, below of=m_switch] {Pengetikan Manual};
-    \node (m_debug) [manual, below of=m_type] {Debugging/Fix};
-    \node (m_end) [manual, below of=m_debug] {Selesai};
-    
-    \draw[arrow] (m_start) -- (m_think);
-    \draw[arrow] (m_think) -- (m_switch);
-    \draw[arrow] (m_switch) -- (m_type);
-    \draw[arrow] (m_type) -- (m_debug);
-    \draw[arrow] (m_debug) -- (m_end);
-    
-    % Agent Flow
-    \node (a_start) [agent, right of=m_start, xshift=4cm] {Mulai};
-    \node (a_intent) [agent, below of=a_start] {Intensi (Prompt)};
-    \node (a_agent) [agent, below of=a_intent, minimum height=2.3cm] {Agen Eksekusi Otomatis};
-    \node (a_end) [agent, below of=a_agent, yshift=-1.5cm] {Selesai};
-    
-    \draw[arrow] (a_start) -- (a_intent);
-    \draw[arrow] (a_intent) -- (a_agent);
-    \draw[arrow] (a_agent) -- (a_end);
-    
-    % Labels
-    \node [above of=m_start, yshift=-0.5cm] {\textbf{Workflow Manual}};
-    \node [above of=a_start, yshift=-0.5cm] {\textbf{Workflow Paicode}};
-    
-    % Annotation
-    \draw [dashed, ->] (m_switch) -- node[above, font=\footnotesize] {Dieliminasi} (a_agent);
-    \draw [dashed, ->] (m_type) -- node[above, font=\footnotesize] {Diotomasi} (a_agent);
-    
-  \end{tikzpicture}
-  \caption{Perbandingan alur kerja Manual vs Paicode. Paicode mengeliminasi \textit{context switching} dan beban pengetikan.}
-  \label{fig:workflow-comparison}
-\end{figure}
+Sebaliknya, Paicode memungkinkan pengembang naik level menjadi \textit{supervisor}. Pengembang cukup menyatakan intensi ("buatkan proyek"), dan agen mengambil alih beban kognitif untuk menerjemahkan intensi tersebut menjadi serangkaian operasi teknis. Hal ini menciptakan alur kerja yang lebih tenang dan terfokus pada tujuan akhir (\textit{goal-oriented}), bukan pada detail implementasi yang repetitif.
 
-\subsection{Keterbatasan Sistem}
-Meskipun berhasil memenuhi tujuan utama, sistem masih memiliki keterbatasan:
-\begin{enumerate}
-    \item Kualitas kode sangat bergantung pada model LLM yang digunakan. Jika API sedang mengalami degradasi layanan, performa agen ikut menurun.
-    \item Konteks jendela (\textit{context window}) terbatas. Untuk proyek skala besar dengan ratusan berkas, agen belum bisa "melihat" keseluruhan proyek sekaligus tanpa strategi \textit{retrieval augmented generation} (RAG) yang lebih canggih.
-\end{enumerate}
+\subsection{Tinjauan Akhir dan Keterbatasan}
+
+Meskipun sistem telah berhasil membuktikan efisiensinya sebagaimana terlihat pada data pengujian, terdapat beberapa batasan alami yang perlu dipahami dalam penerapan arsitektur berbasis LLM ini. Kualitas kode yang dihasilkan sangat bergantung pada performa model bahasa yang digunakan sebagai "otak" sistem. Selain itu, untuk proyek dengan skala basis kode yang sangat masif, jendela konteks (\textit{context window}) model belum sepenuhnya mampu memuat seluruh struktur proyek secara simultan tanpa strategi pengambilan informasi (\textit{retrieval}) yang lebih kompleks.
+
+Secara keseluruhan, hasil implementasi dan pengujian di bab ini mengonfirmasi bahwa pendekatan \textit{Agentic AI} melalui antarmuka CLI mampu memberikan alternatif yang valid dan efisien untuk mempercepat siklus pengembangan perangkat lunak, terutama pada fase-fase awal (\textit{scaffolding}) dan pemeliharaan rutin. Temuan-temuan ini menjadi landasan kuat untuk menarik kesimpulan mengenai efektivitas sistem yang akan dipaparkan pada bab selanjutnya.
