@@ -112,9 +112,25 @@
   \renewcommand{\footrulewidth}{0pt} % No footer rule
 }
 
-% Style for mainmatter: page number at bottom center (default)
+% Redefine plain to be same as frontmatterstyle (for TOC, LOF, LOT)
+\fancypagestyle{plain}{
+  \fancyhf{} % Clear all headers and footers
+  \fancyhead[R]{\thepage} % Page number at top right
+  \renewcommand{\headrulewidth}{0pt} % No header rule
+  \renewcommand{\footrulewidth}{0pt} % No footer rule
+}
+
+% Style for mainmatter: page number at bottom center
 \fancypagestyle{mainmatterstyle}{
   \fancyhf{} % Clear all headers and footers
+  \fancyfoot[C]{\thepage} % Page number at bottom center
+  \renewcommand{\headrulewidth}{0pt} % No header rule
+  \renewcommand{\footrulewidth}{0pt} % No footer rule
+}
+
+% Style for chapter pages in mainmatter
+\fancypagestyle{chapterplain}{
+  \fancyhf{} % Clear all headers and footers  
   \fancyfoot[C]{\thepage} % Page number at bottom center
   \renewcommand{\headrulewidth}{0pt} % No header rule
   \renewcommand{\footrulewidth}{0pt} % No footer rule
@@ -169,24 +185,15 @@
 % --- Table of contents & lists (viii, ix, x) ---
 \cleardoublepage
 \addcontentsline{toc}{chapter}{DAFTAR ISI}
-\begingroup
-\let\ps@plain\ps@frontmatterstyle
 \tableofcontents
-\endgroup
 
 \cleardoublepage
 \addcontentsline{toc}{chapter}{DAFTAR GAMBAR}
-\begingroup
-\let\ps@plain\ps@frontmatterstyle
 \listoffigures
-\endgroup
 
 \cleardoublepage
 \addcontentsline{toc}{chapter}{DAFTAR TABEL}
-\begingroup
-\let\ps@plain\ps@frontmatterstyle
 \listoftables
-\endgroup
 
 % --- Abstract (xi, xii) ---
 \chapter*{INTISARI}
@@ -213,6 +220,13 @@ We adopt a Research and Development approach with iterative prototyping. The eva
 % --- Switch to arabic numbering for main content ---
 \cleardoublepage
 \pagenumbering{arabic}
+% Redefine plain for chapter pages in mainmatter
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
 \pagestyle{mainmatterstyle} % Apply mainmatter style (page number bottom center)
 
 % --- Chapters ---
