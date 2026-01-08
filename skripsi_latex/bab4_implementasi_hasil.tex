@@ -9,7 +9,7 @@ Bagian ini menguraikan tahapan realisasi sistem Paicode, mulai dari konfigurasi 
 \subsection{Lingkungan Implementasi}
 Sistem diimplementasikan pada lingkungan sistem operasi Ubuntu dengan spesifikasi konfigurasi seperti tercantum pada Tabel~\ref{tab:konfigurasi}.
 
-\begin{longtable}{@{}p{0.30\textwidth}p{0.64\textwidth}@{}}
+\begin{longtable}{@{}p{0.30\textwidth}p{0.68\textwidth}@{}}
   \caption{Konfigurasi Lingkungan Implementasi}\label{tab:konfigurasi}\\
   \toprule
   \textbf{Komponen} & \textbf{Spesifikasi} \\
@@ -77,7 +77,7 @@ Pengujian fungsional dilakukan dengan menjalankan serangkaian skenario tugas pem
 
 Seluruh interaksi selama pengujian direkam oleh sistem log yang secara otomatis menyertakan penanda waktu (\textit{timestamp}) pada setiap operasi. Skenario yang diuji dirangkum dalam Tabel~\ref{tab:skenario-uji}.
 
-\begin{longtable}{@{}p{0.20\textwidth}p{0.60\textwidth}p{0.15\textwidth}@{}}
+\begin{longtable}{@{}p{0.20\textwidth}p{0.60\textwidth}p{0.18\textwidth}@{}}
   \caption{Skenario Pengujian Fungsional}\label{tab:skenario-uji}\\
   \toprule
   \textbf{Skenario} & \textbf{Deskripsi Aktivitas} & \textbf{Metode Validasi} \\
@@ -180,7 +180,7 @@ Skenario keamanan memiliki waktu respons tercepat (rata-rata 6.0 detik) karena b
 
 Seluruh hasil pengukuran waktu dari ketiga percobaan untuk setiap skenario dirangkum dalam Tabel~\ref{tab:hasil-komprehensif}. Data ini menunjukkan sebaran waktu yang realistis mengingat ketergantungan sistem pada layanan API eksternal.
 
-\begin{longtable}{@{}p{0.05\textwidth}p{0.35\textwidth}p{0.13\textwidth}p{0.13\textwidth}p{0.13\textwidth}p{0.10\textwidth}@{}}
+\begin{longtable}{@{}p{0.05\textwidth}p{0.35\textwidth}p{0.13\textwidth}p{0.13\textwidth}p{0.13\textwidth}p{0.12\textwidth}@{}}
   \caption{Hasil Pengukuran Waktu Eksekusi (3 Percobaan)}\label{tab:hasil-komprehensif}\\
   \toprule
   \textbf{No} & \textbf{Skenario} & \textbf{Perc. 1 (s)} & \textbf{Perc. 2 (s)} & \textbf{Perc. 3 (s)} & \textbf{Avg ($\lambda$)} \\
@@ -202,7 +202,7 @@ Berdasarkan Tabel~\ref{tab:hasil-komprehensif}, terlihat bahwa deviasi waktu ant
 
 Selain performa waktu, indikator keberhasilan kualitatif lainnya dirangkum dalam Tabel~\ref{tab:metrik-hasil-summary}.
 
-\begin{longtable}{@{}p{0.35\textwidth}p{0.25\textwidth}p{0.30\textwidth}@{}}
+\begin{longtable}{@{}p{0.35\textwidth}p{0.25\textwidth}p{0.38\textwidth}@{}}
   \caption{Ringkasan Indikator Keberhasilan Selepas 3 Percobaan}\label{tab:metrik-hasil-summary}\\
   \toprule
   \textbf{Metrik} & \textbf{Nilai Capaian} & \textbf{Keterangan} \\
