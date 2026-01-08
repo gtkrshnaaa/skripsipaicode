@@ -30,23 +30,20 @@ Tabel~\ref{tab:perbandingan-penelitian} merangkum perbedaan antara penelitian-pe
   \centering
   \caption{Perbandingan Penelitian Terdahulu dengan Penelitian yang Dilakukan}
   \label{tab:perbandingan-penelitian}
-  \begin{tabular}{@{}p{0.22\textwidth}p{0.35\textwidth}p{0.35\textwidth}@{}}
+  \small
+  \begin{tabular}{@{}lp{0.14\textwidth}p{0.16\textwidth}p{0.15\textwidth}p{0.13\textwidth}p{0.12\textwidth}p{0.12\textwidth}@{}}
     \toprule
-    \textbf{Aspek} & \textbf{Penelitian Terdahulu} & \textbf{Penelitian Ini (Paicode)} \\
+    \textbf{Penelitian} & \textbf{Platform} & \textbf{Arsitektur} & \textbf{Keamanan} & \textbf{Transparansi} & \textbf{Efisiensi} & \textbf{Interaktivitas} \\
     \midrule
-    \textbf{Platform} & IDE-based (Copilot), Web-based (ChatGPT Code Interpreter), Container-based (OpenDevin) & CLI native, berjalan langsung di terminal Linux tanpa container \\
+    Copilot & IDE-based & Chat-loop iteratif & Tidak eksplisit & Black-box & High token & Passive \\
     \midrule
-    \textbf{Arsitektur Agen} & Chat-loop iteratif (10-20 API calls) atau fully autonomous & Single-Shot Intelligence (2 phases: planning + execution) \\
+    ChatGPT & Web-based & Chat-loop & Tidak eksplisit & Black-box & High token & Passive \\
     \midrule
-    \textbf{Keamanan Lokal} & Sandboxed container (OpenDevin) atau tidak ada kontrol eksplisit (Copilot) & Path security policy + diff-based guardrails (threshold 500 baris, 50\% ratio) \\
+    OpenDevin & Container & Fully autonomous & Sandboxed & Verbose logs & Resource-intensive & Autonomous \\
     \midrule
-    \textbf{Transparansi} & Black-box suggestions (Copilot) atau verbose logs (SWE-agent) & Explicit JSON planning phase dengan user approval \\
+    SWE-agent & General & Autonomous & Sandboxed & Verbose logs & Resource-intensive & Autonomous \\
     \midrule
-    \textbf{Efisiensi} & High token consumption (chat-loop) atau resource-intensive (full containers) & Token-optimized (reduksi round-trip) dan lightweight (native OS) \\
-    \midrule
-    \textbf{Interaktivitas} & Passive suggestions (Copilot) atau fully autonomous (OpenDevin) & Semi-autonomous dengan interrupt handling (Ctrl+C) \\
-    \midrule
-    \textbf{Fokus Penelitian} & General-purpose coding atau issue-solving automation & Secure, efficient, transparent automation untuk developer workflows \\
+    \textbf{Paicode} & \textbf{CLI native} & \textbf{Single-Shot (2 phases)} & \textbf{Path security + diff} & \textbf{JSON planning} & \textbf{Token-optimized} & \textbf{Semi-autonomous + Ctrl+C} \\
     \bottomrule
   \end{tabular}
 \end{table}
