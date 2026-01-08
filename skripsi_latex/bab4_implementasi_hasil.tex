@@ -176,7 +176,7 @@ Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup 
 \textbf{Analisis Log}:
 Skenario keamanan memiliki waktu respons tercepat (rata-rata 6.0 detik) karena blokir terjadi di sisi klien (\textit{workspace.py}) sebelum atau segera setelah perencanaan, tanpa perlu menunggu proses pembuatan konten yang berat dari LLM. Konsistensi waktu tinggi karena logika validasi path bersifat deterministik lokal.
 
-\subsubsection{Hasil Pengujian Komprehensif (3 Percobaan)}
+\subsubsection{Hasil Pengujian Menyeluruh (3 Percobaan)}
 
 Seluruh hasil pengukuran waktu dari ketiga percobaan untuk setiap skenario dirangkum dalam Tabel~\ref{tab:hasil-komprehensif}. Data ini menunjukkan sebaran waktu yang realistis mengingat ketergantungan sistem pada layanan API eksternal.
 
@@ -223,7 +223,7 @@ Selain performa waktu, indikator keberhasilan kualitatif lainnya dirangkum dalam
 Bagian ini membahas analisis mendalam terhadap hasil implementasi dan pengujian yang telah dilakukan, serta membandingkannya dengan metode manual. Analisis ini didukung oleh data log sistem yang merekam waktu eksekusi secara presisi (\textit{timestamped logs}), memberikan data empiris untuk klaim efisiensi yang diajukan.
 
 \subsection{Efisiensi Mekanisme Perencanaan Otomatis}
-Hasil pengujian menunjukkan bahwa arsitektur \textit{Single-Shot Intelligence} (SSI) mampu menyelesaikan tugas pemrograman kompleks dengan interaksi minimal. Dengan memadatkan proses "berpikir" (\textit{reasoning}) ke dalam satu fase perencanaan yang komprehensif, sistem dapat:
+Hasil pengujian menunjukkan bahwa arsitektur \textit{Single-Shot Intelligence} (SSI) mampu menyelesaikan tugas pemrograman kompleks dengan interaksi minimal. Dengan memadatkan proses "berpikir" (\textit{reasoning}) ke dalam satu fase perencanaan yang utuh, sistem dapat:
 \begin{enumerate}
     \item Menghasilkan rencana eksekusi lengkap yang dapat diverifikasi pengguna sebelum dijalankan, meningkatkan kepercayaan dan kontrol.
     \item Mengurangi beban kognitif pengguna karena tidak perlu membimbing agen langkah demi langkah secara manual.
