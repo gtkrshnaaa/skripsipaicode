@@ -8,15 +8,10 @@ Penelitian ini menghasilkan prototipe \textbf{Paicode}, sebuah agen AI berbasis 
 Berdasarkan implementasi dan evaluasi awal, beberapa poin kesimpulan dapat dirangkum sebagai berikut:
 
 \begin{enumerate}
-  \item Arsitektur \textit{Single-Shot Intelligence} dengan 5 komponen (klasifikasi intensi, acknowledgment dinamis, fase perencanaan JSON, fase eksekusi adaptif 1-3 subfase, dan saran langkah berikutnya) memberikan struktur yang efisien dan terukur untuk setiap tugas pemrograman.
-  \item Integrasi agen \textit{stateful} di lingkungan CLI efektif dalam mempercepat beberapa tugas rekayasa perangkat lunak berulang (pembuatan struktur proyek, pembuatan dan pembacaan berkas, serta modifikasi terarah) dengan tetap menjaga keterlacakan langkah.
-  \item Mekanisme pembatasan perubahan berbasis \textit{diff} pada perintah \texttt{MODIFY} dengan threshold ganda (500 baris absolut dan 50\% ratio maksimal, dapat dikonfigurasi via \texttt{PAI\_MODIFY\_THRESHOLD} dan \texttt{PAI\_MODIFY\_MAX\_RATIO}) membantu mengurangi risiko penimpaan besar yang tidak diinginkan dengan atomic write menggunakan tempfile.
-  \item Fase perencanaan JSON dalam \textit{Single-Shot Intelligence} membantu LLM merencanakan pendekatan yang lebih fokus dan terstruktur, meningkatkan kualitas hasil eksekusi.
-  \item Sistem eksekusi adaptif dengan 1-3 subfase berdasarkan kompleksitas tugas teramati lebih efisien secara operasional dibandingkan pendekatan tradisional yang memerlukan banyak panggilan API berulang.
-  \item Manajemen API key tunggal menyederhanakan konfigurasi dan meningkatkan keandalan sistem.
-  \item Fitur interaktif seperti \textit{interrupt handling} (Ctrl+C) dan pencatatan sesi ke \texttt{.pai\_history} meningkatkan pengalaman pengguna dan memudahkan debugging.
-  \item Kebijakan keamanan path berhasil memblokir akses ke direktori sensitif (mis. \texttt{.git}, \texttt{venv}, \texttt{.env}) dan mencegah \textit{path traversal}, mendukung aspek privasi dan kendali lokal.
-  \item Pemakaian pip/venv, Makefile, dan LaTeX mendukung keterulangan eksperimen serta dokumentasi terstruktur untuk keperluan akademik.
+  \item \textbf{Desain Arsitektur Sistem}: Penelitian ini berhasil merancang arsitektur \textit{Single-Shot Intelligence} (SSI) yang memadukan klasifikasi intensi, perencanaan terstruktur dalam format JSON, dan eksekusi adaptif. Arsitektur ini terbukti mampu memberikan kerangka kerja yang jelas bagi agen AI untuk menyelesaikan tugas pemrograman multi-langkah di lingkungan CLI secara otonom namun tetap terkendali.
+  \item \textbf{Implementasi Kapabilitas dan Keamanan}: Sistem Paicode telah berhasil diimplementasikan dengan kemampuan observasi proyek (\texttt{TREE}, \texttt{LIST\_PATH}), manipulasi berkas, dan modifikasi kode terarah. Penerapan kebijakan \textit{Path Security} dan pembatasan modifikasi berbasis \textit{diff} (threshold ganda) terbukti efektif dalam memblokir akses ke direktori sensitif dan mencegah perubahan destruktif masif, menjawab kebutuhan akan keamanan agen yang berjalan di mesin lokal.
+  \item \textbf{Fitur Interaktif}: Integrasi fitur-fitur interaktif seperti \textit{interrupt handling} (Ctrl+C) untuk penghentian darurat dan pencatatan sesi otomatis ke \texttt{.pai\_history} berhasil meningkatkan pengalaman pengguna dan transparansi proses, memungkinkan pengguna untuk mempertahankan kendali penuh atas tindakan agen.
+  \item \textbf{Evaluasi Kinerja}: Berdasarkan hasil pengujian fungsional dengan skenario pemrograman representatif, Paicode menunjukkan peningkatan efisiensi yang signifikan (hingga 25x lebih cepat untuk tugas \textit{scaffolding}) dan tingkat keberhasilan eksekusi 100\% pada kondisi jaringan stabil. Sistem terbukti andal dalam menerjemahkan intensi pengguna menjadi aksi nyata dengan overhead minimal dibandingkan metode manual.
 \end{enumerate}
 
 Secara arsitektural, Paicode memiliki karakteristik keunggulan dan batasan sebagai berikut:
