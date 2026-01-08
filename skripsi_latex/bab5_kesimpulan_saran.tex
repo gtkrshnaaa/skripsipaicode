@@ -26,14 +26,7 @@ Kinerja dan kualitas hasil tetap bergantung pada kemampuan LLM eksternal (Gemini
 Beberapa saran pengembangan lanjutan yang dapat dilakukan antara lain:
 
 \begin{enumerate}
-  \item \textbf{Dukungan multi-LLM}: menambahkan opsi pemilihan model dan penyedia LLM alternatif (OpenAI GPT, Anthropic Claude, Llama, dll.) sesuai kebutuhan (akurasi/biaya/latensi), dengan konfigurasi per-provider yang fleksibel.
-  \item \textbf{Optimasi fase perencanaan}: mengembangkan mekanisme caching untuk hasil perencanaan JSON yang serupa, mengurangi waktu respons untuk tugas berulang.
-  \item \textbf{Peningkatan validasi hasil}: menambahkan automated testing (unit test, integration test) sebagai bagian dari validasi hasil eksekusi untuk verifikasi kualitas yang lebih objektif.
-  \item \textbf{Integrasi editor}: menyediakan jembatan ringan ke IDE (mis. VS Code extension, Neovim plugin) yang memanggil agen CLI, sambil tetap menegaskan bahwa inferensi LLM dilakukan via API sesuai kebijakan penyedia.
-  \item \textbf{Peningkatan keamanan}: memperluas kebijakan \textit{allow/deny list} \textit{path}, menambah konfirmasi eksplisit untuk operasi berisiko (mis. \texttt{RM}), dan memperketat validasi konten sebelum penulisan berkas.
-  \item \textbf{Memori jangka panjang}: menambahkan ringkasan sesi dan penyimpanan konteks terkurasi (vector database) agar agen dapat mempelajari preferensi proyek pengguna secara berkelanjutan.
-  \item \textbf{Fitur kolaborasi}: menambahkan dukungan untuk sesi multi-user dengan shared context, memungkinkan tim untuk bekerja bersama dengan agen.
-  \item \textbf{Adaptive threshold}: mengembangkan sistem yang secara otomatis menyesuaikan threshold modifikasi (\texttt{PAI\_MODIFY\_THRESHOLD}) berdasarkan ukuran file dan kompleksitas perubahan.
-  \item \textbf{Evaluasi lanjutan}: melakukan pengujian terstandardisasi dengan skenario lebih beragam, termasuk proyek nyata berskala kecil-menengah, untuk memperoleh gambaran dampak produktivitas yang lebih komprehensif.
-  \item \textbf{Dashboard monitoring}: menambahkan dashboard web untuk memantau penggunaan API key, statistik sesi, skor kualitas rata-rata, dan metrik performa lainnya.
+  \item \textbf{Dukungan multi-LLM}: menambahkan opsi pemilihan model dan penyedia LLM alternatif (seperti OpenAI GPT, Anthropic Claude, atau Llama lokal) yang dapat dikonfigurasi, sehingga pengguna dapat menyeimbangkan antara akurasi, biaya, dan latensi sesuai kebutuhan proyek.
+  \item \textbf{Peningkatan keamanan}: memperluas kebijakan \textit{path security} dengan mekanisme \textit{allow/deny list} yang lebih granular, serta menambahkan konfirmasi eksplisit untuk operasi berisiko tinggi (seperti \texttt{RM}) guna mencegah potensi kehilangan data yang tidak disengaja.
+  \item \textbf{Peningkatan validasi hasil}: mengintegrasikan kerangka kerja pengujian otomatis (\textit{automated testing}) sebagai bagian dari validasi hasil eksekusi agen, sehingga kebenaran kode yang dihasilkan dapat diverifikasi secara objektif sebelum diterima oleh pengguna.
 \end{enumerate}
