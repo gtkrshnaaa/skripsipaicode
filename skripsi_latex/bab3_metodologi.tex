@@ -77,8 +77,6 @@ Berdasarkan identifikasi masalah dan studi literatur, sistem dirancang untuk mem
     \item Sistem harus mampu melakukan operasi berkas (membaca, menulis, membuat, menghapus) di dalam direktori kerja proyek.
     \item Sistem harus mampu memodifikasi konten berkas kode secara spesifik menggunakan mekanisme \textit{diff}-based editing tanpa menimpa seluruh berkas.
     \item Sistem harus memiliki fase perencanaan (\textit{planning phase}) sebelum mengeksekusi tindakan yang berisiko mengubah berkas.
-    \item Sistem harus menyimpan riwayat percakapan untuk mempertahankan konteks antar sesi interaksi.
-    \item Sistem harus memberikan mekanisme \textit{interrupt handling} (Ctrl+C) untuk menghentikan respons tanpa keluar dari sesi.
 \end{enumerate}
 
 \subsection{Kebutuhan Non-Fungsional}
@@ -86,8 +84,6 @@ Berdasarkan identifikasi masalah dan studi literatur, sistem dirancang untuk mem
     \item \textbf{Keamanan}: Sistem wajib memblokir akses ke direktori sensitif (\texttt{.git}, \texttt{.env}, \texttt{node\_modules}) dan mencegah operasi pada path di luar direktori proyek untuk menghindari kerusakan sistem.
     \item \textbf{Efisiensi}: Sistem harus meminimalkan jumlah panggilan API melalui arsitektur \textit{Single-Shot Intelligence} untuk mengurangi biaya operasional dan latensi respons.
     \item \textbf{Transparansi}: Sistem harus memberikan visualisasi yang jelas mengenai rencana tindakan dan status eksekusi melalui antarmuka terminal yang terstruktur.
-    \item \textbf{Keandalan}: Sistem harus dapat menangani error dengan graceful degradation dan memberikan pesan error yang informatif.
-    \item \textbf{Portabilitas}: Sistem harus dapat berjalan pada berbagai distribusi Linux dengan dependensi minimal.
 \end{enumerate}
 
 \section{Perancangan Sistem}
