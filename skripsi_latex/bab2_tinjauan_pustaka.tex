@@ -18,7 +18,7 @@ Perkembangan alat bantu pemrograman berbasis AI berkembang pesat dalam beberapa 
 Dibandingkan dengan solusi di atas, Paicode menawarkan kebaruan pada kombinasi arsitektur \textit{local-first} yang ringan namun terstruktur:
 \begin{enumerate}
     \item \textbf{Keamanan Terkendali}: Tidak seperti agen otonom penuh yang sering berjalan di sandboxed container karena risiko tinggi, Paicode dirancang aman untuk berjalan di \textit{host} utama berkat \textit{path security policy} dan \textit{diff-based guardrails}.
-    \item \textbf{Efisiensi Token}: Dengan arsitektur perencanaan \textit{single-shot}, Paicode mengurangi \textit{round-trip} percakapan yang tidak perlu, berbeda dengan model \textit{chat} standar.
+    \item \textbf{Efisiensi Interaksi}: Dengan arsitektur perencanaan \textit{single-shot}, Paicode mengurangi \textit{round-trip} percakapan yang tidak perlu, berbeda dengan model \textit{chat} standar yang sering kali membutuhkan banyak iterasi.
     \item \textbf{Transparansi Rencana}: Pengguna dapat melihat rencana aksi (dalam format JSON) sebelum eksekusi masif dilakukan, memberikan kontrol lebih baik daripada model \textit{black-box}.
 \end{enumerate}
 
@@ -43,7 +43,7 @@ Tabel~\ref{tab:perbandingan-penelitian} merangkum perbedaan antara penelitian-pe
     \midrule
     SWE-agent & General & Auto\-nomous & Sand\-boxed & Verbose logs & Resource-intensive & Auto\-nomous \\
     \midrule
-    \textbf{Paicode} & \textbf{CLI native} & \textbf{Single-Shot (2 phases)} & \textbf{Path security + diff} & \textbf{JSON planning} & \textbf{Token-optimized} & \textbf{Semi-auto\-nomous + Ctrl+C} \\
+    \textbf{Paicode} & \textbf{CLI native} & \textbf{Single-Shot (2 phases)} & \textbf{Path security + diff} & \textbf{JSON planning} & \textbf{Interaction-optimized} & \textbf{Semi-auto\-nomous + Ctrl+C} \\
     \bottomrule
   \end{tabular}
 \end{table}
