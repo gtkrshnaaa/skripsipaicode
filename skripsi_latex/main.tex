@@ -43,6 +43,13 @@
 \geometry{a4paper, top=3cm, left=4cm, bottom=3cm, right=3cm, headheight=15pt}
 \onehalfspacing
 
+% --- Remove extra paragraph spacing for consistency ---
+\setlength{\parskip}{0pt} % No extra space between paragraphs
+\setlength{\parindent}{1em} % Keep paragraph indentation
+
+% --- Configure list spacing to match body text ---
+\setlist{nosep, topsep=0pt, partopsep=0pt, itemsep=0pt, parsep=0pt}
+
 % --- Hyperref setup ---
 \hypersetup{
   colorlinks=true,
@@ -87,21 +94,21 @@
   {\thesection}
   {1em}
   {}
-\titlespacing*{\section}{0pt}{12pt}{6pt}
+\titlespacing*{\section}{0pt}{0pt}{0pt}
 
 \titleformat{\subsection}
   {\bfseries\normalsize} % 12pt Bold
   {\thesubsection}
   {1em}
   {}
-\titlespacing*{\subsection}{0pt}{12pt}{6pt}
+\titlespacing*{\subsection}{0pt}{0pt}{0pt}
 
 \titleformat{\subsubsection}
   {\bfseries\normalsize} % 12pt Bold
   {\thesubsubsection}
   {1em}
   {}
-\titlespacing*{\subsubsection}{0pt}{12pt}{6pt}
+\titlespacing*{\subsubsection}{0pt}{0pt}{0pt}
 
 % --- Page styles with fancyhdr ---
 % Style for frontmatter: page number at top right
