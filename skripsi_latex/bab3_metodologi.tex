@@ -36,76 +36,86 @@ Peralatan yang digunakan untuk mendukung penelitian ini terdiri dari perangkat k
   \end{enumerate}
 \end{enumerate}
 
-\section{Prosedur Penelitian}
-Penelitian ini menggunakan pendekatan \textit{Research and Development} (R\&D) dengan strategi \textit{prototyping} iteratif. Tahapan prosedur penelitian dilakukan sebagai berikut:
+\section{Metodologi Penelitian}
+Penelitian ini menggunakan pendekatan \textit{Research and Development} (R\&D) dengan strategi \textit{prototyping} iteratif. Pendekatan ini dipilih karena memungkinkan pengembangan dan evaluasi sistem secara bertahap, dengan siklus pengembangan yang dapat disesuaikan berdasarkan hasil pengujian di setiap iterasi.
+
+\subsection{Tahapan Penelitian}
+Tahapan penelitian dilakukan secara berurutan sebagai berikut:
 
 \begin{enumerate}
-  \item \textbf{Identifikasi Masalah}: Menganalisis keterbatasan alat bantu pemrograman saat ini (ketergantungan pada IDE, masalah privasi cloud, biaya token tinggi) dan merumuskan kebutuhan akan agen CLI lokal yang efisien.
+  \item \textbf{Identifikasi Masalah}: Menganalisis keterbatasan alat bantu pemrograman berbasis AI saat ini, termasuk ketergantungan pada IDE, masalah privasi pada solusi cloud-based, dan biaya token yang tinggi pada arsitektur chat-loop tradisional.
   
-  \item \textbf{Studi Literatur}: Mengumpulkan referensi tentang \textit{agentic AI}, arsitektur \textit{Single-Shot Intelligence}, dan keamanan sistem file lokal.
+  \item \textbf{Studi Literatur}: Mempelajari konsep \textit{agentic AI}, arsitektur \textit{Single-Shot Intelligence}, mekanisme tool-use pada LLM, dan praktik terbaik dalam keamanan sistem file pada lingkungan CLI.
   
-  \item \textbf{Perancangan Sistem}: Merancang arsitektur Paicode, mendefinisikan himpunan perintah (\texttt{READ}, \texttt{WRITE}, dll.), dan merancang kebijakan keamanan \textit{path security}.
+  \item \textbf{Analisis Kebutuhan}: Mendefinisikan kebutuhan fungsional dan non-fungsional sistem berdasarkan identifikasi masalah dan studi literatur.
   
-  \item \textbf{Implementasi Prototipe}: Membangun modul-modul inti secara iteratif:
+  \item \textbf{Perancangan Sistem}: Merancang arsitektur modular, mendefinisikan komponen-komponen utama, alur kerja sistem, dan kebijakan keamanan \textit{path security}.
+  
+  \item \textbf{Implementasi Prototipe}: Membangun sistem secara iteratif dengan pendekatan \textit{incremental development}:
   \begin{enumerate}
-      \item Iterasi 1: Antarmuka CLI dasar dan integrasi LLM.
-      \item Iterasi 2: Implementasi \textit{Workspace Controller} dan \textit{Path Security}.
-      \item Iterasi 3: Implementasi arsitektur \textit{Single-Shot Intelligence} dan mekanisme \textit{diff}-aware.
+      \item Iterasi 1: Antarmuka CLI dasar dan integrasi dengan API Gemini.
+      \item Iterasi 2: Implementasi \textit{Workspace Controller} dan mekanisme \textit{path security}.
+      \item Iterasi 3: Implementasi arsitektur \textit{Single-Shot Intelligence} dan sistem modifikasi berbasis \textit{diff}.
   \end{enumerate}
   
-  \item \textbf{Pengujian dan Evaluasi}:
-  \begin{enumerate}
-      \item Menjalankan skenario tugas pemrograman representatif (pembuatan proyek, modifikasi fitur).
-      \item Mengumpulkan data operasional (waktu eksekusi, jumlah langkah) dan kualitas (keberhasilan kompilasi).
-      \item Mengevaluasi keamanan dengan mencoba skenario akses ilegal ke direktori sensitif.
-  \end{enumerate}
+  \item \textbf{Pengujian Fungsional}: Menjalankan skenario pengujian untuk memvalidasi fungsionalitas sistem, termasuk pembuatan proyek, modifikasi kode, dan refaktorisasi.
   
-  \item \textbf{Analisis Hasil dan Penyusunan Laporan}: Menganalisis hasil pengujian untuk menarik kesimpulan mengenai efektivitas arsitektur yang diusulkan dan menyusun laporan akhir.
+  \item \textbf{Evaluasi Keamanan}: Menguji efektivitas kebijakan \textit{path security} dengan mencoba skenario akses ke direktori sensitif dan path traversal.
+  
+  \item \textbf{Analisis Hasil}: Menganalisis hasil pengujian untuk mengevaluasi efektivitas arsitektur yang diusulkan dan mengidentifikasi area perbaikan.
+  
+  \item \textbf{Dokumentasi}: Menyusun dokumentasi teknis dan laporan penelitian.
 \end{enumerate}
 
-Pemilihan metode \textit{prototyping} memungkinkan validasi cepat terhadap asumsi desain, khususnya dalam hal manajemen state agen dan efektivitas kebijakan keamanan, serta memungkinkan perbaikan berkelanjutan berdasarkan temuan empiris selama fase pengembangan.
+Pemilihan metode \textit{prototyping} iteratif memungkinkan validasi cepat terhadap asumsi desain, khususnya dalam hal efektivitas arsitektur \textit{Single-Shot Intelligence} dan kebijakan keamanan, serta memungkinkan perbaikan berkelanjutan berdasarkan temuan empiris pada setiap iterasi.
 
-\section{Analisis dan Rancangan Sistem}
-Bagian ini menguraikan analisis kebutuhan dan rancangan arsitektur sistem Paicode yang dibangun.
+\section{Analisis Kebutuhan Sistem}
+Berdasarkan identifikasi masalah dan studi literatur, sistem dirancang untuk memenuhi kebutuhan sebagai berikut:
 
-\subsection{Analisis Sistem}
-
-Sistem dirancang untuk memenuhi kebutuhan fungsional dan non-fungsional sebagai berikut:
-
-\textbf{Kebutuhan Fungsional}:
+\subsection{Kebutuhan Fungsional}
 \begin{enumerate}
-    \item Sistem harus dapat menerima instruksi bahasa alami dari pengguna melalui terminal.
-    \item Sistem harus mampu melakukan operasi berkas (baca, tulis, daftar, hapus) di dalam direktori kerja proyek.
-    \item Sistem harus mampu memodifikasi konten berkas kode secara spesifik tanpa menimpa seluruh berkas yang tidak relevan.
-    \item Sistem harus memiliki mekanisme perencanaan (\textit{planning}) sebelum mengeksekusi tindakan berisiko.
+    \item Sistem harus dapat menerima instruksi dalam bahasa alami dari pengguna melalui antarmuka CLI.
+    \item Sistem harus mampu melakukan operasi berkas (membaca, menulis, membuat, menghapus) di dalam direktori kerja proyek.
+    \item Sistem harus mampu memodifikasi konten berkas kode secara spesifik menggunakan mekanisme \textit{diff}-based editing tanpa menimpa seluruh berkas.
+    \item Sistem harus memiliki fase perencanaan (\textit{planning phase}) sebelum mengeksekusi tindakan yang berisiko mengubah berkas.
+    \item Sistem harus menyimpan riwayat percakapan untuk mempertahankan konteks antar sesi interaksi.
+    \item Sistem harus memberikan mekanisme \textit{interrupt handling} (Ctrl+C) untuk menghentikan respons tanpa keluar dari sesi.
 \end{enumerate}
 
-\textbf{Kebutuhan Non-Fungsional}:
+\subsection{Kebutuhan Non-Fungsional}
 \begin{enumerate}
-    \item \textbf{Keamanan}: Sistem wajib memblokir akses ke direktori sensitif (\texttt{.git}, \texttt{.env}) dan mencegah "halusinasi" yang merusak direktori di luar proyek.
-    \item \textbf{Efisiensi}: Sistem harus meminimalkan jumlah panggilan API dan penggunaan token untuk mengurangi biaya dan latensi.
-    \item \textbf{Transparansi}: Sistem harus memberikan umpan balik visual yang jelas mengenai tindakan yang sedang dan telah dilakukan.
+    \item \textbf{Keamanan}: Sistem wajib memblokir akses ke direktori sensitif (\texttt{.git}, \texttt{.env}, \texttt{node\_modules}) dan mencegah operasi pada path di luar direktori proyek untuk menghindari kerusakan sistem.
+    \item \textbf{Efisiensi}: Sistem harus meminimalkan jumlah panggilan API melalui arsitektur \textit{Single-Shot Intelligence} untuk mengurangi biaya operasional dan latensi respons.
+    \item \textbf{Transparansi}: Sistem harus memberikan visualisasi yang jelas mengenai rencana tindakan dan status eksekusi melalui antarmuka terminal yang terstruktur.
+    \item \textbf{Keandalan}: Sistem harus dapat menangani error dengan graceful degradation dan memberikan pesan error yang informatif.
+    \item \textbf{Portabilitas}: Sistem harus dapat berjalan pada berbagai distribusi Linux dengan dependensi minimal.
 \end{enumerate}
 
-\subsection{Rancangan Arsitektur}
-Arsitektur Paicode dirancang secara modular dengan komponen-komponen utama sebagai berikut:
+\section{Perancangan Sistem}
+Bagian ini menjelaskan arsitektur sistem, komponen-komponen utama, dan alur kerja sistem Paicode.
+
+\subsection{Arsitektur Modular}
+Arsitektur Paicode dirancang secara modular dengan pemisahan tanggung jawab yang jelas antar komponen. Arsitektur modular ini memudahkan pengembangan, pengujian, dan pemeliharaan sistem. Komponen-komponen utama sistem adalah:
 
 \begin{enumerate}
-  \item \textbf{Antarmuka CLI (\texttt{cli.py})}: Menangani input pengguna, argumen baris perintah, dan inisialisasi sesi.
-  \item \textbf{Agen Cerdas (\texttt{agent.py})}: Mengimplementasikan logika \textit{Single-Shot Intelligence}, mencakup klasifikasi intensi, perencanaan JSON, dan orkestrasi eksekusi adaptif (1-3 subfase). Modul ini juga mengelola memori percakapan jangka pendek.
-  \item \textbf{Jembatan LLM (\texttt{llm.py})}: Mengelola komunikasi dengan API Gemini, termasuk manajemen API key tunggal dan sanitasi output.
-  \item \textbf{Pengatur Workspace (\texttt{workspace.py})}: Bertindak sebagai penjaga gerbang (\textit{gatekeeper}) untuk semua operasi sistem file. Modul ini menegakkan \textit{path security policy} (whitelist/blacklist path) dan mengelola mekanisme modifikasi berbasis \textit{diff} dengan threshold aman.
+  \item \textbf{Antarmuka CLI (\texttt{cli.py})}: Menangani input pengguna, parsing argumen baris perintah, dan inisialisasi sesi interaktif.
+  
+  \item \textbf{Agen Cerdas (\texttt{agent.py})}: Mengimplementasikan logika \textit{Single-Shot Intelligence}, mencakup klasifikasi intensi (membedakan percakapan biasa dan tugas pemrograman), fase perencanaan JSON terstruktur, dan orkestrasi eksekusi adaptif yang dapat berjalan dalam 1-3 subfase tergantung kompleksitas tugas. Modul ini juga mengelola memori percakapan jangka pendek.
+  
+  \item \textbf{Jembatan LLM (\texttt{llm.py})}: Mengelola komunikasi dengan API Gemini, termasuk manajemen API key dan sanitasi output untuk memastikan response dalam format yang konsisten.
+  
+  \item \textbf{Pengatur Workspace (\texttt{workspace.py})}: Bertindak sebagai \textit{gatekeeper} untuk semua operasi sistem file. Modul ini menegakkan \textit{path security policy} (whitelist/blacklist direktori) dan mengelola mekanisme modifikasi berbasis \textit{diff} dengan threshold keamanan (maksimal 500 baris atau 50\% dari total baris berkas).
+  
   \item \textbf{Manajemen Konfigurasi (\texttt{config.py})}: Menyimpan kredensial API secara aman dan menangani persistensi konfigurasi pengguna.
-  \item \textbf{Tampilan UI (\texttt{ui.py})}: Mengelola rendering output yang kaya (\textit{rich text}) untuk pengalaman pengguna yang lebih baik di terminal.
+  
+  \item \textbf{Tampilan UI (\texttt{ui.py})}: Mengelola rendering output terminal menggunakan pustaka \texttt{rich}, termasuk syntax highlighting, tabel terstruktur, dan spinner status untuk meningkatkan pengalaman pengguna.
 \end{enumerate}
 
-\subsection{Visualisasi Interaksi Modul}
+\subsection{Deskripsi Modul}
+Tabel berikut merangkum tanggung jawab utama dari setiap modul dalam sistem:
 
-Berikut adalah rincian tanggung jawab dari setiap modul dalam sistem:
-
-% Tabel 3.1: Daftar modul dan dependensi
 \begin{longtable}{@{}p{0.25\textwidth}p{0.70\textwidth}@{}}
-  \caption{Daftar Modul dan Tanggung Jawab}\label{tab:diagram-modul}\\
+  \caption{Daftar Modul dan Tanggung Jawab Utama}\label{tab:diagram-modul}\\
   \toprule
   \textbf{Modul} & \textbf{Tanggung Jawab Utama} \\
   \midrule
@@ -114,19 +124,18 @@ Berikut adalah rincian tanggung jawab dari setiap modul dalam sistem:
   \textbf{Modul} & \textbf{Tanggung Jawab Utama} \\
   \midrule
   \endhead
-  \texttt{cli.py} & Entry point, parsing argumen. \\
-  \texttt{agent.py} & Logika bisnis utama, perencanaan (\textit{planning}), eksekusi (\textit{execution loop}). \\
-  \texttt{llm.py} & Abstraksi API Gemini, manajemen token. \\
-  \texttt{workspace.py} & Operasi I/O berkas, penegakan kebijakan path, penerapan \textit{diff}. \\
-  \texttt{config.py} & Penyimpanan dan validasi API Key. \\
-  \texttt{ui.py} & Rendering output, spinner status, syntax highlighting. \\
+  \texttt{cli.py} & Entry point aplikasi, parsing argumen CLI, inisialisasi sesi. \\
+  \texttt{agent.py} & Logika bisnis utama, klasifikasi intensi, perencanaan terstruktur (JSON), orkestrasi eksekusi adaptif, manajemen memori percakapan. \\
+  \texttt{llm.py} & Abstraksi komunikasi dengan API Gemini, manajemen token, sanitasi response. \\
+  \texttt{workspace.py} & Operasi I/O berkas, penegakan kebijakan \textit{path security}, penerapan modifikasi berbasis \textit{diff} dengan threshold keamanan. \\
+  \texttt{config.py} & Penyimpanan aman dan validasi API Key, manajemen konfigurasi pengguna. \\
+  \texttt{ui.py} & Rendering output terminal dengan \texttt{rich}, syntax highlighting, visualisasi status. \\
   \bottomrule
 \end{longtable}
 
-Diagram alur interaksi umum dalam satu sesi (\textit{turn}) adalah sebagai berikut:
+\subsection{Alur Kerja Sistem}
+Diagram berikut menggambarkan alur kerja sistem dalam satu sesi interaksi pengguna (satu \textit{turn}):
 
-% Tabel 3.2: Urutan interaksi (sequence) sesi agen
-% Visualisasi Flowchart Alur Sistem (Menggantikan Tabel Sequence)
 \begin{figure}[htbp]
   \centering
   \begin{tikzpicture}[node distance=1.5cm, auto,
@@ -154,6 +163,8 @@ Diagram alur interaksi umum dalam satu sesi (\textit{turn}) adalah sebagai berik
     \draw[arrow] (workspace) -- (finish);
 
   \end{tikzpicture}
-  \caption{Flowchart alur eksekusi perintah dalam arsitektur \textit{Single-Shot} Paicode.}
+  \caption{Flowchart alur eksekusi perintah dalam arsitektur \textit{Single-Shot Intelligence}.}
   \label{fig:flowchart-sistem}
 \end{figure}
+
+Alur kerja dimulai dengan penerimaan instruksi pengguna, kemudian LLM membuat rencana tindakan dalam format JSON terstruktur. Rencana ini divalidasi oleh sistem (termasuk pengecekan \textit{path security}). Jika valid, sistem mengeksekusi langkah-langkah dalam rencana secara berurutan dengan melakukan operasi pada workspace melalui modul \texttt{workspace.py}. Hasil eksekusi disimpan ke riwayat percakapan untuk menjaga konteks.
