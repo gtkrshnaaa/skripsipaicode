@@ -25,6 +25,7 @@
 \usepackage{csquotes}
 \usepackage{nameref}
 \usepackage{indentfirst} % Ensure first paragraph is indented
+\usepackage{fancyhdr} % For custom headers and footers
 % Bibliography using BibTeX (simple and Ubuntu-friendly)
 \usepackage[round]{natbib}
 \renewcommand{\bibname}{DAFTAR PUSTAKA}
@@ -39,7 +40,7 @@
 \pgfplotsset{compat=1.18}
 
 % --- Page setup ---
-\geometry{a4paper, top=3cm, left=4cm, bottom=3cm, right=3cm}
+\geometry{a4paper, top=3cm, left=4cm, bottom=3cm, right=3cm, headheight=15pt}
 \onehalfspacing
 
 % --- Hyperref setup ---
@@ -102,6 +103,23 @@
   {}
 \titlespacing*{\subsubsection}{0pt}{12pt}{6pt}
 
+% --- Page styles with fancyhdr ---
+% Style for frontmatter: page number at top right
+\fancypagestyle{frontmatterstyle}{
+  \fancyhf{} % Clear all headers and footers
+  \fancyhead[R]{\thepage} % Page number at top right
+  \renewcommand{\headrulewidth}{0pt} % No header rule
+  \renewcommand{\footrulewidth}{0pt} % No footer rule
+}
+
+% Style for mainmatter: page number at bottom center (default)
+\fancypagestyle{mainmatterstyle}{
+  \fancyhf{} % Clear all headers and footers
+  \fancyfoot[C]{\thepage} % Page number at bottom center
+  \renewcommand{\headrulewidth}{0pt} % No header rule
+  \renewcommand{\footrulewidth}{0pt} % No footer rule
+}
+
 % --- Document meta (edit these) ---
 \newcommand{\JudulSkripsi}{PAICODE: AGENTIC AI BERBASIS CLI UNTUK OTOMASI AKTIVITAS PEMROGRAMAN DAN PENGEMBANGAN PERANGKAT LUNAK DI LINUX YANG DITENAGAI LLM MELALUI API}
 \newcommand{\NamaMahasiswa}{I PUTU GEDE GILANG TEJA KRISHNA}
@@ -129,6 +147,7 @@
 % --- Title Page (Halaman Judul) ---
 % Start Roman numbering from here (i)
 \pagenumbering{roman}
+\pagestyle{frontmatterstyle} % Apply frontmatter style (page number top right)
 \include{front_halaman_judul}
 
 % Skip page ii (blank/hidden) so Approval starts at iii
@@ -185,6 +204,7 @@ We adopt a Research and Development approach with iterative prototyping. The eva
 % --- Switch to arabic numbering for main content ---
 \cleardoublepage
 \pagenumbering{arabic}
+\pagestyle{mainmatterstyle} % Apply mainmatter style (page number bottom center)
 
 % --- Chapters ---
 \include{bab1_pendahuluan}
