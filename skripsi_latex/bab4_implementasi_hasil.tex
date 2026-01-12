@@ -37,27 +37,125 @@ Implementasi inti Paicode berpusat pada arsitektur \textit{Single-Shot Intellige
 \subsubsection{Antarmuka Pengguna}
 Antarmuka pengguna Paicode dibangun berbasis teks (\textit{Command Line Interface}) dengan memanfaatkan pustaka \texttt{rich} untuk menyajikan visualisasi yang terstruktur dan informatif pada terminal. Desain antarmuka mengutamakan kejelasan informasi dengan penggunaan panel, warna (pada terminal yang mendukung), dan tata letak yang rapi. Tampilan awal saat sesi interaktif dimulai direpresentasikan dalam bentuk ASCII pada Gambar~\ref{lst:ui-startup}.
 
-\begin{figure}[H]
-  \centering
-  \begin{lstlisting}[basicstyle=\ttfamily\small]
-+------------------------------------------------------------------------------+
-|                           Interactive Auto Mode                              |
-+------------------------------------------------------------------------------+
+\begin{center}
+  \begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+user@localhost:~/space/univ/skripsi/devpai/trypai$ pai
++--------------------------- Interactive Auto Mode ----------------------------+
 |                                                                              |
-|          Welcome! I'm Pai, your agentic AI coding companion. *               |
-|      Now powered by Single-Shot Intelligence for maximum efficiency.         |
-|                                                                              |
-|                    Type 'exit' or 'quit' to leave.                           |
-|       Each request uses exactly 2 API calls for optimal performance.         |
-|                                                                              |
-|         * Multi-line input: Alt+Enter for new line, Enter to submit.         |
+|            Welcome! I'm Pai, your agentic AI coding companion. *             |
+|       Now powered by Single-Shot Intelligence for maximum efficiency.        |
+|                 [info]Type 'exit' or 'quit' to leave.[/info]                 |
+|           [info]Each request uses exactly 2 API calls for optimal            |
+|                             performance.[/info]                              |
+|  [info]* Multi-line input: Alt+Enter for new line, Enter to submit.[/info]   |
 |                                                                              |
 +------------------------------------------------------------------------------+
-> _
+* Tip: Use Alt+Enter for new line, Enter to submit
+ 
+user> hai pai, make me a simple calculator in python.
+i Tokens: 194 -> 1
+i Tokens: 170 -> 21
++------------------------------------ Pai -------------------------------------+
+|                                                                              |
+|    Sure thing! A simple Python calculator, got it. Let me cook up a smart    |
+|                                plan for that!                                |
+|                                                                              |
++------------------------------------------------------------------------------+
++---------------------- Call 1/2: Intelligence Planning -----------------------+
+|                                                                              |
+|                           Deep Analysis & Planning                           |
+|                                                                              |
++------------------------------------------------------------------------------+
+i Tokens: 1853 -> 1138
++------------------------------ Planning Results ------------------------------+
+|                                                                              |
+|  Smart Analysis Results:                                                     |
+|  Intent: Create a simple calculator program in Python.                       |
+|  Context Usage: No context utilized                                          |
+|  Files to read: 0                                                            |
+|  Files to create: 1                                                          |
+|  Files to modify: 0                                                          |
+|  Efficiency: Standard approach                                               |
+|                                                                              |
+|  Execution Plan: 3 steps                                                     |
+|                                                                              |
+|  +-----+-----------------+------------------------------------------+        |
+|  | No  | Action          | Purpose                                  |        |
+|  +-----+-----------------+------------------------------------------+        |
+|  |  1  | WRITE calcul... | Create a new Python file containing t... |        |
+|  |  2  | LIST_PATH .     | Verify the creation of 'calculator.py... |        |
+|  |  3  | FINISH calcu... | Inform the user that the simple calcu... |        |
+|  +-----+-----------------+------------------------------------------+        |
+|                                                                              |
+|  Intelligence Assessment:                                                    |
+|  Complexity: simple                                                          |
+|  Estimated time: 1 minute                                                    |
+|                                                                              |
++------------------------------------------------------------------------------+
+i Tokens: 168 -> 20
++------------------------------------ Pai -------------------------------------+
+|                                                                              |
+|  Consider it done! My plan is locked and loaded, ready to craft that Python  |
+|                             calculator for you.                              |
+|                                                                              |
++------------------------------------------------------------------------------+
++------------------- Call 2/2: Smart Execution (1-3 phases) -------------------+
+|                                                                              |
+|                        Adaptive Intelligent Execution                        |
+|                                                                              |
++------------------------------------------------------------------------------+
+i Tokens: 2989 -> 53
++----------------------------- Execution Strategy -----------------------------+
+|                                                                              |
+|                    AI Strategy: 1 execution phase planned                    |
+|                                                                              |
++------------------------------------------------------------------------------+
++----------------------------- Execution Phase 1 ------------------------------+
+|                                                                              |
+|                          Phase 1/1: Implementation                           |
+|                                                                              |
++------------------------------------------------------------------------------+
+i Tokens: 2597 -> 62
+i Tokens: 135 -> 391
++----------------------------- Execution Results ------------------------------+
+|                                                                              |
+|  Executing 3 intelligent actions...                                          |
+|                                                                              |
+|  [1/3] WRITE calculator.py                                                   |
+|  New file written: calculator.py                                             |
+|  Success                                                                     |
+|                                                                              |
+|  [2/3] LIST_PATH .                                                           |
+|  ./calculator.py                                                             |
+|  Success                                                                     |
+|                                                                              |
+|  [3/3] FINISH The simple calculator has been created as 'calculator.py'.     |
+|  V The simple calculator has been created as 'calculator.py'.                |
+|  Success                                                                     |
+|                                                                              |
+|  Execution Summary:                                                          |
+|  Successful: 3/3 (100.0%)                                                    |
+|                                                                              |
++------------------------------------------------------------------------------+
++---------------------------- Mission Accomplished ----------------------------+
+|                                                                              |
+|                      Single-Shot Intelligence: SUCCESS                       |
+|                                                                              |
++------------------------------------------------------------------------------+
+i Tokens: 108 -> 24
++-------------------------- * Next Steps Suggestion ---------------------------+
+|                                                                              |
+|  Great! Now that you have a basic calculator, how about we add some more     |
+|  advanced operations like exponents or square roots?                         |
+|                                                                              |
++------------------------------------------------------------------------------+
+* Tip: Use Alt+Enter for new line, Enter to submit
+ 
+user>
   \end{lstlisting}
-  \caption{Visualisasi Antarmuka CLI Paicode}
+  \captionof{figure}{Visualisasi Antarmuka CLI Paicode}
   \label{lst:ui-startup}
-\end{figure}
+\end{center}
 
 \subsubsection{Manajemen Konfigurasi dan API Key}
 Modul \texttt{config.py} mengelola penyimpanan API key secara aman. Kunci disimpan dalam berkas JSON terenkripsi sederhana (hak akses owner-only) di direktori \texttt{~/.config/pai-code/}. Kunci API ini penting untuk otentikasi dengan layanan Gemini. Perintah yang digunakan untuk mengatur dan memvalidasi konfigurasi kunci API ditunjukkan pada Gambar~\ref{lst:config-cmd}.
