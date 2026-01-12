@@ -39,6 +39,10 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 
+% --- Sub-figure label formatting (e.g. Gambar 4.7.1) ---
+\DeclareCaptionLabelFormat{mysublab}{\figurename\ \thefigure.#2}
+\captionsetup[subfigure]{labelformat=mysublab, labelsep=colon}
+
 
 % --- Page setup ---
 \geometry{a4paper, top=3cm, left=4cm, bottom=3cm, right=3cm, headheight=15pt}

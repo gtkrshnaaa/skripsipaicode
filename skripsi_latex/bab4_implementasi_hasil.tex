@@ -121,7 +121,7 @@ Seluruh interaksi selama pengujian direkam oleh sistem log yang secara otomatis 
 Berikut adalah paparan hasil uji coba dari skenario-skenario di atas, ditampilkan melalui log interaksi agen.
 
 \subsubsection{Hasil Skenario 1: Pembuatan Proyek}
-Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Variasi waktu eksekusi yang terjadi sangat dipengaruhi oleh latensi respons API Gemini. Rincian log interaksi untuk setiap percobaan dapat dilihat pada Gambar~\ref{lst:log-scenario-1}, yang terdiri dari percobaan pertama (a), kedua (b), dan ketiga (c).
+Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Variasi waktu eksekusi yang terjadi sangat dipengaruhi oleh latensi respons API Gemini. Rincian log interaksi untuk setiap percobaan dapat dilihat pada \textbf{Gambar~\ref{lst:log-scenario-1}.1} (Percobaan 1), \textbf{Gambar~\ref{lst:log-scenario-1}.2} (Percobaan 2), dan \textbf{Gambar~\ref{lst:log-scenario-1}.3} (Percobaan 3).
 
 \begin{figure}[htbp]
   \centering
@@ -174,7 +174,7 @@ Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Va
 Log di atas menunjukkan durasi eksekusi sekitar 7 detik. Pada pengujian berulang (Percobaan 1--3), waktu yang tercatat berkisar antara 7 detik hingga 9 detik. Variasi ini wajar dalam sistem berbasis \textit{cloud inference}, di mana kecepatan jaringan menjadi variabel bebas. Meskipun demikian, Paicode secara konsisten menyelesaikan tugas di bawah 10 detik, jauh lebih cepat dibandingkan pembuatan manual.
 
 \subsubsection{Hasil Skenario 2: Modifikasi Kode}
-Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur. Proses modifikasi kode untuk penambahan fitur pangkat pada tiga percobaan terpisah ditunjukkan secara lengkap pada Gambar~\ref{lst:log-scenario-2}(a) hingga (c).
+Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur. Proses modifikasi kode untuk penambahan fitur pangkat dipaparkan secara rinci pada \textbf{Gambar~\ref{lst:log-scenario-2}.1}, \textbf{Gambar~\ref{lst:log-scenario-2}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-2}.3}.
 
 \begin{figure}[htbp]
   \centering
@@ -224,7 +224,7 @@ Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff}
 Untuk tugas modifikasi yang melibatkan pembacaan konteks dan pembuatan \textit{diff}, rata-rata waktu yang dibutuhkan adalah 20.66 detik. Fluktuasi tercatat pada percobaan kedua (22 detik) yang diasumsikan terjadi akibat antrian trafik pada API provider. Efisiensi ini menghilangkan waktu yang biasanya dihabiskan manusia untuk \textit{scrolling} dan mencari lokasi penyisipan kode (\textit{context seeking}).
 
 \subsubsection{Hasil Skenario 3: Eksplorasi}
-Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Gambar~\ref{lst:log-scenario-3} memperlihatkan output perintah eksplorasi direktori yang dihasilkan oleh agen pada masing-masing percobaan (a, b, dan c).
+Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Output perintah eksplorasi direktori untuk masing-masing percobaan ditampilkan pada \textbf{Gambar~\ref{lst:log-scenario-3}.1} hingga \textbf{Gambar~\ref{lst:log-scenario-3}.3}.
 
 \begin{figure}[htbp]
   \centering
@@ -283,7 +283,7 @@ Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Gambar~\ref{l
 Operasi \textit{read-only} seperti ini relatif stabil dengan rata-rata 8.33 detik. Agen menggunakan perintah \texttt{TREE} untuk memberikan konteks visual kepada pengguna. Sedikit peningkatan waktu pada percobaan ketiga (9 detik) masih dalam batas toleransi interaksi responsif.
 
 \subsubsection{Hasil Skenario 4: Debugging Otomatis}
-Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Interaksi agen dalam mendeteksi dan memperbaiki kesalahan sintaks secara otomatis pada ketiga percobaan ditunjukkan pada Gambar~\ref{lst:log-scenario-4}.
+Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Hasil interaksi agen dalam mendeteksi dan memperbaiki kesalahan sintaks dapat dicermati pada \textbf{Gambar~\ref{lst:log-scenario-4}.1}, \textbf{Gambar~\ref{lst:log-scenario-4}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-4}.3}.
 
 \begin{figure}[htbp]
   \centering
@@ -339,7 +339,7 @@ Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Inter
 Rata-rata waktu penyelesaian untuk skenario debugging adalah 18.33 detik. Agen melakukan verifikasi terlebih dahulu (\texttt{READ}) sebelum melakukan perbaikan (\texttt{MODIFY}), memastikan perbaikan berbasis fakta. Konsistensi waktu antar percobaan menunjukkan reliabilitas alur \textit{reflection} agen.
 
 \subsubsection{Hasil Skenario 5: Pengujian Keamanan}
-Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek. Gambar~\ref{lst:log-scenario-5}(a--c) menunjukkan konsistensi respons sistem yang menolak permintaan akses ilegal pada setiap percobaan demi alasan keamanan.
+Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek. Konsistensi respons sistem yang menolak permintaan akses ilegal ini ditunjukkan pada \textbf{Gambar~\ref{lst:log-scenario-5}.1}, \textbf{Gambar~\ref{lst:log-scenario-5}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-5}.3}.
 
 \begin{figure}[htbp]
   \centering
