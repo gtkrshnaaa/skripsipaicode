@@ -34,6 +34,31 @@ Proses instalasi dilakukan menggunakan \texttt{Makefile} yang mengotomasi pembua
 
 Implementasi inti Paicode berpusat pada arsitektur \textit{Single-Shot Intelligence} yang terbagi menjadi beberapa modul utama seperti yang telah dirancang pada Bab III.
 
+\subsubsection{Antarmuka Pengguna}
+Antarmuka pengguna Paicode dibangun berbasis teks (\textit{Command Line Interface}) dengan memanfaatkan pustaka \texttt{rich} untuk menyajikan visualisasi yang terstruktur dan informatif pada terminal. Desain antarmuka mengutamakan kejelasan informasi dengan penggunaan panel, warna (pada terminal yang mendukung), dan tata letak yang rapi. Tampilan awal saat sesi interaktif dimulai direpresentasikan dalam bentuk ASCII pada Gambar~\ref{lst:ui-startup}.
+
+\begin{figure}[H]
+  \centering
+  \begin{lstlisting}[basicstyle=\ttfamily\small]
++------------------------------------------------------------------------------+
+|                           Interactive Auto Mode                              |
++------------------------------------------------------------------------------+
+|                                                                              |
+|          Welcome! I'm Pai, your agentic AI coding companion. *               |
+|      Now powered by Single-Shot Intelligence for maximum efficiency.         |
+|                                                                              |
+|                    Type 'exit' or 'quit' to leave.                           |
+|       Each request uses exactly 2 API calls for optimal performance.         |
+|                                                                              |
+|         * Multi-line input: Alt+Enter for new line, Enter to submit.         |
+|                                                                              |
++------------------------------------------------------------------------------+
+> _
+  \end{lstlisting}
+  \caption{Visualisasi Antarmuka CLI Paicode}
+  \label{lst:ui-startup}
+\end{figure}
+
 \subsubsection{Manajemen Konfigurasi dan API Key}
 Modul \texttt{config.py} mengelola penyimpanan API key secara aman. Kunci disimpan dalam berkas JSON terenkripsi sederhana (hak akses owner-only) di direktori \texttt{~/.config/pai-code/}. Kunci API ini penting untuk otentikasi dengan layanan Gemini. Perintah yang digunakan untuk mengatur dan memvalidasi konfigurasi kunci API ditunjukkan pada Gambar~\ref{lst:config-cmd}.
 
