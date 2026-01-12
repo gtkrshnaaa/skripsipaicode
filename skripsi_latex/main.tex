@@ -43,7 +43,7 @@
 % --- Sub-figure label formatting (e.g. Gambar 4.7.1) ---
 \renewcommand{\thesubfigure}{\arabic{subfigure}}
 \DeclareCaptionLabelFormat{mysublab}{\figurename\ \thefigure.\thesubfigure}
-\captionsetup[subfigure]{labelformat=mysublab, labelsep=colon, skip=20pt}
+\captionsetup[subfigure]{labelformat=mysublab, labelsep=colon}
 
 
 % --- Page setup ---
@@ -93,8 +93,7 @@
   tabsize=2,
   breaklines=true,
   frame=single,
-  framerule=0.3pt,
-  belowskip=2em
+  framerule=0.3pt
 }
 \lstset{style=code}
 
