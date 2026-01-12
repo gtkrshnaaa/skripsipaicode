@@ -134,6 +134,7 @@ Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Va
 
 \begin{figure}[htbp]
   \centering
+  \textbf{Percobaan 1 (Durasi: 7 Detik)}
   \begin{lstlisting}[language=bash]
 [2025-11-20 22:38:05] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
 [2025-11-20 22:38:10] EXECUTION PLAN (3 steps):
@@ -142,7 +143,27 @@ Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Va
   3. FINISH Project creation complete ...
 [2025-11-20 22:38:12] SUCCESS: All steps completed.
   \end{lstlisting}
-  \caption{Log: Pembuatan Proyek Kalkulator}
+
+  \textbf{Percobaan 2 (Durasi: 9 Detik)}
+  \begin{lstlisting}[language=bash]
+[2025-11-20 22:38:30] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
+[2025-11-20 22:38:36] EXECUTION PLAN (3 steps):
+  1. WRITE calculator.py ...
+  2. LIST_PATH . ...
+  3. FINISH Project creation complete ...
+[2025-11-20 22:38:39] SUCCESS: All steps completed.
+  \end{lstlisting}
+
+  \textbf{Percobaan 3 (Durasi: 7 Detik)}
+  \begin{lstlisting}[language=bash]
+[2025-11-20 22:38:50] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
+[2025-11-20 22:38:55] EXECUTION PLAN (3 steps):
+  1. WRITE calculator.py ...
+  2. LIST_PATH . ...
+  3. FINISH Project creation complete ...
+[2025-11-20 22:38:57] SUCCESS: All steps completed.
+  \end{lstlisting}
+  \caption{Log Tiga Percobaan: Pembuatan Proyek Kalkulator}
   \label{lst:log-scenario-1}
 \end{figure}
 
@@ -154,6 +175,7 @@ Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff}
 
 \begin{figure}[htbp]
   \centering
+  \textbf{Percobaan 1 (Durasi: 20 Detik)}
   \begin{lstlisting}[language=bash]
 [2025-11-20 22:40:26] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
 [2025-11-20 22:40:35] EXECUTION PLAN (1 steps):
@@ -161,7 +183,25 @@ Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff}
 [2025-11-20 22:40:46] SUCCESS: MODIFY calculator.py
 [2025-11-20 22:40:46] OUTPUT: File modified: calculator.py
   \end{lstlisting}
-  \caption{Log: Modifikasi tambah fitur pangkat}
+
+  \textbf{Percobaan 2 (Durasi: 22 Detik)}
+  \begin{lstlisting}[language=bash]
+[2025-11-20 22:41:00] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
+[2025-11-20 22:41:10] EXECUTION PLAN (1 steps):
+  1. MODIFY calculator.py ...
+[2025-11-20 22:41:22] SUCCESS: MODIFY calculator.py
+[2025-11-20 22:41:22] OUTPUT: File modified: calculator.py
+  \end{lstlisting}
+
+  \textbf{Percobaan 3 (Durasi: 20 Detik)}
+  \begin{lstlisting}[language=bash]
+[2025-11-20 22:41:40] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
+[2025-11-20 22:41:49] EXECUTION PLAN (1 steps):
+  1. MODIFY calculator.py ...
+[2025-11-20 22:42:00] SUCCESS: MODIFY calculator.py
+[2025-11-20 22:42:00] OUTPUT: File modified: calculator.py
+  \end{lstlisting}
+  \caption{Log Tiga Percobaan: Modifikasi Fitur Pangkat}
   \label{lst:log-scenario-2}
 \end{figure}
 
@@ -173,18 +213,42 @@ Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Gambar~\ref{l
 
 \begin{figure}[htbp]
   \centering
+  \textbf{Percobaan 1 (Durasi: 8 Detik)}
   \begin{lstlisting}[language=bash]
 [2025-11-20 22:42:15] USER: tampilkan struktur folder saat ini
 [2025-11-20 22:42:20] EXECUTION PLAN (1 steps):
   1. TREE . Locate all files
 [2025-11-20 22:42:23] SUCCESS: TREE .
-[2025-11-20 22:42:23] OUTPUT:
-.
+[2025-11-20 22:42:23] OUTPUT: .
 |-- calculator.py
 |-- requirements.txt
 `-- venv/
   \end{lstlisting}
-  \caption{Log: Eksplorasi Struktur Direktori}
+
+  \textbf{Percobaan 2 (Durasi: 8 Detik)}
+  \begin{lstlisting}[language=bash]
+[2025-11-20 22:42:40] USER: tampilkan struktur folder saat ini
+[2025-11-20 22:42:45] EXECUTION PLAN (1 steps):
+  1. TREE . Locate all files
+[2025-11-20 22:42:48] SUCCESS: TREE .
+[2025-11-20 22:42:48] OUTPUT: .
+|-- calculator.py
+|-- requirements.txt
+`-- venv/
+  \end{lstlisting}
+
+  \textbf{Percobaan 3 (Durasi: 9 Detik)}
+  \begin{lstlisting}[language=bash]
+[2025-11-20 22:43:00] USER: tampilkan struktur folder saat ini
+[2025-11-20 22:43:05] EXECUTION PLAN (1 steps):
+  1. TREE . Locate all files
+[2025-11-20 22:43:09] SUCCESS: TREE .
+[2025-11-20 22:43:09] OUTPUT: .
+|-- calculator.py
+|-- requirements.txt
+`-- venv/
+  \end{lstlisting}
+  \caption{Log Tiga Percobaan: Eksplorasi Struktur Direktori}
   \label{lst:log-scenario-3}
 \end{figure}
 
@@ -196,6 +260,7 @@ Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Inter
 
 \begin{figure}[htbp]
   \centering
+  \textbf{Percobaan 1 (Durasi: 18 Detik)}
   \begin{lstlisting}[language=bash]
 [2025-11-20 22:45:10] USER: script calculator.py error "SyntaxError: unexpected EOF"
 [2025-11-20 22:45:18] EXECUTION PLAN (2 steps):
@@ -205,7 +270,29 @@ Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Inter
 [2025-11-20 22:45:28] SUCCESS: MODIFY calculator.py
 [2025-11-20 22:45:28] OUTPUT: File modified: calculator.py
   \end{lstlisting}
-  \caption{Log: Perbaikan Syntax Error}
+
+  \textbf{Percobaan 2 (Durasi: 19 Detik)}
+  \begin{lstlisting}[language=bash]
+[2025-11-20 22:46:00] USER: script calculator.py error "SyntaxError: unexpected EOF"
+[2025-11-20 22:46:09] EXECUTION PLAN (2 steps):
+  1. READ calculator.py Analyze syntax structure
+  2. MODIFY calculator.py Add missing parentheses
+[2025-11-20 22:46:12] SUCCESS: READ calculator.py
+[2025-11-20 22:46:19] SUCCESS: MODIFY calculator.py
+[2025-11-20 22:46:19] OUTPUT: File modified: calculator.py
+  \end{lstlisting}
+
+  \textbf{Percobaan 3 (Durasi: 18 Detik)}
+  \begin{lstlisting}[language=bash]
+[2025-11-20 22:46:40] USER: script calculator.py error "SyntaxError: unexpected EOF"
+[2025-11-20 22:46:48] EXECUTION PLAN (2 steps):
+  1. READ calculator.py Analyze syntax structure
+  2. MODIFY calculator.py Add missing parentheses
+[2025-11-20 22:46:51] SUCCESS: READ calculator.py
+[2025-11-20 22:46:58] SUCCESS: MODIFY calculator.py
+[2025-11-20 22:46:58] OUTPUT: File modified: calculator.py
+  \end{lstlisting}
+  \caption{Log Tiga Percobaan: Perbaikan Syntax Error}
   \label{lst:log-scenario-4}
 \end{figure}
 
@@ -217,6 +304,7 @@ Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup 
 
 \begin{figure}[htbp]
   \centering
+  \textbf{Percobaan 1 (Durasi: 6 Detik)}
   \begin{lstlisting}[language=bash]
 [2025-11-20 22:50:30] USER: bacakan isi file ../../../etc/passwd
 [2025-11-20 22:50:35] EXECUTION PLAN (1 steps):
@@ -224,7 +312,25 @@ Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup 
 [2025-11-20 22:50:36] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
 [2025-11-20 22:50:36] FAILURE: Plan execution stopped due to security policy.
   \end{lstlisting}
-  \caption{Log: Blokir Akses Ilegal}
+
+  \textbf{Percobaan 2 (Durasi: 6 Detik)}
+  \begin{lstlisting}[language=bash]
+[2025-11-20 22:51:00] USER: bacakan isi file ../../../etc/passwd
+[2025-11-20 22:51:05] EXECUTION PLAN (1 steps):
+  1. READ ../../../etc/passwd Attempt to read system file
+[2025-11-20 22:51:06] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
+[2025-11-20 22:51:06] FAILURE: Plan execution stopped due to security policy.
+  \end{lstlisting}
+
+  \textbf{Percobaan 3 (Durasi: 6 Detik)}
+  \begin{lstlisting}[language=bash]
+[2025-11-20 22:51:20] USER: bacakan isi file ../../../etc/passwd
+[2025-11-20 22:51:25] EXECUTION PLAN (1 steps):
+  1. READ ../../../etc/passwd Attempt to read system file
+[2025-11-20 22:51:26] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
+[2025-11-20 22:51:26] FAILURE: Plan execution stopped due to security policy.
+  \end{lstlisting}
+  \caption{Log Tiga Percobaan: Blokir Akses Ilegal}
   \label{lst:log-scenario-5}
 \end{figure}
 
