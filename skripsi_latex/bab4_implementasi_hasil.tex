@@ -682,7 +682,7 @@ Temuan ini mengonfirmasi bahwa perencanaan terstruktur di muka memberikan dampak
 Implementasi \textit{Path Security} dan \textit{Diff-based Modification} berfungsi efektif sebagai lapisan pertahanan terakhir (\textit{last line of defense}) di sisi klien. Dalam skenario uji coba akses ilegal (Skenario 5), agen secara konsisten menolak permintaan untuk mengakses \texttt{.env} atau direktori induk (\texttt{../}). Hal ini sangat krusial mengingat LLM memiliki kecenderungan untuk "berhalusinasi" atau mengikuti instruksi pengguna secara naif (misalnya, pengguna meminta "hapus semua file"). Dengan adanya validasi di level \texttt{workspace.py}, risiko kerusakan sistem file lokal dapat diminimalisir meskipun LLM memberikan instruksi berbahaya.
 
 \subsection{Perbandingan dengan Metode Manual}
-Jika dibandingkan dengan pengembangan manual:
+Evaluasi efektivitas Paicode dilakukan dengan membandingkan alur kerjanya terhadap metode pengembangan perangkat lunak konvensional. Perbandingan ini menyoroti perbedaan signifikan dalam jumlah langkah operasional dan beban kognitif yang diperlukan untuk menyelesaikan tugas pemrograman yang sama.
 \subsubsection{Analisis Efisiensi Langkah (Step Efficiency)}
 Tabel~\ref{tab:perbandingan-langkah} menguraikan dekomposisi langkah kerja yang diperlukan untuk menyelesaikan \textit{Skenario 1 (Pembuatan Proyek)} secara manual dibandingkan dengan menggunakan Paicode.
 
