@@ -3,10 +3,10 @@
 \label{chap:implementasi}
 
 \section{Implementasi dan Uji Coba Sistem}
-\indent Bagian ini menguraikan tahapan realisasi sistem Paicode, mulai dari konfigurasi lingkungan, implementasi kode program, hingga hasil pengujian fungsional.
+\customindent Bagian ini menguraikan tahapan realisasi sistem Paicode, mulai dari konfigurasi lingkungan, implementasi kode program, hingga hasil pengujian fungsional.
 
 \subsection{Lingkungan Implementasi}
-\indent Sistem diimplementasikan pada lingkungan sistem operasi Ubuntu dengan spesifikasi konfigurasi seperti tercantum pada Tabel~\ref{tab:konfigurasi}.
+\customindent Sistem diimplementasikan pada lingkungan sistem operasi Ubuntu dengan spesifikasi konfigurasi seperti tercantum pada Tabel~\ref{tab:konfigurasi}.
 
 \begin{longtable}{@{}p{0.32\textwidth}p{0.66\textwidth}@{}}
   \caption{Konfigurasi Lingkungan Implementasi}\label{tab:konfigurasi}\\
@@ -27,13 +27,13 @@
   \bottomrule
 \end{longtable}
 
-\indent Proses instalasi dilakukan menggunakan \texttt{Makefile} yang mengotomasi pembuatan virtual environment dan instalasi dependensi dari berkas \texttt{requirements.txt} dan \texttt{setup.cfg}.
+\customindent Proses instalasi dilakukan menggunakan \texttt{Makefile} yang mengotomasi pembuatan virtual environment dan instalasi dependensi dari berkas \texttt{requirements.txt} dan \texttt{setup.cfg}.
 
 \subsection{Implementasi Fitur Utama}
-\indent Implementasi inti Paicode berpusat pada arsitektur \textit{Single-Shot Intelligence} yang terbagi menjadi beberapa modul utama seperti yang telah dirancang pada Bab III.
+\customindent Implementasi inti Paicode berpusat pada arsitektur \textit{Single-Shot Intelligence} yang terbagi menjadi beberapa modul utama seperti yang telah dirancang pada Bab III.
 
 \subsubsection{Antarmuka Pengguna}
-\indent Antarmuka pengguna Paicode dibangun berbasis teks (\textit{Command Line Interface}) dengan memanfaatkan pustaka \texttt{rich} untuk menyajikan visualisasi yang terstruktur dan informatif pada terminal. Desain antarmuka mengutamakan kejelasan informasi dengan penggunaan panel, warna (pada terminal yang mendukung), dan tata letak yang rapi. Tampilan awal saat sesi interaktif dimulai direpresentasikan dalam bentuk ASCII pada Gambar~\ref{lst:ui-startup}.
+\customindent Antarmuka pengguna Paicode dibangun berbasis teks (\textit{Command Line Interface}) dengan memanfaatkan pustaka \texttt{rich} untuk menyajikan visualisasi yang terstruktur dan informatif pada terminal. Desain antarmuka mengutamakan kejelasan informasi dengan penggunaan panel, warna (pada terminal yang mendukung), dan tata letak yang rapi. Tampilan awal saat sesi interaktif dimulai direpresentasikan dalam bentuk ASCII pada Gambar~\ref{lst:ui-startup}.
 
 \begin{center}
   \begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
@@ -156,7 +156,7 @@ user>
 \end{center}
 
 \subsubsection{Manajemen Konfigurasi dan API Key}
-\indent Modul \texttt{config.py} mengelola penyimpanan API key secara aman. Kunci disimpan dalam berkas JSON terenkripsi sederhana (hak akses owner-only) di direktori \texttt{~/.config/pai-code/}. Kunci API ini penting untuk otentikasi dengan layanan Gemini. Perintah yang digunakan untuk mengatur dan memvalidasi konfigurasi kunci API ditunjukkan pada Gambar~\ref{lst:config-cmd}.
+\customindent Modul \texttt{config.py} mengelola penyimpanan API key secara aman. Kunci disimpan dalam berkas JSON terenkripsi sederhana (hak akses owner-only) di direktori \texttt{~/.config/pai-code/}. Kunci API ini penting untuk otentikasi dengan layanan Gemini. Perintah yang digunakan untuk mengatur dan memvalidasi konfigurasi kunci API ditunjukkan pada Gambar~\ref{lst:config-cmd}.
 
 \begin{figure}[H]
   \centering
@@ -169,7 +169,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \end{figure}
 
 \subsubsection{Implementasi Agen (Single-Shot Intelligence)}
-\indent Agen diimplementasikan dalam \texttt{agent.py}. Alur kerja agen dimulai dengan klasifikasi intensi, dilanjutkan dengan fase perencanaan, dan diakhiri dengan eksekusi. Struktur data JSON yang digunakan untuk merepresentasikan rencana eksekusi agen dapat dilihat pada Gambar~\ref{lst:agent-planning}.
+\customindent Agen diimplementasikan dalam \texttt{agent.py}. Alur kerja agen dimulai dengan klasifikasi intensi, dilanjutkan dengan fase perencanaan, dan diakhiri dengan eksekusi. Struktur data JSON yang digunakan untuk merepresentasikan rencana eksekusi agen dapat dilihat pada Gambar~\ref{lst:agent-planning}.
 
 \medskip
 \begin{figure}[H]
@@ -179,7 +179,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \label{lst:agent-planning}
 \end{figure}
 
-\indent Selain format data, agen juga dibekali instruksi sistem (\textit{System Prompt}) yang mendefinisikan persona dan batasan arsitektur \textit{Single-Shot} agar model fokus pada perencanaan yang presisi. Definisi persona dan instruksi sistem tersebut diimplementasikan dalam kode program sebagaimana ditampilkan pada Gambar~\ref{lst:agent-prompt}.
+\customindent Selain format data, agen juga dibekali instruksi sistem (\textit{System Prompt}) yang mendefinisikan persona dan batasan arsitektur \textit{Single-Shot} agar model fokus pada perencanaan yang presisi. Definisi persona dan instruksi sistem tersebut diimplementasikan dalam kode program sebagaimana ditampilkan pada Gambar~\ref{lst:agent-prompt}.
 
 \medskip
 \begin{figure}[H]
@@ -189,7 +189,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \label{lst:agent-prompt}
 \end{figure}
 
-\indent Selanjutnya, untuk fase eksekusi, sistem menerapkan pemilihan strategi adaptif (1 hingga 3 fase) berdasarkan kompleksitas tugas. Logika pemrograman untuk pemilihan strategi eksekusi adaptif ini ditunjukkan secara rinci pada Gambar~\ref{lst:agent-strategy}.
+\customindent Selanjutnya, untuk fase eksekusi, sistem menerapkan pemilihan strategi adaptif (1 hingga 3 fase) berdasarkan kompleksitas tugas. Logika pemrograman untuk pemilihan strategi eksekusi adaptif ini ditunjukkan secara rinci pada Gambar~\ref{lst:agent-strategy}.
 
 \medskip
 \lstinputlisting[language=Python, firstline=836, lastline=868]{../paicode/paicode/agent.py}
@@ -197,16 +197,16 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \label{lst:agent-strategy}
 
 \subsubsection{Sistem Keamanan Workspace}
-\indent Modul \texttt{workspace.py} bertugas menegakkan kebijakan keamanan. Setiap operasi berkas divalidasi path-nya untuk memastikan tidak keluar dari root project (mencegah path traversal) dan tidak menyentuh direktori terlarang seperti \texttt{.git} atau \texttt{.env}.
+\customindent Modul \texttt{workspace.py} bertugas menegakkan kebijakan keamanan. Setiap operasi berkas divalidasi path-nya untuk memastikan tidak keluar dari root project (mencegah path traversal) dan tidak menyentuh direktori terlarang seperti \texttt{.git} atau \texttt{.env}.
 
-\indent Berikut adalah implementasi fungsi \texttt{\_is\_safe\_path} yang menjadi gerbang validasi utama. Implementasi fungsi utama \texttt{\_is\_safe\_path} yang bertugas memvalidasi keamanan jalur berkas diperlihatkan pada Gambar~\ref{lst:workspace-security}.
+\customindent Berikut adalah implementasi fungsi \texttt{\_is\_safe\_path} yang menjadi gerbang validasi utama. Implementasi fungsi utama \texttt{\_is\_safe\_path} yang bertugas memvalidasi keamanan jalur berkas diperlihatkan pada Gambar~\ref{lst:workspace-security}.
 
 \medskip
 \lstinputlisting[language=Python, firstline=36, lastline=61]{../paicode/paicode/workspace.py}
 \captionof{figure}{Validasi Path (\_is\_safe\_path)}
 \label{lst:workspace-security}
 
-\indent Selain validasi path, sistem juga menerapkan pembatasan modifikasi berbasis \textit{diff} untuk mencegah perubahan masif yang berisiko. Mekanisme pembatasan jumlah baris yang dimodifikasi (threshold) diimplementasikan melalui kode pada Gambar~\ref{lst:workspace-diff}.
+\customindent Selain validasi path, sistem juga menerapkan pembatasan modifikasi berbasis \textit{diff} untuk mencegah perubahan masif yang berisiko. Mekanisme pembatasan jumlah baris yang dimodifikasi (threshold) diimplementasikan melalui kode pada Gambar~\ref{lst:workspace-diff}.
 
 \medskip
 \lstinputlisting[language=Python, firstline=270, lastline=293]{../paicode/paicode/workspace.py}
@@ -214,9 +214,9 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \label{lst:workspace-diff}
 
 \subsection{Skenario Pengujian}
-\indent Pengujian fungsional dilakukan dengan menjalankan serangkaian skenario tugas pemrograman yang mewakili aktivitas nyata pengembang. Untuk memastikan konsistensi dan reliabilitas hasil, setiap skenario diuji sebanyak \textbf{tiga kali percobaan} pada kondisi jaringan yang berbeda. Hal ini bertujuan untuk mengidentifikasi variabilitas waktu respons yang disebabkan oleh latensi API atau faktor eksternal lainnya.
+\customindent Pengujian fungsional dilakukan dengan menjalankan serangkaian skenario tugas pemrograman yang mewakili aktivitas nyata pengembang. Untuk memastikan konsistensi dan reliabilitas hasil, setiap skenario diuji sebanyak \textbf{tiga kali percobaan} pada kondisi jaringan yang berbeda. Hal ini bertujuan untuk mengidentifikasi variabilitas waktu respons yang disebabkan oleh latensi API atau faktor eksternal lainnya.
 
-\indent Seluruh interaksi selama pengujian direkam oleh sistem log yang secara otomatis menyertakan penanda waktu (\textit{timestamp}) pada setiap operasi. Skenario yang diuji dirangkum dalam Tabel~\ref{tab:skenario-uji}.
+\customindent Seluruh interaksi selama pengujian direkam oleh sistem log yang secara otomatis menyertakan penanda waktu (\textit{timestamp}) pada setiap operasi. Skenario yang diuji dirangkum dalam Tabel~\ref{tab:skenario-uji}.
 
 \begin{longtable}{@{}p{0.17\textwidth}>{\hyphenpenalty=50\tolerance=1000}p{0.62\textwidth}p{0.17\textwidth}@{}}
   \caption{Skenario Pengujian Fungsional}\label{tab:skenario-uji}\\
@@ -237,10 +237,10 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \end{longtable}
 
 \subsection{Hasil Uji Coba}
-\indent Berikut adalah paparan hasil uji coba dari skenario-skenario di atas, ditampilkan melalui log interaksi agen.
+\customindent Berikut adalah paparan hasil uji coba dari skenario-skenario di atas, ditampilkan melalui log interaksi agen.
 
 \subsubsection{Hasil Skenario 1: Pembuatan Proyek}
-\indent Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Variasi waktu eksekusi yang terjadi sangat dipengaruhi oleh latensi respons API Gemini. Rincian log interaksi untuk setiap percobaan dapat dilihat pada \textbf{Gambar~\ref{lst:log-scenario-1}.1} (Percobaan 1), \textbf{Gambar~\ref{lst:log-scenario-1}.2} (Percobaan 2), dan \textbf{Gambar~\ref{lst:log-scenario-1}.3} (Percobaan 3).
+\customindent Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Variasi waktu eksekusi yang terjadi sangat dipengaruhi oleh latensi respons API Gemini. Rincian log interaksi untuk setiap percobaan dapat dilihat pada \textbf{Gambar~\ref{lst:log-scenario-1}.1} (Percobaan 1), \textbf{Gambar~\ref{lst:log-scenario-1}.2} (Percobaan 2), dan \textbf{Gambar~\ref{lst:log-scenario-1}.3} (Percobaan 3).
 
 \begin{figure}[H]
   \centering
@@ -316,11 +316,11 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \end{subfigure}
 \end{figure}
 
-\indent \textbf{Analisis Log}:\par
-\indent Log di atas menunjukkan durasi eksekusi sekitar 7 detik. Pada pengujian berulang (Percobaan 1--3), waktu yang tercatat berkisar antara 7 detik hingga 9 detik. Variasi ini wajar dalam sistem berbasis \textit{cloud inference}, di mana kecepatan jaringan menjadi variabel bebas. Meskipun demikian, Paicode secara konsisten menyelesaikan tugas di bawah 10 detik, jauh lebih cepat dibandingkan pembuatan manual.
+\customindent \textbf{Analisis Log}:\par
+\customindent Log di atas menunjukkan durasi eksekusi sekitar 7 detik. Pada pengujian berulang (Percobaan 1--3), waktu yang tercatat berkisar antara 7 detik hingga 9 detik. Variasi ini wajar dalam sistem berbasis \textit{cloud inference}, di mana kecepatan jaringan menjadi variabel bebas. Meskipun demikian, Paicode secara konsisten menyelesaikan tugas di bawah 10 detik, jauh lebih cepat dibandingkan pembuatan manual.
 
 \subsubsection{Hasil Skenario 2: Modifikasi Kode}
-\indent Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur. Proses modifikasi kode untuk penambahan fitur pangkat dipaparkan secara rinci pada \textbf{Gambar~\ref{lst:log-scenario-2}.1}, \textbf{Gambar~\ref{lst:log-scenario-2}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-2}.3}.
+\customindent Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur. Proses modifikasi kode untuk penambahan fitur pangkat dipaparkan secara rinci pada \textbf{Gambar~\ref{lst:log-scenario-2}.1}, \textbf{Gambar~\ref{lst:log-scenario-2}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-2}.3}.
 
 \begin{figure}[H]
   \centering
@@ -387,11 +387,11 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \end{subfigure}
 \end{figure}
 
-\indent \textbf{Analisis Log}:\par
-\indent Untuk tugas modifikasi yang melibatkan pembacaan konteks dan pembuatan \textit{diff}, rata-rata waktu yang dibutuhkan adalah 20.66 detik. Fluktuasi tercatat pada percobaan kedua (22 detik) yang diasumsikan terjadi akibat antrian trafik pada API provider. Efisiensi ini menghilangkan waktu yang biasanya dihabiskan manusia untuk \textit{scrolling} dan mencari lokasi penyisipan kode (\textit{context seeking}).
+\customindent \textbf{Analisis Log}:\par
+\customindent Untuk tugas modifikasi yang melibatkan pembacaan konteks dan pembuatan \textit{diff}, rata-rata waktu yang dibutuhkan adalah 20.66 detik. Fluktuasi tercatat pada percobaan kedua (22 detik) yang diasumsikan terjadi akibat antrian trafik pada API provider. Efisiensi ini menghilangkan waktu yang biasanya dihabiskan manusia untuk \textit{scrolling} dan mencari lokasi penyisipan kode (\textit{context seeking}).
 
 \subsubsection{Hasil Skenario 3: Eksplorasi}
-\indent Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Output perintah eksplorasi direktori untuk masing-masing percobaan ditampilkan pada \textbf{Gambar~\ref{lst:log-scenario-3}.1} hingga \textbf{Gambar~\ref{lst:log-scenario-3}.3}.
+\customindent Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Output perintah eksplorasi direktori untuk masing-masing percobaan ditampilkan pada \textbf{Gambar~\ref{lst:log-scenario-3}.1} hingga \textbf{Gambar~\ref{lst:log-scenario-3}.3}.
 
 \begin{figure}[H]
   \centering
@@ -467,11 +467,11 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \end{subfigure}
 \end{figure}
 
-\indent \textbf{Analisis Log}:\par
-\indent Operasi \textit{read-only} seperti ini relatif stabil dengan rata-rata 8.33 detik. Agen menggunakan perintah \texttt{TREE} untuk memberikan konteks visual kepada pengguna. Sedikit peningkatan waktu pada percobaan ketiga (9 detik) masih dalam batas toleransi interaksi responsif.
+\customindent \textbf{Analisis Log}:\par
+\customindent Operasi \textit{read-only} seperti ini relatif stabil dengan rata-rata 8.33 detik. Agen menggunakan perintah \texttt{TREE} untuk memberikan konteks visual kepada pengguna. Sedikit peningkatan waktu pada percobaan ketiga (9 detik) masih dalam batas toleransi interaksi responsif.
 
 \subsubsection{Hasil Skenario 4: Debugging Otomatis}
-\indent Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Hasil interaksi agen dalam mendeteksi dan memperbaiki kesalahan sintaks dapat dicermati pada \textbf{Gambar~\ref{lst:log-scenario-4}.1}, \textbf{Gambar~\ref{lst:log-scenario-4}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-4}.3}.
+\customindent Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Hasil interaksi agen dalam mendeteksi dan memperbaiki kesalahan sintaks dapat dicermati pada \textbf{Gambar~\ref{lst:log-scenario-4}.1}, \textbf{Gambar~\ref{lst:log-scenario-4}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-4}.3}.
 
 \begin{figure}[H]
   \centering
@@ -544,11 +544,11 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \end{subfigure}
 \end{figure}
 
-\indent \textbf{Analisis Log}:\par
-\indent Rata-rata waktu penyelesaian untuk skenario debugging adalah 18.33 detik. Agen melakukan verifikasi terlebih dahulu (\texttt{READ}) sebelum melakukan perbaikan (\texttt{MODIFY}), memastikan perbaikan berbasis fakta. Konsistensi waktu antar percobaan menunjukkan reliabilitas alur \textit{reflection} agen.
+\customindent \textbf{Analisis Log}:\par
+\customindent Rata-rata waktu penyelesaian untuk skenario debugging adalah 18.33 detik. Agen melakukan verifikasi terlebih dahulu (\texttt{READ}) sebelum melakukan perbaikan (\texttt{MODIFY}), memastikan perbaikan berbasis fakta. Konsistensi waktu antar percobaan menunjukkan reliabilitas alur \textit{reflection} agen.
 
 \subsubsection{Hasil Skenario 5: Pengujian Keamanan}
-\indent Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek. Konsistensi respons sistem yang menolak permintaan akses ilegal ini ditunjukkan pada \textbf{Gambar~\ref{lst:log-scenario-5}.1}, \textbf{Gambar~\ref{lst:log-scenario-5}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-5}.3}.
+\customindent Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek. Konsistensi respons sistem yang menolak permintaan akses ilegal ini ditunjukkan pada \textbf{Gambar~\ref{lst:log-scenario-5}.1}, \textbf{Gambar~\ref{lst:log-scenario-5}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-5}.3}.
 
 \begin{figure}[H]
   \centering
@@ -615,11 +615,11 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \end{subfigure}
 \end{figure}
 
-\indent \textbf{Analisis Log}:\par
-\indent Skenario keamanan memiliki waktu respons tercepat (rata-rata 6.0 detik) karena blokir terjadi di sisi klien (\textit{workspace.py}) sebelum atau segera setelah perencanaan, tanpa perlu menunggu proses pembuatan konten yang berat dari LLM. Konsistensi waktu tinggi karena logika validasi path bersifat deterministik lokal.
+\customindent \textbf{Analisis Log}:\par
+\customindent Skenario keamanan memiliki waktu respons tercepat (rata-rata 6.0 detik) karena blokir terjadi di sisi klien (\textit{workspace.py}) sebelum atau segera setelah perencanaan, tanpa perlu menunggu proses pembuatan konten yang berat dari LLM. Konsistensi waktu tinggi karena logika validasi path bersifat deterministik lokal.
 
 \subsubsection{Hasil Pengujian Menyeluruh (3 Percobaan)}
-\indent Seluruh hasil pengukuran waktu dari ketiga percobaan untuk setiap skenario dirangkum dalam Tabel~\ref{tab:hasil-komprehensif}. Data ini menunjukkan sebaran waktu yang realistis mengingat ketergantungan sistem pada layanan API eksternal.
+\customindent Seluruh hasil pengukuran waktu dari ketiga percobaan untuk setiap skenario dirangkum dalam Tabel~\ref{tab:hasil-komprehensif}. Data ini menunjukkan sebaran waktu yang realistis mengingat ketergantungan sistem pada layanan API eksternal.
 
 \begin{longtable}{@{}p{0.05\textwidth}p{0.32\textwidth}>{\raggedright\arraybackslash}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.14\textwidth}@{}}
   \caption{Hasil Pengukuran Waktu Eksekusi (3 Percobaan)}\label{tab:hasil-komprehensif}\\
@@ -639,9 +639,9 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \bottomrule
 \end{longtable}
 
-\indent Berdasarkan Tabel~\ref{tab:hasil-komprehensif}, terlihat bahwa deviasi waktu antar percobaan masih dalam batas wajar (< 15\%). Faktor jaringan internet memegang peranan utama dalam fluktuasi ini. Secara keseluruhan, sistem mampu memberikan respons yang dapat diandalkan.
+\customindent Berdasarkan Tabel~\ref{tab:hasil-komprehensif}, terlihat bahwa deviasi waktu antar percobaan masih dalam batas wajar (< 15\%). Faktor jaringan internet memegang peranan utama dalam fluktuasi ini. Secara keseluruhan, sistem mampu memberikan respons yang dapat diandalkan.
 
-\indent Selain performa waktu, indikator keberhasilan kualitatif lainnya dirangkum dalam Tabel~\ref{tab:metrik-hasil-summary}.
+\customindent Selain performa waktu, indikator keberhasilan kualitatif lainnya dirangkum dalam Tabel~\ref{tab:metrik-hasil-summary}.
 
 \begin{longtable}{@{}p{0.26\textwidth}p{0.23\textwidth}>{\hyphenpenalty=50\tolerance=1000}p{0.47\textwidth}@{}}
   \caption{Ringkasan Indikator Keberhasilan Setelah 3 Percobaan}\label{tab:metrik-hasil-summary}\\
@@ -660,25 +660,25 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \end{longtable}
 
 \section{Pembahasan}
-\indent Bagian ini membahas analisis mendalam terhadap hasil implementasi dan pengujian yang telah dilakukan, serta membandingkannya dengan metode manual. Analisis ini didukung oleh data log sistem yang merekam waktu eksekusi secara presisi (\textit{timestamped logs}), memberikan data empiris untuk klaim efisiensi yang diajukan.
+\customindent Bagian ini membahas analisis mendalam terhadap hasil implementasi dan pengujian yang telah dilakukan, serta membandingkannya dengan metode manual. Analisis ini didukung oleh data log sistem yang merekam waktu eksekusi secara presisi (\textit{timestamped logs}), memberikan data empiris untuk klaim efisiensi yang diajukan.
 
 \subsection{Efisiensi Mekanisme Perencanaan Otomatis}
-\indent Hasil pengujian menunjukkan bahwa arsitektur \textit{Single-Shot Intelligence} (SSI) mampu menyelesaikan tugas pemrograman kompleks dengan interaksi minimal. Dengan memadatkan proses "berpikir" (\textit{reasoning}) ke dalam satu fase perencanaan yang utuh, sistem dapat:
+\customindent Hasil pengujian menunjukkan bahwa arsitektur \textit{Single-Shot Intelligence} (SSI) mampu menyelesaikan tugas pemrograman kompleks dengan interaksi minimal. Dengan memadatkan proses "berpikir" (\textit{reasoning}) ke dalam satu fase perencanaan yang utuh, sistem dapat:
 \begin{enumerate}
     \item Menghasilkan rencana eksekusi lengkap yang dapat diverifikasi pengguna sebelum dijalankan, meningkatkan kepercayaan dan kontrol.
     \item Mengurangi beban kognitif pengguna karena tidak perlu membimbing agen langkah demi langkah secara manual.
     \item Mengeksekusi serangkaian operasi file secara presisi tanpa intervensi tambahan setelah persetujuan rencana.
 \end{enumerate}
 
-\indent Temuan ini mengonfirmasi bahwa perencanaan terstruktur di muka memberikan dampak positif terhadap kecepatan dan akurasi pelaksanaan tugas pengembangan perangkat lunak.
+\customindent Temuan ini mengonfirmasi bahwa perencanaan terstruktur di muka memberikan dampak positif terhadap kecepatan dan akurasi pelaksanaan tugas pengembangan perangkat lunak.
 
 \subsection{Analisis Aspek Keamanan}
-\indent Implementasi \textit{Path Security} dan \textit{Diff-based Modification} berfungsi efektif sebagai lapisan pertahanan terakhir (\textit{last line of defense}) di sisi klien. Dalam skenario uji coba akses ilegal (Skenario 5), agen secara konsisten menolak permintaan untuk mengakses \texttt{.env} atau direktori induk (\texttt{../}). Hal ini sangat krusial mengingat LLM memiliki kecenderungan untuk "berhalusinasi" atau mengikuti instruksi pengguna secara naif (misalnya, pengguna meminta "hapus semua file"). Dengan adanya validasi di level \texttt{workspace.py}, risiko kerusakan sistem file lokal dapat diminimalisir meskipun LLM memberikan instruksi berbahaya.
+\customindent Implementasi \textit{Path Security} dan \textit{Diff-based Modification} berfungsi efektif sebagai lapisan pertahanan terakhir (\textit{last line of defense}) di sisi klien. Dalam skenario uji coba akses ilegal (Skenario 5), agen secara konsisten menolak permintaan untuk mengakses \texttt{.env} atau direktori induk (\texttt{../}). Hal ini sangat krusial mengingat LLM memiliki kecenderungan untuk "berhalusinasi" atau mengikuti instruksi pengguna secara naif (misalnya, pengguna meminta "hapus semua file"). Dengan adanya validasi di level \texttt{workspace.py}, risiko kerusakan sistem file lokal dapat diminimalisir meskipun LLM memberikan instruksi berbahaya.
 
 \subsection{Perbandingan dengan Metode Manual}
-\indent Evaluasi efektivitas Paicode dilakukan dengan membandingkan alur kerjanya terhadap metode pengembangan perangkat lunak konvensional. Perbandingan ini menyoroti perbedaan signifikan dalam jumlah langkah operasional dan beban kognitif yang diperlukan untuk menyelesaikan tugas pemrograman yang sama.
+\customindent Evaluasi efektivitas Paicode dilakukan dengan membandingkan alur kerjanya terhadap metode pengembangan perangkat lunak konvensional. Perbandingan ini menyoroti perbedaan signifikan dalam jumlah langkah operasional dan beban kognitif yang diperlukan untuk menyelesaikan tugas pemrograman yang sama.
 \subsubsection{Analisis Efisiensi Langkah (Step Efficiency)}
-\indent Tabel~\ref{tab:perbandingan-langkah} menguraikan dekomposisi langkah kerja yang diperlukan untuk menyelesaikan \textit{Skenario 1 (Pembuatan Proyek)} secara manual dibandingkan dengan menggunakan Paicode.
+\customindent Tabel~\ref{tab:perbandingan-langkah} menguraikan dekomposisi langkah kerja yang diperlukan untuk menyelesaikan \textit{Skenario 1 (Pembuatan Proyek)} secara manual dibandingkan dengan menggunakan Paicode.
 
 \begin{longtable}{@{}p{0.05\textwidth}p{0.45\textwidth}p{0.46\textwidth}@{}}
   \caption{Perbandingan Jumlah Langkah Kerja (Skenario 1)}\label{tab:perbandingan-langkah}\\
@@ -703,10 +703,10 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \bottomrule
 \end{longtable}
 
-\indent Dari Tabel~\ref{tab:perbandingan-langkah} terlihat bahwa Paicode mereduksi jumlah interaksi fisik hingga 75\%. Eliminasi langkah-langkah mekanis ini menghilangkan potensi kesalahan pengetikan (\textit{typo}) yang sering terjadi pada proses manual.
+\customindent Dari Tabel~\ref{tab:perbandingan-langkah} terlihat bahwa Paicode mereduksi jumlah interaksi fisik hingga 75\%. Eliminasi langkah-langkah mekanis ini menghilangkan potensi kesalahan pengetikan (\textit{typo}) yang sering terjadi pada proses manual.
 
 \subsubsection{Analisis Efisiensi Waktu (Time Efficiency)}
-\indent Selain jumlah langkah, pengukuran waktu eksekusi juga dilakukan untuk memvalidasi klaim efisiensi. Tabel~\ref{tab:perbandingan-waktu} menyajikan rata-rata waktu penyelesaian tugas berdasarkan 5 kali percobaan.
+\customindent Selain jumlah langkah, pengukuran waktu eksekusi juga dilakukan untuk memvalidasi klaim efisiensi. Tabel~\ref{tab:perbandingan-waktu} menyajikan rata-rata waktu penyelesaian tugas berdasarkan 5 kali percobaan.
 
 \begin{longtable}{@{}p{0.29\textwidth}p{0.27\textwidth}p{0.27\textwidth}p{0.11\textwidth}@{}}
   \caption{Perbandingan Rata-rata Waktu Penyelesaian Tugas}\label{tab:perbandingan-waktu}\\
@@ -725,14 +725,14 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \bottomrule
 \end{longtable}
 
-\indent Peningkatan kecepatan paling teramati terjadi pada tugas-tugas generatif (seperti setup proyek awal), di mana kecepatan mengetik manusia menjadi hambatan utama (\textit{bottleneck}) dibandingkan kecepatan generasi teks oleh LLM.
+\customindent Peningkatan kecepatan paling teramati terjadi pada tugas-tugas generatif (seperti setup proyek awal), di mana kecepatan mengetik manusia menjadi hambatan utama (\textit{bottleneck}) dibandingkan kecepatan generasi teks oleh LLM.
 
 \subsubsection{Transformasi Alur Kerja Pengembangan}
-\indent Perbandingan ini tidak hanya sekadar masalah waktu atau jumlah langkah, melainkan perubahan fundamental dalam model interaksi manusia dan komputer. Pada metode konvensional, pengembang bertindak sebagai eksekutor yang harus terus-menerus memindahkan konteks (\textit{context switching}) antara merancang logika, menulis sintaks, dan melihat dokumentasi.
+\customindent Perbandingan ini tidak hanya sekadar masalah waktu atau jumlah langkah, melainkan perubahan fundamental dalam model interaksi manusia dan komputer. Pada metode konvensional, pengembang bertindak sebagai eksekutor yang harus terus-menerus memindahkan konteks (\textit{context switching}) antara merancang logika, menulis sintaks, dan melihat dokumentasi.
 
-\indent Sebaliknya, Paicode memungkinkan pengembang naik level menjadi \textit{supervisor}. Pengembang cukup menyatakan intensi ("buatkan proyek"), dan agen mengambil alih beban kognitif untuk menerjemahkan intensi tersebut menjadi serangkaian operasi teknis. Hal ini menciptakan alur kerja yang lebih tenang dan terfokus pada tujuan akhir (\textit{goal-oriented}), bukan pada detail implementasi yang repetitif.
+\customindent Sebaliknya, Paicode memungkinkan pengembang naik level menjadi \textit{supervisor}. Pengembang cukup menyatakan intensi ("buatkan proyek"), dan agen mengambil alih beban kognitif untuk menerjemahkan intensi tersebut menjadi serangkaian operasi teknis. Hal ini menciptakan alur kerja yang lebih tenang dan terfokus pada tujuan akhir (\textit{goal-oriented}), bukan pada detail implementasi yang repetitif.
 
 \subsection{Tinjauan Akhir dan Keterbatasan}
-\indent Terlepas dari capaian efisiensi yang ditunjukkan oleh data pengujian, penerapan arsitektur berbasis LLM memiliki sejumlah batasan inheren yang perlu diperhatikan. Kualitas kode yang dihasilkan sangat bergantung pada performa model bahasa yang digunakan sebagai "otak" sistem. Selain itu, untuk proyek dengan skala basis kode yang sangat masif, jendela konteks (\textit{context window}) model belum sepenuhnya mampu memuat seluruh struktur proyek secara simultan tanpa strategi pengambilan informasi (\textit{retrieval}) yang lebih kompleks.
+\customindent Terlepas dari capaian efisiensi yang ditunjukkan oleh data pengujian, penerapan arsitektur berbasis LLM memiliki sejumlah batasan inheren yang perlu diperhatikan. Kualitas kode yang dihasilkan sangat bergantung pada performa model bahasa yang digunakan sebagai "otak" sistem. Selain itu, untuk proyek dengan skala basis kode yang sangat masif, jendela konteks (\textit{context window}) model belum sepenuhnya mampu memuat seluruh struktur proyek secara simultan tanpa strategi pengambilan informasi (\textit{retrieval}) yang lebih kompleks.
 
-\indent Secara keseluruhan, hasil implementasi dan pengujian di bab ini mengonfirmasi bahwa pendekatan \textit{Agentic AI} melalui antarmuka CLI mampu memberikan alternatif yang valid dan efisien untuk mempercepat siklus pengembangan perangkat lunak, terutama pada fase-fase awal (\textit{scaffolding}) dan pemeliharaan rutin. Temuan-temuan ini menjadi landasan kuat untuk menarik kesimpulan mengenai efektivitas sistem yang akan dipaparkan pada bab selanjutnya.
+\customindent Secara keseluruhan, hasil implementasi dan pengujian di bab ini mengonfirmasi bahwa pendekatan \textit{Agentic AI} melalui antarmuka CLI mampu memberikan alternatif yang valid dan efisien untuk mempercepat siklus pengembangan perangkat lunak, terutama pada fase-fase awal (\textit{scaffolding}) dan pemeliharaan rutin. Temuan-temuan ini menjadi landasan kuat untuk menarik kesimpulan mengenai efektivitas sistem yang akan dipaparkan pada bab selanjutnya.
