@@ -173,22 +173,17 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \customindent Agen diimplementasikan dalam \texttt{agent.py}. Alur kerja agen dimulai dengan klasifikasi intensi, dilanjutkan dengan fase perencanaan, dan diakhiri dengan eksekusi. Struktur data JSON yang digunakan untuk merepresentasikan rencana eksekusi agen dapat dilihat pada Gambar~\ref{lst:agent-planning}.
 
 \medskip
-\begin{figure}[H]
-  \centering
-  \lstinputlisting[language=Python, firstline=640, lastline=660]{../paicode/paicode/agent.py}
-  \caption{Cuplikan agent.py (Struktur Planning JSON)}
-  \label{lst:agent-planning}
-\end{figure}
+\medskip
+\lstinputlisting[language=Python, firstline=640, lastline=660]{../paicode/paicode/agent.py}
+\captionof{figure}{Cuplikan agent.py (Struktur Planning JSON)}
+\label{lst:agent-planning}
 
 \customindent Selain format data, agen juga dibekali instruksi sistem (\textit{System Prompt}) yang mendefinisikan persona dan batasan arsitektur \textit{Single-Shot} agar model fokus pada perencanaan yang presisi. Definisi persona dan instruksi sistem tersebut diimplementasikan dalam kode program sebagaimana ditampilkan pada Gambar~\ref{lst:agent-prompt}.
 
 \medskip
-\begin{figure}[H]
-  \centering
-  \lstinputlisting[language=Python, firstline=542, lastline=560]{../paicode/paicode/agent.py}
-  \caption{System Prompt untuk Fase Perencanaan}
-  \label{lst:agent-prompt}
-\end{figure}
+\lstinputlisting[language=Python, firstline=542, lastline=560]{../paicode/paicode/agent.py}
+\captionof{figure}{System Prompt untuk Fase Perencanaan}
+\label{lst:agent-prompt}
 
 \customindent Selanjutnya, untuk fase eksekusi, sistem menerapkan pemilihan strategi adaptif (1 hingga 3 fase) berdasarkan kompleksitas tugas. Logika pemrograman untuk pemilihan strategi eksekusi adaptif ini ditunjukkan secara rinci pada Gambar~\ref{lst:agent-strategy}.
 
