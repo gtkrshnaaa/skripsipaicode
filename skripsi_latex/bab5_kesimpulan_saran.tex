@@ -3,7 +3,7 @@
 \label{chap:kesimpulan}
 
 \section{SIMPULAN}
-Penelitian ini menghasilkan prototipe \textbf{Paicode}, sebuah agen AI berbasis CLI yang mendukung proses pengembangan perangkat lunak secara interaktif dengan memanfaatkan LLM eksternal melalui API. Sistem beroperasi pada terminal lokal dan melakukan \textbf{operasi berkas tingkat-aplikasi di ruang kerja proyek}, dilengkapi kebijakan \textit{path security} untuk mencegah akses ke direktori sensitif. Himpunan perintah yang disediakan (\texttt{MKDIR}, \texttt{TOUCH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{RM}, \texttt{MV}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{FINISH}) memungkinkan agen untuk mengobservasi, memanipulasi, dan memodifikasi berkas secara terarah.
+\indent Penelitian ini menghasilkan prototipe \textbf{Paicode}, sebuah agen AI berbasis CLI yang mendukung proses pengembangan perangkat lunak secara interaktif dengan memanfaatkan LLM eksternal melalui API. Sistem beroperasi pada terminal lokal dan melakukan \textbf{operasi berkas tingkat-aplikasi di ruang kerja proyek}, dilengkapi kebijakan \textit{path security} untuk mencegah akses ke direktori sensitif. Himpunan perintah yang disediakan (\texttt{MKDIR}, \texttt{TOUCH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{RM}, \texttt{MV}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{FINISH}) memungkinkan agen untuk mengobservasi, memanipulasi, dan memodifikasi berkas secara terarah.
 
 Berdasarkan implementasi dan evaluasi awal, beberapa poin kesimpulan dapat dirangkum sebagai berikut:
 
@@ -23,7 +23,7 @@ Secara arsitektural, Paicode memiliki karakteristik keunggulan dan batasan sebag
 Kinerja dan kualitas hasil tetap bergantung pada kemampuan LLM eksternal (Gemini) serta kejelasan instruksi yang diberikan. Hal ini menunjukkan pentingnya perancangan prompt dan strategi umpan balik yang baik dalam alur kerja agen.
 
 \section{SARAN}
-Beberapa saran pengembangan lanjutan yang dapat dilakukan antara lain:
+\indent Beberapa saran pengembangan lanjutan yang dapat dilakukan antara lain:
 
 \begin{enumerate}
   \item \textbf{Dukungan multi-LLM}: menambahkan opsi pemilihan model dan penyedia LLM alternatif (seperti OpenAI GPT, Anthropic Claude, atau Llama lokal) yang dapat dikonfigurasi, sehingga pengguna dapat menyeimbangkan antara akurasi, biaya, dan latensi sesuai kebutuhan proyek.
