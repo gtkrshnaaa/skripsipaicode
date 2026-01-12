@@ -317,7 +317,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \end{subfigure}
 \end{figure}
 
-\customindent \textbf{Analisis Log}:\par
+\textbf{Analisis Log}:\par
 \customindent Log di atas menunjukkan durasi eksekusi sekitar 7 detik. Pada pengujian berulang (Percobaan 1--3), waktu yang tercatat berkisar antara 7 detik hingga 9 detik. Variasi ini wajar dalam sistem berbasis \textit{cloud inference}, di mana kecepatan jaringan menjadi variabel bebas. Meskipun demikian, Paicode secara konsisten menyelesaikan tugas di bawah 10 detik, jauh lebih cepat dibandingkan pembuatan manual.
 
 \subsubsection{Hasil Skenario 2: Modifikasi Kode}
@@ -388,7 +388,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \end{subfigure}
 \end{figure}
 
-\customindent \textbf{Analisis Log}:\par
+\textbf{Analisis Log}:\par
 \customindent Untuk tugas modifikasi yang melibatkan pembacaan konteks dan pembuatan \textit{diff}, rata-rata waktu yang dibutuhkan adalah 20.66 detik. Fluktuasi tercatat pada percobaan kedua (22 detik) yang diasumsikan terjadi akibat antrian trafik pada API provider. Efisiensi ini menghilangkan waktu yang biasanya dihabiskan manusia untuk \textit{scrolling} dan mencari lokasi penyisipan kode (\textit{context seeking}).
 
 \subsubsection{Hasil Skenario 3: Eksplorasi}
@@ -468,7 +468,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \end{subfigure}
 \end{figure}
 
-\customindent \textbf{Analisis Log}:\par
+\textbf{Analisis Log}:\par
 \customindent Operasi \textit{read-only} seperti ini relatif stabil dengan rata-rata 8.33 detik. Agen menggunakan perintah \texttt{TREE} untuk memberikan konteks visual kepada pengguna. Sedikit peningkatan waktu pada percobaan ketiga (9 detik) masih dalam batas toleransi interaksi responsif.
 
 \subsubsection{Hasil Skenario 4: Debugging Otomatis}
@@ -545,7 +545,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \end{subfigure}
 \end{figure}
 
-\customindent \textbf{Analisis Log}:\par
+\textbf{Analisis Log}:\par
 \customindent Rata-rata waktu penyelesaian untuk skenario debugging adalah 18.33 detik. Agen melakukan verifikasi terlebih dahulu (\texttt{READ}) sebelum melakukan perbaikan (\texttt{MODIFY}), memastikan perbaikan berbasis fakta. Konsistensi waktu antar percobaan menunjukkan reliabilitas alur \textit{reflection} agen.
 
 \subsubsection{Hasil Skenario 5: Pengujian Keamanan}
@@ -616,7 +616,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \end{subfigure}
 \end{figure}
 
-\customindent \textbf{Analisis Log}:\par
+\textbf{Analisis Log}:\par
 \customindent Skenario keamanan memiliki waktu respons tercepat (rata-rata 6.0 detik) karena blokir terjadi di sisi klien (\textit{workspace.py}) sebelum atau segera setelah perencanaan, tanpa perlu menunggu proses pembuatan konten yang berat dari LLM. Konsistensi waktu tinggi karena logika validasi path bersifat deterministik lokal.
 
 \subsubsection{Hasil Pengujian Menyeluruh (3 Percobaan)}
