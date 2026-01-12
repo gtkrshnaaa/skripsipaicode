@@ -71,12 +71,9 @@ Selain format data, agen juga dibekali instruksi sistem (\textit{System Prompt})
 Selanjutnya, untuk fase eksekusi, sistem menerapkan pemilihan strategi adaptif (1 hingga 3 fase) berdasarkan kompleksitas tugas. Logika pemrograman untuk pemilihan strategi eksekusi adaptif ini ditunjukkan secara rinci pada Gambar~\ref{lst:agent-strategy}.
 
 \medskip
-\begin{figure}[htbp]
-  \centering
-  \lstinputlisting[language=Python, firstline=836, lastline=868]{../paicode/paicode/agent.py}
-  \caption{Logika Strategi Eksekusi Adaptif}
-  \label{lst:agent-strategy}
-\end{figure}
+\lstinputlisting[language=Python, firstline=836, lastline=868]{../paicode/paicode/agent.py}
+\captionof{figure}{Logika Strategi Eksekusi Adaptif}
+\label{lst:agent-strategy}
 
 \subsubsection{Sistem Keamanan Workspace}
 Modul \texttt{workspace.py} bertugas menegakkan kebijakan keamanan. Setiap operasi berkas divalidasi path-nya untuk memastikan tidak keluar dari root project (mencegah path traversal) dan tidak menyentuh direktori terlarang seperti \texttt{.git} atau \texttt{.env}.
@@ -84,22 +81,16 @@ Modul \texttt{workspace.py} bertugas menegakkan kebijakan keamanan. Setiap opera
 Berikut adalah implementasi fungsi \texttt{\_is\_safe\_path} yang menjadi gerbang validasi utama. Implementasi fungsi utama \texttt{\_is\_safe\_path} yang bertugas memvalidasi keamanan jalur berkas diperlihatkan pada Gambar~\ref{lst:workspace-security}.
 
 \medskip
-\begin{figure}[htbp]
-  \centering
-  \lstinputlisting[language=Python, firstline=36, lastline=61]{../paicode/paicode/workspace.py}
-  \caption{Validasi Path (\_is\_safe\_path)}
-  \label{lst:workspace-security}
-\end{figure}
+\lstinputlisting[language=Python, firstline=36, lastline=61]{../paicode/paicode/workspace.py}
+\captionof{figure}{Validasi Path (\_is\_safe\_path)}
+\label{lst:workspace-security}
 
 Selain validasi path, sistem juga menerapkan pembatasan modifikasi berbasis \textit{diff} untuk mencegah perubahan masif yang berisiko. Mekanisme pembatasan jumlah baris yang dimodifikasi (threshold) diimplementasikan melalui kode pada Gambar~\ref{lst:workspace-diff}.
 
 \medskip
-\begin{figure}[htbp]
-  \centering
-  \lstinputlisting[language=Python, firstline=270, lastline=293]{../paicode/paicode/workspace.py}
-  \caption{Logika Threshold Modifikasi (Diff-based)}
-  \label{lst:workspace-diff}
-\end{figure}
+\lstinputlisting[language=Python, firstline=270, lastline=293]{../paicode/paicode/workspace.py}
+\captionof{figure}{Logika Threshold Modifikasi (Diff-based)}
+\label{lst:workspace-diff}
 
 \subsection{Skenario Pengujian}
 
