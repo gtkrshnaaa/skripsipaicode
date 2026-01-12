@@ -1,6 +1,6 @@
 % Chapter 4 - Implementasi dan Pembahasan
-\chapter{IMPLEMENTASI DAN PEMBAHASAN}
 \label{chap:implementasi}
+\setlength{\parindent}{0pt} % Disable standard indentation locally to avoid double-indenting with \customindent
 
 \section{Implementasi dan Uji Coba Sistem}
 \customindent Bagian ini menguraikan tahapan realisasi sistem Paicode, mulai dari konfigurasi lingkungan, implementasi kode program, hingga hasil pengujian fungsional.
@@ -736,3 +736,5 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \customindent Terlepas dari capaian efisiensi yang ditunjukkan oleh data pengujian, penerapan arsitektur berbasis LLM memiliki sejumlah batasan inheren yang perlu diperhatikan. Kualitas kode yang dihasilkan sangat bergantung pada performa model bahasa yang digunakan sebagai "otak" sistem. Selain itu, untuk proyek dengan skala basis kode yang sangat masif, jendela konteks (\textit{context window}) model belum sepenuhnya mampu memuat seluruh struktur proyek secara simultan tanpa strategi pengambilan informasi (\textit{retrieval}) yang lebih kompleks.
 
 \customindent Secara keseluruhan, hasil implementasi dan pengujian di bab ini mengonfirmasi bahwa pendekatan \textit{Agentic AI} melalui antarmuka CLI mampu memberikan alternatif yang valid dan efisien untuk mempercepat siklus pengembangan perangkat lunak, terutama pada fase-fase awal (\textit{scaffolding}) dan pemeliharaan rutin. Temuan-temuan ini menjadi landasan kuat untuk menarik kesimpulan mengenai efektivitas sistem yang akan dipaparkan pada bab selanjutnya.
+
+\setlength{\parindent}{1.27cm} % Restore standard indentation for next chapters
