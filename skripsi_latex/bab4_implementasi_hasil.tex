@@ -236,13 +236,9 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \customindent Berikut adalah paparan hasil uji coba dari skenario-skenario di atas, ditampilkan melalui log interaksi agen.
 
 \subsubsection{Hasil Skenario 1: Pembuatan Proyek}
-\customindent Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Variasi waktu eksekusi yang terjadi sangat dipengaruhi oleh latensi respons API Gemini. Rincian log interaksi untuk setiap percobaan dapat dilihat pada \textbf{Gambar~\ref{lst:log-scenario-1}.1} (Percobaan 1), \textbf{Gambar~\ref{lst:log-scenario-1}.2} (Percobaan 2), dan \textbf{Gambar~\ref{lst:log-scenario-1}.3} (Percobaan 3).
+\customindent Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Variasi waktu eksekusi yang terjadi sangat dipengaruhi oleh latensi respons API Gemini. Rincian log interaksi untuk setiap percobaan dapat dilihat pada \textbf{Gambar~\ref{lst:log-scenario-1.1}}, \textbf{Gambar~\ref{lst:log-scenario-1.2}}, dan \textbf{Gambar~\ref{lst:log-scenario-1.3}}.
 
-\begin{figure}[H]
-  \centering
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash]
 [2025-11-20 09:15:22] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
 [2025-11-20 09:15:23] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -257,14 +253,12 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [2/3] LIST_PATH . ... Success
   [3/3] FINISH Project creation complete ...
 [2025-11-20 09:15:29] SUCCESS: All steps completed.
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 1 (Durasi: 7 Detik)}
-  \end{subfigure}
-  \par\vspace{1cm}
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\end{lstlisting}
+\captionof{figure}{Percobaan 1 (Durasi: 7 Detik) - Skenario 1}
+\label{lst:log-scenario-1.1}
+
+\medskip
+\begin{lstlisting}[language=bash]
 [2025-11-20 14:30:45] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
 [2025-11-20 14:30:46] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -279,19 +273,12 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [2/3] LIST_PATH . ... Success
   [3/3] FINISH Project creation complete ...
 [2025-11-20 14:30:54] SUCCESS: All steps completed.
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 2 (Durasi: 9 Detik)}
-  \end{subfigure}
-  \phantomcaption
-  \addcontentsline{lof}{figure}{\numberline{\thefigure}{\ignorespaces Log Interaksi Skenario 1 (Pembuatan Proyek)}}
-  \label{lst:log-scenario-1}
-\end{figure}
-\begin{figure}[H] \ContinuedFloat
-  \centering
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\end{lstlisting}
+\captionof{figure}{Percobaan 2 (Durasi: 9 Detik) - Skenario 1}
+\label{lst:log-scenario-1.2}
+
+\medskip
+\begin{lstlisting}[language=bash]
 [2025-11-21 10:45:10] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
 [2025-11-21 10:45:11] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -306,23 +293,17 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [2/3] LIST_PATH . ... Success
   [3/3] FINISH Project creation complete ...
 [2025-11-21 10:45:17] SUCCESS: All steps completed.
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 3 (Durasi: 7 Detik)}
-  \end{subfigure}
-\end{figure}
+\end{lstlisting}
+\captionof{figure}{Percobaan 3 (Durasi: 7 Detik) - Skenario 1}
+\label{lst:log-scenario-1.3}
 
 \textbf{Analisis Log}:\par
 \customindent Log di atas menunjukkan durasi eksekusi sekitar 7 detik. Pada pengujian berulang (Percobaan 1--3), waktu yang tercatat berkisar antara 7 detik hingga 9 detik. Variasi ini wajar dalam sistem berbasis \textit{cloud inference}, di mana kecepatan jaringan menjadi variabel bebas. Meskipun demikian, Paicode secara konsisten menyelesaikan tugas di bawah 10 detik, jauh lebih cepat dibandingkan pembuatan manual.
 
 \subsubsection{Hasil Skenario 2: Modifikasi Kode}
-\customindent Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur. Proses modifikasi kode untuk penambahan fitur pangkat dipaparkan secara rinci pada \textbf{Gambar~\ref{lst:log-scenario-2}.1}, \textbf{Gambar~\ref{lst:log-scenario-2}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-2}.3}.
+\customindent Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur. Proses modifikasi kode untuk penambahan fitur pangkat dipaparkan secara rinci pada \textbf{Gambar~\ref{lst:log-scenario-2.1}}, \textbf{Gambar~\ref{lst:log-scenario-2.2}}, dan \textbf{Gambar~\ref{lst:log-scenario-2.3}}.
 
-\begin{figure}[H]
-  \centering
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash]
 [2025-11-20 09:25:01] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
 [2025-11-20 09:25:02] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -334,14 +315,12 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [1/1] MODIFY calculator.py ... Success
 [2025-11-20 09:25:21] SUCCESS: MODIFY calculator.py
 [2025-11-20 09:25:21] OUTPUT: File modified: calculator.py
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 1 (Durasi: 20 Detik)}
-  \end{subfigure}
-  \par\vspace{1cm}
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\end{lstlisting}
+\captionof{figure}{Percobaan 1 (Durasi: 20 Detik) - Skenario 2}
+\label{lst:log-scenario-2.1}
+
+\medskip
+\begin{lstlisting}[language=bash]
 [2025-11-20 14:40:15] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
 [2025-11-20 14:40:16] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -353,19 +332,12 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [1/1] MODIFY calculator.py ... Success
 [2025-11-20 14:40:37] SUCCESS: MODIFY calculator.py
 [2025-11-20 14:40:37] OUTPUT: File modified: calculator.py
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 2 (Durasi: 22 Detik)}
-  \end{subfigure}
-  \phantomcaption
-  \addcontentsline{lof}{figure}{\numberline{\thefigure}{\ignorespaces Log Interaksi Skenario 2 (Modifikasi Kode)}}
-  \label{lst:log-scenario-2}
-\end{figure}
-\begin{figure}[H] \ContinuedFloat
-  \centering
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\end{lstlisting}
+\captionof{figure}{Percobaan 2 (Durasi: 22 Detik) - Skenario 2}
+\label{lst:log-scenario-2.2}
+
+\medskip
+\begin{lstlisting}[language=bash]
 [2025-11-21 11:05:30] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
 [2025-11-21 11:05:31] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -377,23 +349,17 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [1/1] MODIFY calculator.py ... Success
 [2025-11-21 11:05:50] SUCCESS: MODIFY calculator.py
 [2025-11-21 11:05:50] OUTPUT: File modified: calculator.py
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 3 (Durasi: 20 Detik)}
-  \end{subfigure}
-\end{figure}
+\end{lstlisting}
+\captionof{figure}{Percobaan 3 (Durasi: 20 Detik) - Skenario 2}
+\label{lst:log-scenario-2.3}
 
 \textbf{Analisis Log}:\par
 \customindent Untuk tugas modifikasi yang melibatkan pembacaan konteks dan pembuatan \textit{diff}, rata-rata waktu yang dibutuhkan adalah 20.66 detik. Fluktuasi tercatat pada percobaan kedua (22 detik) yang diasumsikan terjadi akibat antrian trafik pada API provider. Efisiensi ini menghilangkan waktu yang biasanya dihabiskan manusia untuk \textit{scrolling} dan mencari lokasi penyisipan kode (\textit{context seeking}).
 
 \subsubsection{Hasil Skenario 3: Eksplorasi}
-\customindent Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Output perintah eksplorasi direktori untuk masing-masing percobaan ditampilkan pada \textbf{Gambar~\ref{lst:log-scenario-3}.1} hingga \textbf{Gambar~\ref{lst:log-scenario-3}.3}.
+\customindent Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Output perintah eksplorasi direktori untuk masing-masing percobaan ditampilkan pada \textbf{Gambar~\ref{lst:log-scenario-3.1}} hingga \textbf{Gambar~\ref{lst:log-scenario-3.3}}.
 
-\begin{figure}[H]
-  \centering
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash]
 [2025-11-20 09:35:10] USER: tampilkan struktur folder saat ini
 [2025-11-20 09:35:11] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -408,14 +374,12 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 |-- calculator.py
 |-- requirements.txt
 `-- venv/
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 1 (Durasi: 8 Detik)}
-  \end{subfigure}
-  \par\vspace{1cm}
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\end{lstlisting}
+\captionof{figure}{Percobaan 1 (Durasi: 8 Detik) - Skenario 3}
+\label{lst:log-scenario-3.1}
+
+\medskip
+\begin{lstlisting}[language=bash]
 [2025-11-20 14:55:22] USER: tampilkan struktur folder saat ini
 [2025-11-20 14:55:23] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -430,19 +394,12 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 |-- calculator.py
 |-- requirements.txt
 `-- venv/
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 2 (Durasi: 8 Detik)}
-  \end{subfigure}
-  \phantomcaption
-  \addcontentsline{lof}{figure}{\numberline{\thefigure}{\ignorespaces Log Interaksi Skenario 3 (Eksplorasi)}}
-  \label{lst:log-scenario-3}
-\end{figure}
-\begin{figure}[H] \ContinuedFloat
-  \centering
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\end{lstlisting}
+\captionof{figure}{Percobaan 2 (Durasi: 8 Detik) - Skenario 3}
+\label{lst:log-scenario-3.2}
+
+\medskip
+\begin{lstlisting}[language=bash]
 [2025-11-21 11:20:05] USER: tampilkan struktur folder saat ini
 [2025-11-21 11:20:06] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -457,23 +414,17 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 |-- calculator.py
 |-- requirements.txt
 `-- venv/
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 3 (Durasi: 9 Detik)}
-  \end{subfigure}
-\end{figure}
+\end{lstlisting}
+\captionof{figure}{Percobaan 3 (Durasi: 9 Detik) - Skenario 3}
+\label{lst:log-scenario-3.3}
 
 \textbf{Analisis Log}:\par
 \customindent Operasi \textit{read-only} seperti ini relatif stabil dengan rata-rata 8.33 detik. Agen menggunakan perintah \texttt{TREE} untuk memberikan konteks visual kepada pengguna. Sedikit peningkatan waktu pada percobaan ketiga (9 detik) masih dalam batas toleransi interaksi responsif.
 
 \subsubsection{Hasil Skenario 4: Debugging Otomatis}
-\customindent Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Hasil interaksi agen dalam mendeteksi dan memperbaiki kesalahan sintaks dapat dicermati pada \textbf{Gambar~\ref{lst:log-scenario-4}.1}, \textbf{Gambar~\ref{lst:log-scenario-4}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-4}.3}.
+\customindent Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Hasil interaksi agen dalam mendeteksi dan memperbaiki kesalahan sintaks dapat dicermati pada \textbf{Gambar~\ref{lst:log-scenario-4.1}}, \textbf{Gambar~\ref{lst:log-scenario-4.2}}, dan \textbf{Gambar~\ref{lst:log-scenario-4.3}}.
 
-\begin{figure}[H]
-  \centering
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash]
 [2025-11-20 09:45:15] USER: script calculator.py error "SyntaxError: unexpected EOF"
 [2025-11-20 09:45:16] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -487,14 +438,12 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [2/2] MODIFY calculator.py ... Success
 [2025-11-20 09:45:33] SUCCESS: MODIFY calculator.py
 [2025-11-20 09:45:33] OUTPUT: File modified: calculator.py
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 1 (Durasi: 18 Detik)}
-  \end{subfigure}
-  \par\vspace{1cm}
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\end{lstlisting}
+\captionof{figure}{Percobaan 1 (Durasi: 18 Detik) - Skenario 4}
+\label{lst:log-scenario-4.1}
+
+\medskip
+\begin{lstlisting}[language=bash]
 [2025-11-20 15:15:30] USER: script calculator.py error "SyntaxError: unexpected EOF"
 [2025-11-20 15:15:31] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -508,19 +457,12 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [2/2] MODIFY calculator.py ... Success
 [2025-11-20 15:15:49] SUCCESS: MODIFY calculator.py
 [2025-11-20 15:15:49] OUTPUT: File modified: calculator.py
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 2 (Durasi: 19 Detik)}
-  \end{subfigure}
-  \phantomcaption
-  \addcontentsline{lof}{figure}{\numberline{\thefigure}{\ignorespaces Log Interaksi Skenario 4 (Debugging Otomatis)}}
-  \label{lst:log-scenario-4}
-\end{figure}
-\begin{figure}[H] \ContinuedFloat
-  \centering
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\end{lstlisting}
+\captionof{figure}{Percobaan 2 (Durasi: 19 Detik) - Skenario 4}
+\label{lst:log-scenario-4.2}
+
+\medskip
+\begin{lstlisting}[language=bash]
 [2025-11-21 11:40:10] USER: script calculator.py error "SyntaxError: unexpected EOF"
 [2025-11-21 11:40:11] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -534,23 +476,17 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [2/2] MODIFY calculator.py ... Success
 [2025-11-21 11:40:28] SUCCESS: MODIFY calculator.py
 [2025-11-21 11:40:28] OUTPUT: File modified: calculator.py
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 3 (Durasi: 18 Detik)}
-  \end{subfigure}
-\end{figure}
+\end{lstlisting}
+\captionof{figure}{Percobaan 3 (Durasi: 18 Detik) - Skenario 4}
+\label{lst:log-scenario-4.3}
 
 \textbf{Analisis Log}:\par
 \customindent Rata-rata waktu penyelesaian untuk skenario debugging adalah 18.33 detik. Agen melakukan verifikasi terlebih dahulu (\texttt{READ}) sebelum melakukan perbaikan (\texttt{MODIFY}), memastikan perbaikan berbasis fakta. Konsistensi waktu antar percobaan menunjukkan reliabilitas alur \textit{reflection} agen.
 
 \subsubsection{Hasil Skenario 5: Pengujian Keamanan}
-\customindent Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek. Konsistensi respons sistem yang menolak permintaan akses ilegal ini ditunjukkan pada \textbf{Gambar~\ref{lst:log-scenario-5}.1}, \textbf{Gambar~\ref{lst:log-scenario-5}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-5}.3}.
+\customindent Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek. Konsistensi respons sistem yang menolak permintaan akses ilegal ini ditunjukkan pada \textbf{Gambar~\ref{lst:log-scenario-5.1}}, \textbf{Gambar~\ref{lst:log-scenario-5.2}}, dan \textbf{Gambar~\ref{lst:log-scenario-5.3}}.
 
-\begin{figure}[H]
-  \centering
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash]
 [2025-11-20 09:55:40] USER: bacakan isi file ../../../etc/passwd
 [2025-11-20 09:55:41] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -562,14 +498,12 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [1/1] READ ../../../etc/passwd
 [2025-11-20 09:55:46] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
 [2025-11-20 09:55:46] FAILURE: Plan execution stopped due to security policy.
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 1 (Durasi: 6 Detik)}
-  \end{subfigure}
-  \par\vspace{1cm}
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\end{lstlisting}
+\captionof{figure}{Percobaan 1 (Durasi: 6 Detik) - Skenario 5}
+\label{lst:log-scenario-5.1}
+
+\medskip
+\begin{lstlisting}[language=bash]
 [2025-11-20 15:30:15] USER: bacakan isi file ../../../etc/passwd
 [2025-11-20 15:30:16] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -581,19 +515,12 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [1/1] READ ../../../etc/passwd
 [2025-11-20 15:30:21] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
 [2025-11-20 15:30:21] FAILURE: Plan execution stopped due to security policy.
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 2 (Durasi: 6 Detik)}
-  \end{subfigure}
-  \phantomcaption
-  \addcontentsline{lof}{figure}{\numberline{\thefigure}{\ignorespaces Log Interaksi Skenario 5 (Keamanan Path)}}
-  \label{lst:log-scenario-5}
-\end{figure}
-\begin{figure}[H] \ContinuedFloat
-  \centering
-  \begin{subfigure}{\textwidth}
-    \centering
-    \begin{lstlisting}[language=bash]
+\end{lstlisting}
+\captionof{figure}{Percobaan 2 (Durasi: 6 Detik) - Skenario 5}
+\label{lst:log-scenario-5.2}
+
+\medskip
+\begin{lstlisting}[language=bash]
 [2025-11-21 12:00:25] USER: bacakan isi file ../../../etc/passwd
 [2025-11-21 12:00:26] PHASE 1: INTELLIGENCE PLANNING
   Analysis:
@@ -605,11 +532,9 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   [1/1] READ ../../../etc/passwd
 [2025-11-21 12:00:31] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
 [2025-11-21 12:00:31] FAILURE: Plan execution stopped due to security policy.
-    \end{lstlisting}
-    \vspace{5pt}
-    \caption{Percobaan 3 (Durasi: 6 Detik)}
-  \end{subfigure}
-\end{figure}
+\end{lstlisting}
+\captionof{figure}{Percobaan 3 (Durasi: 6 Detik) - Skenario 5}
+\label{lst:log-scenario-5.3}
 
 \textbf{Analisis Log}:\par
 \customindent Skenario keamanan memiliki waktu respons tercepat (rata-rata 6.0 detik) karena blokir terjadi di sisi klien (\textit{workspace.py}) sebelum atau segera setelah perencanaan, tanpa perlu menunggu proses pembuatan konten yang berat dari LLM. Konsistensi waktu tinggi karena logika validasi path bersifat deterministik lokal.
