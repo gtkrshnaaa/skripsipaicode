@@ -37,7 +37,7 @@ Implementasi inti Paicode berpusat pada arsitektur \textit{Single-Shot Intellige
 \subsubsection{Manajemen Konfigurasi dan API Key}
 Modul \texttt{config.py} mengelola penyimpanan API key secara aman. Kunci disimpan dalam berkas JSON terenkripsi sederhana (hak akses owner-only) di direktori \texttt{~/.config/pai-code/}. Kunci API ini penting untuk otentikasi dengan layanan Gemini. Perintah yang digunakan untuk mengatur dan memvalidasi konfigurasi kunci API ditunjukkan pada Gambar~\ref{lst:config-cmd}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
   \centering
   \begin{lstlisting}[language=bash]
 pai config set AIzaSy...  # Mengatur key
@@ -51,7 +51,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 Agen diimplementasikan dalam \texttt{agent.py}. Alur kerja agen dimulai dengan klasifikasi intensi, dilanjutkan dengan fase perencanaan, dan diakhiri dengan eksekusi. Struktur data JSON yang digunakan untuk merepresentasikan rencana eksekusi agen dapat dilihat pada Gambar~\ref{lst:agent-planning}.
 
 \medskip
-\begin{figure}[htbp]
+\begin{figure}[H]
   \centering
   \lstinputlisting[language=Python, firstline=640, lastline=660]{../paicode/paicode/agent.py}
   \caption{Cuplikan agent.py (Struktur Planning JSON)}
@@ -61,7 +61,7 @@ Agen diimplementasikan dalam \texttt{agent.py}. Alur kerja agen dimulai dengan k
 Selain format data, agen juga dibekali instruksi sistem (\textit{System Prompt}) yang mendefinisikan persona dan batasan arsitektur \textit{Single-Shot} agar model fokus pada perencanaan yang presisi. Definisi persona dan instruksi sistem tersebut diimplementasikan dalam kode program sebagaimana ditampilkan pada Gambar~\ref{lst:agent-prompt}.
 
 \medskip
-\begin{figure}[htbp]
+\begin{figure}[H]
   \centering
   \lstinputlisting[language=Python, firstline=542, lastline=560]{../paicode/paicode/agent.py}
   \caption{System Prompt untuk Fase Perencanaan}
@@ -123,7 +123,7 @@ Berikut adalah paparan hasil uji coba dari skenario-skenario di atas, ditampilka
 \subsubsection{Hasil Skenario 1: Pembuatan Proyek}
 Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Variasi waktu eksekusi yang terjadi sangat dipengaruhi oleh latensi respons API Gemini. Rincian log interaksi untuk setiap percobaan dapat dilihat pada \textbf{Gambar~\ref{lst:log-scenario-1}.1} (Percobaan 1), \textbf{Gambar~\ref{lst:log-scenario-1}.2} (Percobaan 2), dan \textbf{Gambar~\ref{lst:log-scenario-1}.3} (Percobaan 3).
 
-\begin{figure}[htbp]
+\begin{figure}[H]
   \centering
   \begin{subfigure}{\textwidth}
     \centering
@@ -153,7 +153,7 @@ Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Va
   \phantomcaption
   \label{lst:log-scenario-1}
 \end{figure}
-\begin{figure}[htbp] \ContinuedFloat
+\begin{figure}[H] \ContinuedFloat
   \centering
   \begin{subfigure}{\textwidth}
     \centering
@@ -175,7 +175,7 @@ Log di atas menunjukkan durasi eksekusi sekitar 7 detik. Pada pengujian berulang
 \subsubsection{Hasil Skenario 2: Modifikasi Kode}
 Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur. Proses modifikasi kode untuk penambahan fitur pangkat dipaparkan secara rinci pada \textbf{Gambar~\ref{lst:log-scenario-2}.1}, \textbf{Gambar~\ref{lst:log-scenario-2}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-2}.3}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
   \centering
   \begin{subfigure}{\textwidth}
     \centering
@@ -203,7 +203,7 @@ Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff}
   \phantomcaption
   \label{lst:log-scenario-2}
 \end{figure}
-\begin{figure}[htbp] \ContinuedFloat
+\begin{figure}[H] \ContinuedFloat
   \centering
   \begin{subfigure}{\textwidth}
     \centering
@@ -224,7 +224,7 @@ Untuk tugas modifikasi yang melibatkan pembacaan konteks dan pembuatan \textit{d
 \subsubsection{Hasil Skenario 3: Eksplorasi}
 Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Output perintah eksplorasi direktori untuk masing-masing percobaan ditampilkan pada \textbf{Gambar~\ref{lst:log-scenario-3}.1} hingga \textbf{Gambar~\ref{lst:log-scenario-3}.3}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
   \centering
   \begin{subfigure}{\textwidth}
     \centering
@@ -258,7 +258,7 @@ Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Output perint
   \phantomcaption
   \label{lst:log-scenario-3}
 \end{figure}
-\begin{figure}[htbp] \ContinuedFloat
+\begin{figure}[H] \ContinuedFloat
   \centering
   \begin{subfigure}{\textwidth}
     \centering
@@ -282,7 +282,7 @@ Operasi \textit{read-only} seperti ini relatif stabil dengan rata-rata 8.33 deti
 \subsubsection{Hasil Skenario 4: Debugging Otomatis}
 Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Hasil interaksi agen dalam mendeteksi dan memperbaiki kesalahan sintaks dapat dicermati pada \textbf{Gambar~\ref{lst:log-scenario-4}.1}, \textbf{Gambar~\ref{lst:log-scenario-4}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-4}.3}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
   \centering
   \begin{subfigure}{\textwidth}
     \centering
@@ -314,7 +314,7 @@ Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Hasil
   \phantomcaption
   \label{lst:log-scenario-4}
 \end{figure}
-\begin{figure}[htbp] \ContinuedFloat
+\begin{figure}[H] \ContinuedFloat
   \centering
   \begin{subfigure}{\textwidth}
     \centering
@@ -337,7 +337,7 @@ Rata-rata waktu penyelesaian untuk skenario debugging adalah 18.33 detik. Agen m
 \subsubsection{Hasil Skenario 5: Pengujian Keamanan}
 Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek. Konsistensi respons sistem yang menolak permintaan akses ilegal ini ditunjukkan pada \textbf{Gambar~\ref{lst:log-scenario-5}.1}, \textbf{Gambar~\ref{lst:log-scenario-5}.2}, dan \textbf{Gambar~\ref{lst:log-scenario-5}.3}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
   \centering
   \begin{subfigure}{\textwidth}
     \centering
@@ -365,7 +365,7 @@ Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup 
   \phantomcaption
   \label{lst:log-scenario-5}
 \end{figure}
-\begin{figure}[htbp] \ContinuedFloat
+\begin{figure}[H] \ContinuedFloat
   \centering
   \begin{subfigure}{\textwidth}
     \centering
