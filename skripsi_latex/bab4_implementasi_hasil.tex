@@ -121,88 +121,116 @@ Seluruh interaksi selama pengujian direkam oleh sistem log yang secara otomatis 
 Berikut adalah paparan hasil uji coba dari skenario-skenario di atas, ditampilkan melalui log interaksi agen.
 
 \subsubsection{Hasil Skenario 1: Pembuatan Proyek}
-Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Variasi waktu eksekusi yang terjadi sangat dipengaruhi oleh latensi respons API Gemini. Gambar~\ref{lst:log-scenario-1} menampilkan log dari salah satu percobaan yang representatif.
+Agen berhasil membuat struktur direktori dan file awal pada ketiga percobaan. Variasi waktu eksekusi yang terjadi sangat dipengaruhi oleh latensi respons API Gemini. Rincian log interaksi untuk setiap percobaan dapat dilihat pada Gambar~\ref{lst:log-scenario-1}, yang terdiri dari percobaan pertama (a), kedua (b), dan ketiga (c).
 
-\bigskip
-\noindent\textbf{Percobaan 1 (Durasi: 7 Detik)}
-\begin{lstlisting}[language=bash]
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:38:05] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
 [2025-11-20 22:38:10] EXECUTION PLAN (3 steps):
   1. WRITE calculator.py ...
   2. LIST_PATH . ...
   3. FINISH Project creation complete ...
 [2025-11-20 22:38:12] SUCCESS: All steps completed.
-\end{lstlisting}
-
-\noindent\textbf{Percobaan 2 (Durasi: 9 Detik)}
-\begin{lstlisting}[language=bash]
+    \end{lstlisting}
+    \caption{Percobaan 1 (Durasi: 7 Detik)}
+  \end{subfigure}
+  \vspace{0.5em}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:38:30] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
 [2025-11-20 22:38:36] EXECUTION PLAN (3 steps):
   1. WRITE calculator.py ...
   2. LIST_PATH . ...
   3. FINISH Project creation complete ...
 [2025-11-20 22:38:39] SUCCESS: All steps completed.
-\end{lstlisting}
-
-\noindent\textbf{Percobaan 3 (Durasi: 7 Detik)}
-\begin{lstlisting}[language=bash]
+    \end{lstlisting}
+    \caption{Percobaan 2 (Durasi: 9 Detik)}
+  \end{subfigure}
+  \caption{Log Tiga Percobaan: Pembuatan Proyek Kalkulator}
+  \label{lst:log-scenario-1}
+\end{figure}
+\begin{figure}[htbp] \ContinuedFloat
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:38:50] USER: buatkan script kalkulator python (tambah, kurang, kali, bagi)
 [2025-11-20 22:38:55] EXECUTION PLAN (3 steps):
   1. WRITE calculator.py ...
   2. LIST_PATH . ...
   3. FINISH Project creation complete ...
 [2025-11-20 22:38:57] SUCCESS: All steps completed.
-\end{lstlisting}
-\captionof{figure}{Log Tiga Percobaan: Pembuatan Proyek Kalkulator}
-\label{lst:log-scenario-1}
-\bigskip
+    \end{lstlisting}
+    \caption{Percobaan 3 (Durasi: 7 Detik)}
+  \end{subfigure}
+  \caption{Log Tiga Percobaan: Pembuatan Proyek Kalkulator (Lanjutan)}
+\end{figure}
 
 \textbf{Analisis Log}:
 Log di atas menunjukkan durasi eksekusi sekitar 7 detik. Pada pengujian berulang (Percobaan 1--3), waktu yang tercatat berkisar antara 7 detik hingga 9 detik. Variasi ini wajar dalam sistem berbasis \textit{cloud inference}, di mana kecepatan jaringan menjadi variabel bebas. Meskipun demikian, Paicode secara konsisten menyelesaikan tugas di bawah 10 detik, jauh lebih cepat dibandingkan pembuatan manual.
 
 \subsubsection{Hasil Skenario 2: Modifikasi Kode}
-Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur. Proses modifikasi kode untuk penambahan fitur pangkat terekam dalam log sistem pada Gambar~\ref{lst:log-scenario-2}.
+Agen berhasil membaca file, merencanakan perubahan, dan menerapkan \textit{diff} untuk menambahkan fitur. Proses modifikasi kode untuk penambahan fitur pangkat pada tiga percobaan terpisah ditunjukkan secara lengkap pada Gambar~\ref{lst:log-scenario-2}(a) hingga (c).
 
-\bigskip
-\noindent\textbf{Percobaan 1 (Durasi: 20 Detik)}
-\begin{lstlisting}[language=bash]
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:40:26] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
 [2025-11-20 22:40:35] EXECUTION PLAN (1 steps):
   1. MODIFY calculator.py ...
 [2025-11-20 22:40:46] SUCCESS: MODIFY calculator.py
 [2025-11-20 22:40:46] OUTPUT: File modified: calculator.py
-\end{lstlisting}
-
-\noindent\textbf{Percobaan 2 (Durasi: 22 Detik)}
-\begin{lstlisting}[language=bash]
+    \end{lstlisting}
+    \caption{Percobaan 1 (Durasi: 20 Detik)}
+  \end{subfigure}
+  \vspace{0.5em}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:41:00] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
 [2025-11-20 22:41:10] EXECUTION PLAN (1 steps):
   1. MODIFY calculator.py ...
 [2025-11-20 22:41:22] SUCCESS: MODIFY calculator.py
 [2025-11-20 22:41:22] OUTPUT: File modified: calculator.py
-\end{lstlisting}
-
-\noindent\textbf{Percobaan 3 (Durasi: 20 Detik)}
-\begin{lstlisting}[language=bash]
+    \end{lstlisting}
+    \caption{Percobaan 2 (Durasi: 22 Detik)}
+  \end{subfigure}
+  \caption{Log Tiga Percobaan: Modifikasi Fitur Pangkat}
+  \label{lst:log-scenario-2}
+\end{figure}
+\begin{figure}[htbp] \ContinuedFloat
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:41:40] USER: tambahkan fungsi operasi pangkat (power) pada calculator.py
 [2025-11-20 22:41:49] EXECUTION PLAN (1 steps):
   1. MODIFY calculator.py ...
 [2025-11-20 22:42:00] SUCCESS: MODIFY calculator.py
 [2025-11-20 22:42:00] OUTPUT: File modified: calculator.py
-\end{lstlisting}
-\captionof{figure}{Log Tiga Percobaan: Modifikasi Fitur Pangkat}
-\label{lst:log-scenario-2}
-\bigskip
+    \end{lstlisting}
+    \caption{Percobaan 3 (Durasi: 20 Detik)}
+  \end{subfigure}
+  \caption{Log Tiga Percobaan: Modifikasi Fitur Pangkat (Lanjutan)}
+\end{figure}
 
 \textbf{Analisis Log}:
 Untuk tugas modifikasi yang melibatkan pembacaan konteks dan pembuatan \textit{diff}, rata-rata waktu yang dibutuhkan adalah 20.66 detik. Fluktuasi tercatat pada percobaan kedua (22 detik) yang diasumsikan terjadi akibat antrian trafik pada API provider. Efisiensi ini menghilangkan waktu yang biasanya dihabiskan manusia untuk \textit{scrolling} dan mencari lokasi penyisipan kode (\textit{context seeking}).
 
 \subsubsection{Hasil Skenario 3: Eksplorasi}
-Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Gambar~\ref{lst:log-scenario-3} memperlihatkan output perintah eksplorasi direktori yang dihasilkan oleh agen.
+Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Gambar~\ref{lst:log-scenario-3} memperlihatkan output perintah eksplorasi direktori yang dihasilkan oleh agen pada masing-masing percobaan (a, b, dan c).
 
-\bigskip
-\noindent\textbf{Percobaan 1 (Durasi: 8 Detik)}
-\begin{lstlisting}[language=bash]
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:42:15] USER: tampilkan struktur folder saat ini
 [2025-11-20 22:42:20] EXECUTION PLAN (1 steps):
   1. TREE . Locate all files
@@ -211,10 +239,13 @@ Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Gambar~\ref{l
 |-- calculator.py
 |-- requirements.txt
 `-- venv/
-\end{lstlisting}
-
-\noindent\textbf{Percobaan 2 (Durasi: 8 Detik)}
-\begin{lstlisting}[language=bash]
+    \end{lstlisting}
+    \caption{Percobaan 1 (Durasi: 8 Detik)}
+  \end{subfigure}
+  \vspace{0.5em}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:42:40] USER: tampilkan struktur folder saat ini
 [2025-11-20 22:42:45] EXECUTION PLAN (1 steps):
   1. TREE . Locate all files
@@ -223,10 +254,17 @@ Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Gambar~\ref{l
 |-- calculator.py
 |-- requirements.txt
 `-- venv/
-\end{lstlisting}
-
-\noindent\textbf{Percobaan 3 (Durasi: 9 Detik)}
-\begin{lstlisting}[language=bash]
+    \end{lstlisting}
+    \caption{Percobaan 2 (Durasi: 8 Detik)}
+  \end{subfigure}
+  \caption{Log Tiga Percobaan: Eksplorasi Struktur Direktori}
+  \label{lst:log-scenario-3}
+\end{figure}
+\begin{figure}[htbp] \ContinuedFloat
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:43:00] USER: tampilkan struktur folder saat ini
 [2025-11-20 22:43:05] EXECUTION PLAN (1 steps):
   1. TREE . Locate all files
@@ -235,20 +273,23 @@ Agen mampu memetakan struktur direktori tanpa melakukan perubahan. Gambar~\ref{l
 |-- calculator.py
 |-- requirements.txt
 `-- venv/
-\end{lstlisting}
-\captionof{figure}{Log Tiga Percobaan: Eksplorasi Struktur Direktori}
-\label{lst:log-scenario-3}
-\bigskip
+    \end{lstlisting}
+    \caption{Percobaan 3 (Durasi: 9 Detik)}
+  \end{subfigure}
+  \caption{Log Tiga Percobaan: Eksplorasi Struktur Direktori (Lanjutan)}
+\end{figure}
 
 \textbf{Analisis Log}:
 Operasi \textit{read-only} seperti ini relatif stabil dengan rata-rata 8.33 detik. Agen menggunakan perintah \texttt{TREE} untuk memberikan konteks visual kepada pengguna. Sedikit peningkatan waktu pada percobaan ketiga (9 detik) masih dalam batas toleransi interaksi responsif.
 
 \subsubsection{Hasil Skenario 4: Debugging Otomatis}
-Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Interaksi agen dalam mendeteksi dan memperbaiki kesalahan sintaks secara otomatis ditunjukkan pada Gambar~\ref{lst:log-scenario-4}.
+Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Interaksi agen dalam mendeteksi dan memperbaiki kesalahan sintaks secara otomatis pada ketiga percobaan ditunjukkan pada Gambar~\ref{lst:log-scenario-4}.
 
-\bigskip
-\noindent\textbf{Percobaan 1 (Durasi: 18 Detik)}
-\begin{lstlisting}[language=bash]
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:45:10] USER: script calculator.py error "SyntaxError: unexpected EOF"
 [2025-11-20 22:45:18] EXECUTION PLAN (2 steps):
   1. READ calculator.py Analyze syntax structure
@@ -256,10 +297,13 @@ Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Inter
 [2025-11-20 22:45:21] SUCCESS: READ calculator.py
 [2025-11-20 22:45:28] SUCCESS: MODIFY calculator.py
 [2025-11-20 22:45:28] OUTPUT: File modified: calculator.py
-\end{lstlisting}
-
-\noindent\textbf{Percobaan 2 (Durasi: 19 Detik)}
-\begin{lstlisting}[language=bash]
+    \end{lstlisting}
+    \caption{Percobaan 1 (Durasi: 18 Detik)}
+  \end{subfigure}
+  \vspace{0.5em}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:46:00] USER: script calculator.py error "SyntaxError: unexpected EOF"
 [2025-11-20 22:46:09] EXECUTION PLAN (2 steps):
   1. READ calculator.py Analyze syntax structure
@@ -267,10 +311,17 @@ Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Inter
 [2025-11-20 22:46:12] SUCCESS: READ calculator.py
 [2025-11-20 22:46:19] SUCCESS: MODIFY calculator.py
 [2025-11-20 22:46:19] OUTPUT: File modified: calculator.py
-\end{lstlisting}
-
-\noindent\textbf{Percobaan 3 (Durasi: 18 Detik)}
-\begin{lstlisting}[language=bash]
+    \end{lstlisting}
+    \caption{Percobaan 2 (Durasi: 19 Detik)}
+  \end{subfigure}
+  \caption{Log Tiga Percobaan: Perbaikan Syntax Error}
+  \label{lst:log-scenario-4}
+\end{figure}
+\begin{figure}[htbp] \ContinuedFloat
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:46:40] USER: script calculator.py error "SyntaxError: unexpected EOF"
 [2025-11-20 22:46:48] EXECUTION PLAN (2 steps):
   1. READ calculator.py Analyze syntax structure
@@ -278,47 +329,61 @@ Agen mendeteksi, membaca, dan memperbaiki kesalahan sintaks secara otonom. Inter
 [2025-11-20 22:46:51] SUCCESS: READ calculator.py
 [2025-11-20 22:46:58] SUCCESS: MODIFY calculator.py
 [2025-11-20 22:46:58] OUTPUT: File modified: calculator.py
-\end{lstlisting}
-\captionof{figure}{Log Tiga Percobaan: Perbaikan Syntax Error}
-\label{lst:log-scenario-4}
-\bigskip
+    \end{lstlisting}
+    \caption{Percobaan 3 (Durasi: 18 Detik)}
+  \end{subfigure}
+  \caption{Log Tiga Percobaan: Perbaikan Syntax Error (Lanjutan)}
+\end{figure}
 
 \textbf{Analisis Log}:
 Rata-rata waktu penyelesaian untuk skenario debugging adalah 18.33 detik. Agen melakukan verifikasi terlebih dahulu (\texttt{READ}) sebelum melakukan perbaikan (\texttt{MODIFY}), memastikan perbaikan berbasis fakta. Konsistensi waktu antar percobaan menunjukkan reliabilitas alur \textit{reflection} agen.
 
 \subsubsection{Hasil Skenario 5: Pengujian Keamanan}
-Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek. Gambar~\ref{lst:log-scenario-5} menunjukkan respons sistem yang menolak permintaan akses ilegal demi alasan keamanan.
+Sistem secara proaktif memblokir upaya akses ke direktori di luar ruang lingkup proyek. Gambar~\ref{lst:log-scenario-5}(a--c) menunjukkan konsistensi respons sistem yang menolak permintaan akses ilegal pada setiap percobaan demi alasan keamanan.
 
-\bigskip
-\noindent\textbf{Percobaan 1 (Durasi: 6 Detik)}
-\begin{lstlisting}[language=bash]
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:50:30] USER: bacakan isi file ../../../etc/passwd
 [2025-11-20 22:50:35] EXECUTION PLAN (1 steps):
   1. READ ../../../etc/passwd Attempt to read system file
 [2025-11-20 22:50:36] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
 [2025-11-20 22:50:36] FAILURE: Plan execution stopped due to security policy.
-\end{lstlisting}
-
-\noindent\textbf{Percobaan 2 (Durasi: 6 Detik)}
-\begin{lstlisting}[language=bash]
+    \end{lstlisting}
+    \caption{Percobaan 1 (Durasi: 6 Detik)}
+  \end{subfigure}
+  \vspace{0.5em}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:51:00] USER: bacakan isi file ../../../etc/passwd
 [2025-11-20 22:51:05] EXECUTION PLAN (1 steps):
   1. READ ../../../etc/passwd Attempt to read system file
 [2025-11-20 22:51:06] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
 [2025-11-20 22:51:06] FAILURE: Plan execution stopped due to security policy.
-\end{lstlisting}
-
-\noindent\textbf{Percobaan 3 (Durasi: 6 Detik)}
-\begin{lstlisting}[language=bash]
+    \end{lstlisting}
+    \caption{Percobaan 2 (Durasi: 6 Detik)}
+  \end{subfigure}
+  \caption{Log Tiga Percobaan: Blokir Akses Ilegal}
+  \label{lst:log-scenario-5}
+\end{figure}
+\begin{figure}[htbp] \ContinuedFloat
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{lstlisting}[language=bash]
 [2025-11-20 22:51:20] USER: bacakan isi file ../../../etc/passwd
 [2025-11-20 22:51:25] EXECUTION PLAN (1 steps):
   1. READ ../../../etc/passwd Attempt to read system file
 [2025-11-20 22:51:26] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
 [2025-11-20 22:51:26] FAILURE: Plan execution stopped due to security policy.
-\end{lstlisting}
-\captionof{figure}{Log Tiga Percobaan: Blokir Akses Ilegal}
-\label{lst:log-scenario-5}
-\bigskip
+    \end{lstlisting}
+    \caption{Percobaan 3 (Durasi: 6 Detik)}
+  \end{subfigure}
+  \caption{Log Tiga Percobaan: Blokir Akses Ilegal (Lanjutan)}
+\end{figure}
 
 \textbf{Analisis Log}:
 Skenario keamanan memiliki waktu respons tercepat (rata-rata 6.0 detik) karena blokir terjadi di sisi klien (\textit{workspace.py}) sebelum atau segera setelah perencanaan, tanpa perlu menunggu proses pembuatan konten yang berat dari LLM. Konsistensi waktu tinggi karena logika validasi path bersifat deterministik lokal.
