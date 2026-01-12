@@ -5,7 +5,7 @@
 \section{SIMPULAN}
 \indent Penelitian ini menghasilkan prototipe \textbf{Paicode}, sebuah agen AI berbasis CLI yang mendukung proses pengembangan perangkat lunak secara interaktif dengan memanfaatkan LLM eksternal melalui API. Sistem beroperasi pada terminal lokal dan melakukan \textbf{operasi berkas tingkat-aplikasi di ruang kerja proyek}, dilengkapi kebijakan \textit{path security} untuk mencegah akses ke direktori sensitif. Himpunan perintah yang disediakan (\texttt{MKDIR}, \texttt{TOUCH}, \texttt{READ}, \texttt{WRITE}, \texttt{MODIFY}, \texttt{RM}, \texttt{MV}, \texttt{TREE}, \texttt{LIST\_PATH}, \texttt{FINISH}) memungkinkan agen untuk mengobservasi, memanipulasi, dan memodifikasi berkas secara terarah.
 
-Berdasarkan implementasi dan evaluasi awal, beberapa poin kesimpulan dapat dirangkum sebagai berikut:
+\indent Berdasarkan implementasi dan evaluasi awal, beberapa poin kesimpulan dapat dirangkum sebagai berikut:
 
 \begin{enumerate}
   \item \textbf{Desain Arsitektur Sistem}: Penelitian ini berhasil merancang arsitektur \textit{Single-Shot Intelligence} (SSI) yang memadukan klasifikasi intensi, perencanaan terstruktur dalam format JSON, dan eksekusi adaptif. Arsitektur ini terbukti mampu memberikan kerangka kerja yang jelas bagi agen AI untuk menyelesaikan tugas pemrograman multi-langkah di lingkungan CLI secara otonom namun tetap terkendali.
@@ -14,13 +14,13 @@ Berdasarkan implementasi dan evaluasi awal, beberapa poin kesimpulan dapat diran
   \item \textbf{Evaluasi Kinerja}: Berdasarkan hasil pengujian fungsional dengan skenario pemrograman representatif, Paicode menunjukkan peningkatan efisiensi yang signifikan (hingga 25x lebih cepat untuk tugas \textit{scaffolding}) dan tingkat keberhasilan eksekusi 100\% pada skenario yang diuji dengan kondisi jaringan stabil. Sistem terbukti andal dalam menerjemahkan intensi pengguna menjadi aksi nyata dengan overhead minimal dibandingkan metode manual.
 \end{enumerate}
 
-Secara arsitektural, Paicode memiliki karakteristik keunggulan dan batasan sebagai berikut:
+\indent Secara arsitektural, Paicode memiliki karakteristik keunggulan dan batasan sebagai berikut:
 \begin{enumerate}
     \item \textbf{Keunggulan}: Paicode menawarkan otonomi eksekusi multi-langkah di terminal lokal yang memberikan transparansi penuh melalui mekanisme rencana eksekusi (\textit{JSON planning}) dan pencatatan log aktivitas yang terstruktur. Desainnya yang minimalis dan berbasis CLI memungkinkan aplikasi ini berjalan di lingkungan Linux tanpa antarmuka grafis (\textit{headless}).
     \item \textbf{Batasan}: Sebagai aplikasi berbasis CLI yang berfokus pada otonomi, Paicode belum menyediakan fitur debugging visual interaktif seperti pada Integrated Development Environment (IDE). Selain itu, ketergantungan penuh pada konektivitas API LLM eksternal mengharuskan adanya koneksi internet aktif selama penggunaan.
 \end{enumerate}
 
-Kinerja dan kualitas hasil tetap bergantung pada kemampuan LLM eksternal (Gemini) serta kejelasan instruksi yang diberikan. Hal ini menunjukkan pentingnya perancangan prompt dan strategi umpan balik yang baik dalam alur kerja agen.
+\indent Kinerja dan kualitas hasil tetap bergantung pada kemampuan LLM eksternal (Gemini) serta kejelasan instruksi yang diberikan. Hal ini menunjukkan pentingnya perancangan prompt dan strategi umpan balik yang baik dalam alur kerja agen.
 
 \section{SARAN}
 \indent Beberapa saran pengembangan lanjutan yang dapat dilakukan antara lain:

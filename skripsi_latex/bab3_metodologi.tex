@@ -36,10 +36,10 @@
 \end{enumerate}
 
 \section{Metodologi Penelitian}
-Penelitian ini menggunakan pendekatan \textit{Research and Development} (R\&D) dengan strategi \textit{prototyping} iteratif. Pendekatan ini dipilih karena memungkinkan pengembangan dan evaluasi sistem secara bertahap, dengan siklus pengembangan yang dapat disesuaikan berdasarkan hasil pengujian di setiap iterasi.
+\indent Penelitian ini menggunakan pendekatan \textit{Research and Development} (R\&D) dengan strategi \textit{prototyping} iteratif. Pendekatan ini dipilih karena memungkinkan pengembangan dan evaluasi sistem secara bertahap, dengan siklus pengembangan yang dapat disesuaikan berdasarkan hasil pengujian di setiap iterasi.
 
 \subsection{Tahapan Penelitian}
-Tahapan penelitian dilakukan secara berurutan sebagai berikut:
+\indent Tahapan penelitian dilakukan secara berurutan sebagai berikut:
 
 \begin{enumerate}
   \item \textbf{Identifikasi Masalah}: Menganalisis keterbatasan alat bantu pemrograman berbasis AI saat ini, termasuk ketergantungan pada IDE, masalah privasi pada solusi cloud-based, dan biaya token yang tinggi pada arsitektur chat-loop tradisional.
@@ -69,7 +69,7 @@ Tahapan penelitian dilakukan secara berurutan sebagai berikut:
 Pemilihan metode \textit{prototyping} iteratif memungkinkan validasi cepat terhadap asumsi desain, khususnya dalam hal efektivitas arsitektur \textit{Single-Shot Intelligence} dan kebijakan keamanan, serta memungkinkan perbaikan berkelanjutan berdasarkan temuan empiris pada setiap iterasi.
 
 \section{Analisis Kebutuhan Sistem}
-Berdasarkan identifikasi masalah dan studi literatur, sistem dirancang untuk memenuhi kebutuhan sebagai berikut:
+\indent Berdasarkan identifikasi masalah dan studi literatur, sistem dirancang untuk memenuhi kebutuhan sebagai berikut:
 
 \subsection{Kebutuhan Fungsional}
 \begin{enumerate}
@@ -87,10 +87,10 @@ Berdasarkan identifikasi masalah dan studi literatur, sistem dirancang untuk mem
 \end{enumerate}
 
 \section{Perancangan Sistem}
-Bagian ini menjelaskan arsitektur sistem, komponen-komponen utama, dan alur kerja sistem Paicode.
+\indent Bagian ini menjelaskan arsitektur sistem, komponen-komponen utama, dan alur kerja sistem Paicode.
 
 \subsection{Arsitektur Modular}
-Arsitektur Paicode dirancang secara modular dengan pemisahan tanggung jawab yang jelas antar komponen. Arsitektur modular ini memudahkan pengembangan, pengujian, dan pemeliharaan sistem. Komponen-komponen utama sistem adalah:
+\indent Arsitektur Paicode dirancang secara modular dengan pemisahan tanggung jawab yang jelas antar komponen. Arsitektur modular ini memudahkan pengembangan, pengujian, dan pemeliharaan sistem. Komponen-komponen utama sistem adalah:
 
 \begin{enumerate}
   \item \textbf{Antarmuka CLI (\texttt{cli.py})}: Menangani input pengguna, parsing argumen baris perintah, dan inisialisasi sesi interaktif.
@@ -107,7 +107,7 @@ Arsitektur Paicode dirancang secara modular dengan pemisahan tanggung jawab yang
 \end{enumerate}
 
 \subsection{Deskripsi Modul}
-Tabel berikut merangkum tanggung jawab utama dari setiap modul dalam sistem:
+\indent Tabel berikut merangkum tanggung jawab utama dari setiap modul dalam sistem:
 
 \begin{longtable}{@{}p{0.28\textwidth}>{\hyphenpenalty=50\tolerance=1000}p{0.70\textwidth}@{}}
   \caption{Daftar Modul dan Tanggung Jawab Utama}\label{tab:diagram-modul}\\
@@ -129,7 +129,7 @@ Tabel berikut merangkum tanggung jawab utama dari setiap modul dalam sistem:
 \end{longtable}
 
 \subsection{Alur Kerja Sistem}
-Diagram berikut menggambarkan alur kerja sistem dalam satu sesi interaksi pengguna (satu \textit{turn}):
+\indent Diagram berikut menggambarkan alur kerja sistem dalam satu sesi interaksi pengguna (satu \textit{turn}):
 
 \begin{figure}[htbp]
   \centering
@@ -162,4 +162,4 @@ Diagram berikut menggambarkan alur kerja sistem dalam satu sesi interaksi penggu
   \label{fig:flowchart-sistem}
 \end{figure}
 
-Alur kerja dimulai dengan penerimaan instruksi pengguna, kemudian LLM membuat rencana tindakan dalam format JSON terstruktur. Rencana ini divalidasi oleh sistem (termasuk pengecekan \textit{path security}). Jika valid, sistem mengeksekusi langkah-langkah dalam rencana secara berurutan dengan melakukan operasi pada workspace melalui modul \texttt{workspace.py}. Hasil eksekusi disimpan ke riwayat percakapan untuk menjaga konteks.
+\indent Alur kerja dimulai dengan penerimaan instruksi pengguna, kemudian LLM membuat rencana tindakan dalam format JSON terstruktur. Rencana ini divalidasi oleh sistem (termasuk pengecekan \textit{path security}). Jika valid, sistem mengeksekusi langkah-langkah dalam rencana secara berurutan dengan melakukan operasi pada workspace melalui modul \texttt{workspace.py}. Hasil eksekusi disimpan ke riwayat percakapan untuk menjaga konteks.
