@@ -21,7 +21,14 @@
 }
 \usepackage{tocloft} % Enhance TOC formatting
 \renewcommand{\cftchapdotsep}{\cftdotsep} % Add dots for chapters
-\renewcommand{\cftsecdotsep}{\cftdotsep} % Add dots for sections (default, but ensures consistency)
+\renewcommand{\cftsecdotsep}{\cftdotsep} % Add dots for sections
+% Center and Bold 14pt for List Titles
+\renewcommand{\cfttoctitlefont}{\hfill\bfseries\fontsize{14pt}{17pt}\selectfont}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cftloftitlefont}{\hfill\bfseries\fontsize{14pt}{17pt}\selectfont}
+\renewcommand{\cftafterloftitle}{\hfill}
+\renewcommand{\cftlottitlefont}{\hfill\bfseries\fontsize{14pt}{17pt}\selectfont}
+\renewcommand{\cftafterlottitle}{\hfill}
 
 \usepackage{hyperref}
 \usepackage{caption}
