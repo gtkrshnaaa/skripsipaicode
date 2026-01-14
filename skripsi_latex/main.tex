@@ -17,7 +17,12 @@
   \renewcommand{\contentsname}{DAFTAR ISI}
   \renewcommand{\listfigurename}{DAFTAR GAMBAR}
   \renewcommand{\listtablename}{DAFTAR TABEL}
+  \renewcommand{\listtablename}{DAFTAR TABEL}
 }
+\usepackage{tocloft} % Enhance TOC formatting
+\renewcommand{\cftchapdotsep}{\cftdotsep} % Add dots for chapters
+\renewcommand{\cftsecdotsep}{\cftdotsep} % Add dots for sections (default, but ensures consistency)
+
 \usepackage{hyperref}
 \usepackage{caption}
 \usepackage{subcaption}
