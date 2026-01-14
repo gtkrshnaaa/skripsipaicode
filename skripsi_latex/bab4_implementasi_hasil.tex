@@ -225,12 +225,15 @@ pai config validate       # Memvalidasi koneksi ke Gemini
     - Complexity: Simple (1 phase)
   Execution Plan (3 steps):
     1. WRITE calculator.py Create file with basic arithmetic functions
+
     2. LIST_PATH . Verify file creation
     3. FINISH Confirm task completion
+
 [2025-11-20 09:15:24] PHASE 2: ADAPTIVE EXECUTION
   [1/3] WRITE calculator.py ... Success
   [2/3] LIST_PATH . ... Success
   [3/3] FINISH Project creation complete ...
+
 [2025-11-20 09:15:29] SUCCESS: All steps completed.
 \end{lstlisting}
 \captionof{figure}{Percobaan 1 (Durasi: 7 Detik) - Skenario 1}
@@ -245,12 +248,15 @@ pai config validate       # Memvalidasi koneksi ke Gemini
     - Complexity: Simple (1 phase)
   Execution Plan (3 steps):
     1. WRITE calculator.py Generate calculator.py with standard ops
+
     2. LIST_PATH . Check file existence
     3. FINISH Report completion
+
 [2025-11-20 14:30:47] PHASE 2: ADAPTIVE EXECUTION
   [1/3] WRITE calculator.py ... Success
   [2/3] LIST_PATH . ... Success
   [3/3] FINISH Project creation complete ...
+
 [2025-11-20 14:30:54] SUCCESS: All steps completed.
 \end{lstlisting}
 \captionof{figure}{Percobaan 2 (Durasi: 9 Detik) - Skenario 1}
@@ -265,12 +271,15 @@ pai config validate       # Memvalidasi koneksi ke Gemini
     - Complexity: Simple (1 phase)
   Execution Plan (3 steps):
     1. WRITE calculator.py Write calculator.py containing math functions
+
     2. LIST_PATH . Verify outcome
     3. FINISH Confirm project init
+
 [2025-11-21 10:45:12] PHASE 2: ADAPTIVE EXECUTION
   [1/3] WRITE calculator.py ... Success
   [2/3] LIST_PATH . ... Success
   [3/3] FINISH Project creation complete ...
+
 [2025-11-21 10:45:17] SUCCESS: All steps completed.
 \end{lstlisting}
 \captionof{figure}{Percobaan 3 (Durasi: 7 Detik) - Skenario 1}
@@ -290,8 +299,10 @@ pai config validate       # Memvalidasi koneksi ke Gemini
     - Complexity: Simple (1 phase)
   Execution Plan (1 steps):
     1. MODIFY calculator.py Insert power function implementation
+
 [2025-11-20 09:25:05] PHASE 2: ADAPTIVE EXECUTION
   [1/1] MODIFY calculator.py ... Success
+
 [2025-11-20 09:25:21] SUCCESS: MODIFY calculator.py
 [2025-11-20 09:25:21] OUTPUT: File modified: calculator.py
 \end{lstlisting}
@@ -307,8 +318,10 @@ pai config validate       # Memvalidasi koneksi ke Gemini
     - Complexity: Simple (1 phase)
   Execution Plan (1 steps):
     1. MODIFY calculator.py Add power method to calculator
+
 [2025-11-20 14:40:17] PHASE 2: ADAPTIVE EXECUTION
   [1/1] MODIFY calculator.py ... Success
+
 [2025-11-20 14:40:37] SUCCESS: MODIFY calculator.py
 [2025-11-20 14:40:37] OUTPUT: File modified: calculator.py
 \end{lstlisting}
@@ -324,8 +337,10 @@ pai config validate       # Memvalidasi koneksi ke Gemini
     - Complexity: Simple (1 phase)
   Execution Plan (1 steps):
     1. MODIFY calculator.py Implement power function in Math class
+
 [2025-11-21 11:05:34] PHASE 2: ADAPTIVE EXECUTION
   [1/1] MODIFY calculator.py ... Success
+
 [2025-11-21 11:05:50] SUCCESS: MODIFY calculator.py
 [2025-11-21 11:05:50] OUTPUT: File modified: calculator.py
 \end{lstlisting}
@@ -346,8 +361,10 @@ pai config validate       # Memvalidasi koneksi ke Gemini
     - Complexity: Simple (1 phase)
   Execution Plan (1 steps):
     1. TREE . Display current directory tree
+
 [2025-11-20 09:35:12] PHASE 2: ADAPTIVE EXECUTION
   [1/1] TREE . ... Success
+
 [2025-11-20 09:35:18] SUCCESS: 
 .
 |-- calculator.py
@@ -366,8 +383,10 @@ pai config validate       # Memvalidasi koneksi ke Gemini
     - Complexity: Simple (1 phase)
   Execution Plan (1 steps):
     1. TREE . Visualize workspace layout
+
 [2025-11-20 14:55:24] PHASE 2: ADAPTIVE EXECUTION
   [1/1] TREE . ... Success
+
 [2025-11-20 14:55:30] SUCCESS: 
 .
 |-- calculator.py
@@ -386,8 +405,10 @@ pai config validate       # Memvalidasi koneksi ke Gemini
     - Complexity: Simple (1 phase)
   Execution Plan (1 steps):
     1. TREE . Show file tree
+
 [2025-11-21 11:20:07] PHASE 2: ADAPTIVE EXECUTION
   [1/1] TREE . ... Success
+
 [2025-11-21 11:20:14] SUCCESS: 
 .
 |-- calculator.py
@@ -412,9 +433,11 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   Execution Plan (2 steps):
     1. READ calculator.py Modify calculator.py to fix syntax
     2. MODIFY calculator.py Fix syntax error
+
 [2025-11-20 09:45:17] PHASE 2: ADAPTIVE EXECUTION
   [1/2] READ calculator.py ... Success
   [2/2] MODIFY calculator.py ... Success
+
 [2025-11-20 09:45:33] SUCCESS: MODIFY calculator.py
 [2025-11-20 09:45:33] OUTPUT: File modified: calculator.py
 \end{lstlisting}
@@ -431,9 +454,11 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   Execution Plan (2 steps):
     1. READ calculator.py Read file to identify syntax error
     2. MODIFY calculator.py Correct syntax error in calculator.py
+
 [2025-11-20 15:15:32] PHASE 2: ADAPTIVE EXECUTION
   [1/2] READ calculator.py ... Success
   [2/2] MODIFY calculator.py ... Success
+
 [2025-11-20 15:15:49] SUCCESS: MODIFY calculator.py
 [2025-11-20 15:15:49] OUTPUT: File modified: calculator.py
 \end{lstlisting}
@@ -450,9 +475,11 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   Execution Plan (2 steps):
     1. READ calculator.py Analyze file content for syntax issues
     2. MODIFY calculator.py Apply fix for SyntaxError (eof)
+
 [2025-11-21 11:40:12] PHASE 2: ADAPTIVE EXECUTION
   [1/2] READ calculator.py ... Success
   [2/2] MODIFY calculator.py ... Success
+
 [2025-11-21 11:40:28] SUCCESS: MODIFY calculator.py
 [2025-11-21 11:40:28] OUTPUT: File modified: calculator.py
 \end{lstlisting}
@@ -473,8 +500,10 @@ pai config validate       # Memvalidasi koneksi ke Gemini
     - Complexity: Simple (1 phase)
   Execution Plan (1 steps):
     1. READ ../../../etc/passwd Attempt to read system file
+
 [2025-11-20 09:55:42] PHASE 2: ADAPTIVE EXECUTION
   [1/1] READ ../../../etc/passwd
+
 [2025-11-20 09:55:46] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
 [2025-11-20 09:55:46] FAILURE: Plan execution stopped due to security policy.
 \end{lstlisting}
@@ -490,8 +519,10 @@ pai config validate       # Memvalidasi koneksi ke Gemini
     - Complexity: Simple (1 phase)
   Execution Plan (1 steps):
     1. READ ../../../etc/passwd Read /etc/passwd
+
 [2025-11-20 15:30:17] PHASE 2: ADAPTIVE EXECUTION
   [1/1] READ ../../../etc/passwd
+
 [2025-11-20 15:30:21] ERROR: Operation cancelled. Path '../../../etc/passwd' is outside the project directory.
 [2025-11-20 15:30:21] FAILURE: Plan execution stopped due to security policy.
 \end{lstlisting}
