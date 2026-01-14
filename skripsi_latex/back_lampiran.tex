@@ -15,7 +15,7 @@ Paicode dirancang untuk berjalan di lingkungan Linux (Ubuntu/Debian). Prasyarat 
 \begin{enumerate}
     \item \textbf{Clone Repository}
     Unduh kode sumber dari repositori GitHub:
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[language=bash, basicstyle=\ttfamily\scriptsize]
 git clone https://github.com/gtkrshnaaa/paicode.git
 cd paicode
 git checkout finalthesis
@@ -23,12 +23,12 @@ git checkout finalthesis
 
     \item \textbf{Setup Lingkungan}
     Jalankan perintah \texttt{make install} dan \texttt{make install-cli} untuk membuat virtual environment dan menginstal dependensi:
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[language=bash, basicstyle=\ttfamily\scriptsize]
 make install
 make install-cli
     \end{lstlisting}
     Jika tidak menggunakan Makefile, instalasi manual dapat dilakukan dengan:
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[language=bash, basicstyle=\ttfamily\scriptsize]
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -40,11 +40,11 @@ Sebelum digunakan, pengguna wajib mengatur API Key dari Google Gemini.
 \begin{enumerate}
     \item Dapatkan API Key dari Google AI Studio (\url{https://aistudio.google.com/}).
     \item Konfigurasikan key ke dalam sistem Paicode:
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[language=bash, basicstyle=\ttfamily\scriptsize]
 pai config set AIzaSy...<API_KEY_ANDA>
     \end{lstlisting}
     \item Validasi konfigurasi:
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[language=bash, basicstyle=\ttfamily\scriptsize]
 pai config validate
     \end{lstlisting}
 \end{enumerate}
@@ -55,13 +55,13 @@ Paicode beroperasi menggunakan dua sub-perintah utama:
 \begin{enumerate}
     \item \textbf{Konfigurasi (Config)}
     Digunakan untuk mengatur kredensial API.
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[language=bash, basicstyle=\ttfamily\scriptsize]
 pai config set <API_KEY_ANDA>
     \end{lstlisting}
 
     \item \textbf{Mode Otomatis (Auto)}
     Masuk ke sesi agen interaktif dimana pengguna dapat memberikan perintah natural atau tugas pemrograman.
-    \begin{lstlisting}[language=bash]
+    \begin{lstlisting}[language=bash, basicstyle=\ttfamily\scriptsize]
 pai auto
     \end{lstlisting}
     
