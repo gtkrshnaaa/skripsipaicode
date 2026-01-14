@@ -292,8 +292,13 @@ We adopt a Research and Development approach with iterative prototyping. The eva
 \cleardoublepage
 \renewcommand{\bibname}{DAFTAR PUSTAKA} % Ensure UpperCase title
 \addcontentsline{toc}{chapter}{DAFTAR PUSTAKA} % Add to TOC
-\bibliographystyle{apalike-id} % Customized Indonesian style
-\bibliography{daftar_pustaka}
+% Spacing: 1.5 within entry (standard), 2.0 (double) between entries
+\setlength{\bibsep}{2\baselineskip} 
+{
+  \onehalfspacing
+  \bibliographystyle{apalike-id} % Customized Indonesian style
+  \bibliography{daftar_pustaka}
+}
 
 % --- Appendices ---
 \include{back_lampiran}
