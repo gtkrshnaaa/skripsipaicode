@@ -151,15 +151,15 @@
   \renewcommand{\footrulewidth}{0pt} % No footer rule
 }
 
-% Style for mainmatter: page number at bottom center
+% Style for mainmatter: page number at Top Right (regular pages)
 \fancypagestyle{mainmatterstyle}{
   \fancyhf{} % Clear all headers and footers
-  \fancyfoot[C]{\thepage} % Page number at bottom center
+  \fancyhead[R]{\thepage} % Page number at top right
   \renewcommand{\headrulewidth}{0pt} % No header rule
   \renewcommand{\footrulewidth}{0pt} % No footer rule
 }
 
-% Style for chapter pages in mainmatter
+% Style for chapter pages in mainmatter (optional custom name, though standard uses 'plain')
 \fancypagestyle{chapterplain}{
   \fancyhf{} % Clear all headers and footers  
   \fancyfoot[C]{\thepage} % Page number at bottom center
