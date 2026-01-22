@@ -130,7 +130,7 @@ Pemilihan metode \textit{prototyping} iteratif memungkinkan validasi cepat terha
 \subsection{Alur Kerja Sistem}
 \indent Alur kerja sistem dalam satu sesi interaksi pengguna (satu \textit{turn}) ditunjukkan pada Gambar~\ref{fig:flowchart-sistem}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
   \centering
   \begin{tikzpicture}[node distance=1.5cm, auto,
     startstop/.style={rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black},
@@ -161,4 +161,5 @@ Pemilihan metode \textit{prototyping} iteratif memungkinkan validasi cepat terha
   \label{fig:flowchart-sistem}
 \end{figure}
 
+\nopagebreak[4]
 \indent Alur kerja dimulai dengan penerimaan instruksi pengguna, kemudian LLM membuat rencana tindakan dalam format JSON terstruktur. Rencana ini divalidasi oleh sistem (termasuk pengecekan \textit{path security}). Jika valid, sistem mengeksekusi langkah-langkah dalam rencana secara berurutan dengan melakukan operasi pada workspace melalui modul \texttt{workspace.py}. Hasil eksekusi disimpan ke riwayat percakapan untuk menjaga konteks.
