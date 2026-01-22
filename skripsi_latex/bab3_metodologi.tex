@@ -109,23 +109,22 @@ Pemilihan metode \textit{prototyping} iteratif memungkinkan validasi cepat terha
 \subsection{Deskripsi Modul}
 \indent Tabel berikut merangkum tanggung jawab utama dari setiap modul dalam sistem:
 
-\begin{longtable}{@{}p{0.28\textwidth}>{\hyphenpenalty=50\tolerance=1000}p{0.70\textwidth}@{}}
+\begin{longtable}{|p{0.28\textwidth}|>{\hyphenpenalty=50\tolerance=1000}p{0.70\textwidth}|}
   \caption{Daftar Modul dan Tanggung Jawab Utama}\label{tab:diagram-modul}\\
-  \toprule
+  \hline
   \textbf{Modul} & \textbf{Tanggung Jawab Utama} \\
-  \midrule
+  \hline
   \endfirsthead
-  \toprule
+  \hline
   \textbf{Modul} & \textbf{Tanggung Jawab Utama} \\
-  \midrule
+  \hline
   \endhead
-  \texttt{cli.py} & Entry point aplikasi, parsing argumen CLI, inisialisasi sesi. \\
-  \texttt{agent.py} & Logika bisnis utama, klasifikasi intensi, perencanaan terstruktur (JSON), orkestrasi eksekusi adaptif, manajemen memori percakapan. \\
-  \texttt{llm.py} & Abstraksi komunikasi dengan API Gemini, manajemen token, sanitasi response. \\
-  \texttt{workspace.py} & Operasi I/O berkas, penegakan kebijakan \textit{path security}, penerapan modifikasi berbasis \textit{diff} dengan threshold keamanan. \\
-  \texttt{config.py} & Penyimpanan aman dan validasi API Key, manajemen konfigurasi pengguna. \\
-  \texttt{ui.py} & Rendering output terminal dengan \texttt{rich}, syntax highlighting, visualisasi status. \\
-  \bottomrule
+  \texttt{cli.py} & Entry point aplikasi, parsing argumen CLI, inisialisasi sesi. \\ \hline
+  \texttt{agent.py} & Logika bisnis utama, klasifikasi intensi, perencanaan terstruktur (JSON), orkestrasi eksekusi adaptif, manajemen memori percakapan. \\ \hline
+  \texttt{llm.py} & Abstraksi komunikasi dengan API Gemini, manajemen token, sanitasi response. \\ \hline
+  \texttt{workspace.py} & Operasi I/O berkas, penegakan kebijakan \textit{path security}, penerapan modifikasi berbasis \textit{diff} dengan threshold keamanan. \\ \hline
+  \texttt{config.py} & Penyimpanan aman dan validasi API Key, manajemen konfigurasi pengguna. \\ \hline
+  \texttt{ui.py} & Rendering output terminal dengan \texttt{rich}, syntax highlighting, visualisasi status. \\ \hline
 \end{longtable}
 
 \subsection{Alur Kerja Sistem}
