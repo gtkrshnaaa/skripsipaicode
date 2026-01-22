@@ -607,27 +607,26 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \subsubsection{Analisis Efisiensi Langkah (Step Efficiency)}
 \customindent Tabel~\ref{tab:perbandingan-langkah} menguraikan dekomposisi langkah kerja yang diperlukan untuk menyelesaikan \textit{Skenario 1 (Pembuatan Proyek)} secara manual dibandingkan dengan menggunakan Paicode.
 
-\begin{longtable}{|p{0.05\textwidth}|p{0.44\textwidth}|p{0.43\textwidth}|}
-  \caption{Perbandingan Jumlah Langkah Kerja (Skenario 1)}\label{tab:perbandingan-langkah}\\
-  \hline
-  \textbf{No} & \textbf{Metode Manual (Konvensional)} & \textbf{Metode Paicode (Agentic)} \\
-  \hline
-  \endfirsthead
-  \hline
-  \textbf{No} & \textbf{Metode Manual (Konvensional)} & \textbf{Metode Paicode (Agentic)} \\
-  \hline
-  \endhead
-  1 & Membuka terminal dan membuat direktori (\texttt{mkdir}). & Membuka terminal. \\ \hline
-  2 & Membuat virtual environment (\texttt{python -m venv}). & Mengetik instruksi lengkap dalam satu baris kalimat. \\ \hline
-  3 & Mengaktifkan virtual environment (\texttt{source activate}). & Menunggu agen memproses dan mengeksekusi (otomatis). \\ \hline
-  4 & Membuat file \texttt{requirements.txt} (\texttt{touch}). & - \\ \hline
-  5 & Membuka text editor/IDE. & - \\ \hline
-  6 & Mengetik/copy-paste dependensi ke file. & - \\ \hline
-  7 & Menyimpan file. & - \\ \hline
-  8 & Menjalankan instalasi (\texttt{pip install}). & - \\ \hline
-  \hline
-  \textbf{Total} & \textbf{8 Langkah Eksplisit} & \textbf{2 Langkah (Instruksi + Konfirmasi)} \\ \hline
-\end{longtable}
+\begin{table}[H]
+  \centering
+  \caption{Perbandingan Jumlah Langkah Kerja (Skenario 1)}
+  \label{tab:perbandingan-langkah}
+  \begin{tabular}{|p{0.05\textwidth}|p{0.44\textwidth}|p{0.43\textwidth}|}
+    \hline
+    \textbf{No} & \textbf{Metode Manual (Konvensional)} & \textbf{Metode Paicode (Agentic)} \\
+    \hline
+    1 & Membuka terminal dan membuat direktori (\texttt{mkdir}). & Membuka terminal. \\ \hline
+    2 & Membuat virtual environment (\texttt{python -m venv}). & Mengetik instruksi lengkap dalam satu baris kalimat. \\ \hline
+    3 & Mengaktifkan virtual environment (\texttt{source activate}). & Menunggu agen memproses dan mengeksekusi (otomatis). \\ \hline
+    4 & Membuat file \texttt{requirements.txt} (\texttt{touch}). & - \\ \hline
+    5 & Membuka text editor/IDE. & - \\ \hline
+    6 & Mengetik/copy-paste dependensi ke file. & - \\ \hline
+    7 & Menyimpan file. & - \\ \hline
+    8 & Menjalankan instalasi (\texttt{pip install}). & - \\ \hline
+    \hline
+    \textbf{Total} & \textbf{8 Langkah Eksplisit} & \textbf{2 Langkah (Instruksi + Konfirmasi)} \\ \hline
+  \end{tabular}
+\end{table}
 
 \customindent Dari Tabel~\ref{tab:perbandingan-langkah} terlihat bahwa Paicode mereduksi jumlah interaksi fisik hingga 75\%. Eliminasi langkah-langkah mekanis ini menghilangkan potensi kesalahan pengetikan (\textit{typo}) yang sering terjadi pada proses manual.
 
