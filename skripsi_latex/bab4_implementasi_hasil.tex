@@ -9,7 +9,7 @@
 \subsection{Lingkungan Implementasi}
 \customindent Sistem diimplementasikan pada lingkungan sistem operasi Ubuntu dengan spesifikasi konfigurasi seperti tercantum pada Tabel~\ref{tab:konfigurasi}.
 
-\begin{longtable}{|p{0.30\textwidth}|p{0.64\textwidth}|}
+\begin{longtable}{|p{0.30\textwidth}|p{0.657\textwidth}|}
   \caption{Konfigurasi Lingkungan Implementasi}\label{tab:konfigurasi}\\
   \hline
   \textbf{Komponen} & \textbf{Spesifikasi} \\
@@ -192,7 +192,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 
 \customindent Seluruh interaksi selama pengujian direkam oleh sistem log yang secara otomatis menyertakan penanda waktu (\textit{timestamp}) pada setiap operasi. Skenario yang diuji dirangkum dalam Tabel~\ref{tab:skenario-uji}.
 
-\begin{longtable}{|p{0.16\textwidth}|>{\hyphenpenalty=50\tolerance=1000}p{0.60\textwidth}|p{0.16\textwidth}|}
+\begin{longtable}{|p{0.17\textwidth}|>{\hyphenpenalty=50\tolerance=1000}p{0.596\textwidth}|p{0.17\textwidth}|}
   \caption{Skenario Pengujian Fungsional}\label{tab:skenario-uji}\\
   \hline
   \textbf{Skenario} & \textbf{Deskripsi Aktivitas} & \textbf{Metode Validasi} \\
@@ -550,7 +550,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \subsubsection{Hasil Pengujian Menyeluruh (3 Percobaan)}
 \customindent Seluruh hasil pengukuran waktu dari ketiga percobaan untuk setiap skenario dirangkum dalam Tabel~\ref{tab:hasil-komprehensif}. Data ini menunjukkan sebaran waktu yang realistis mengingat ketergantungan sistem pada layanan API eksternal.
 
-\begin{longtable}{|p{0.04\textwidth}|p{0.32\textwidth}|>{\raggedright\arraybackslash}p{0.12\textwidth}|>{\raggedright\arraybackslash}p{0.12\textwidth}|>{\raggedright\arraybackslash}p{0.12\textwidth}|>{\raggedright\arraybackslash}p{0.14\textwidth}|}
+\begin{longtable}{|p{0.05\textwidth}|p{0.33\textwidth}|>{\raggedright\arraybackslash}p{0.122\textwidth}|>{\raggedright\arraybackslash}p{0.122\textwidth}|>{\raggedright\arraybackslash}p{0.122\textwidth}|>{\raggedright\arraybackslash}p{0.126\textwidth}|}
   \caption{Hasil Pengukuran Waktu Eksekusi (3 Percobaan)}\label{tab:hasil-komprehensif}\\
   \hline
   \textbf{No} & \textbf{Skenario} & \textbf{Perc. 1 (s)} & \textbf{Perc. 2 (s)} & \textbf{Perc. 3 (s)} & \textbf{Rata-rata ($\lambda$)} \\
@@ -571,7 +571,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 
 \customindent Selain performa waktu, indikator keberhasilan kualitatif lainnya dirangkum dalam Tabel~\ref{tab:metrik-hasil-summary}.
 
-\begin{longtable}{|p{0.25\textwidth}|p{0.22\textwidth}|>{\hyphenpenalty=50\tolerance=1000}p{0.45\textwidth}|}
+\begin{longtable}{|p{0.26\textwidth}|p{0.23\textwidth}|>{\hyphenpenalty=50\tolerance=1000}p{0.446\textwidth}|}
   \caption{Ringkasan Indikator Keberhasilan Setelah 3 Percobaan}\label{tab:metrik-hasil-summary}\\
   \hline
   \textbf{Metrik} & \textbf{Nilai Capaian} & \textbf{Keterangan} \\
@@ -611,7 +611,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
   \centering
   \caption{Perbandingan Jumlah Langkah Kerja (Skenario 1)}
   \label{tab:perbandingan-langkah}
-  \begin{tabular}{|p{0.05\textwidth}|p{0.44\textwidth}|p{0.43\textwidth}|}
+  \begin{tabular}{|p{0.06\textwidth}|p{0.438\textwidth}|p{0.438\textwidth}|}
     \hline
     \textbf{No} & \textbf{Metode Manual (Konvensional)} & \textbf{Metode Paicode (Agentic)} \\
     \hline
@@ -632,7 +632,7 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \subsubsection{Analisis Efisiensi Waktu (Time Efficiency)}
 \customindent Selain jumlah langkah, pengukuran waktu eksekusi juga dilakukan untuk memvalidasi klaim efisiensi. Tabel~\ref{tab:perbandingan-waktu} menyajikan rata-rata waktu penyelesaian tugas berdasarkan 5 kali percobaan.
 
-\begin{longtable}{|p{0.28\textwidth}|p{0.26\textwidth}|p{0.26\textwidth}|p{0.10\textwidth}|}
+\begin{longtable}{|p{0.27\textwidth}|p{0.25\textwidth}|p{0.25\textwidth}|p{0.145\textwidth}|}
   \caption{Perbandingan Rata-rata Waktu Penyelesaian Tugas}\label{tab:perbandingan-waktu}\\
   \hline
   \textbf{Jenis Tugas} & \textbf{Waktu Manual (Detik)} & \textbf{Waktu Paicode (Detik)} & \textbf{Speedup} \\
