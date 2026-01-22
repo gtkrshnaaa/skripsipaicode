@@ -9,23 +9,23 @@
 \subsection{Lingkungan Implementasi}
 \customindent Sistem diimplementasikan pada lingkungan sistem operasi Ubuntu dengan spesifikasi konfigurasi seperti tercantum pada Tabel~\ref{tab:konfigurasi}.
 
-\begin{longtable}{@{}p{0.32\textwidth}p{0.66\textwidth}@{}}
+\begin{longtable}{|p{0.32\textwidth}|p{0.66\textwidth}|}
   \caption{Konfigurasi Lingkungan Implementasi}\label{tab:konfigurasi}\\
-  \toprule
+  \hline
   \textbf{Komponen} & \textbf{Spesifikasi} \\
-  \midrule
+  \hline
   \endfirsthead
-  \toprule
+  \hline
   \textbf{Komponen} & \textbf{Spesifikasi} \\
-  \midrule
+  \hline
   \endhead
-  Sistem Operasi & Ubuntu (Linux) \\
-  Python & \texttt{\textgreater= 3.10} \\
-  Manajer Dependensi & pip dan virtual environment \\
-  LLM Provider & Gemini (via \texttt{google-generativeai}) \\
-  Antarmuka Terminal & \texttt{rich} (output) dan \texttt{prompt\_toolkit} (input) \\
-  Hardware & CPU x86\_64, RAM 8+ GB \\
-  \bottomrule
+  Sistem Operasi & Ubuntu (Linux) \\ \hline
+  Python & \texttt{\textgreater= 3.10} \\ \hline
+  Manajer Dependensi & pip dan virtual environment \\ \hline
+  LLM Provider & Gemini (via \texttt{google-generativeai}) \\ \hline
+  Antarmuka Terminal & \texttt{rich} (output) dan \texttt{prompt\_toolkit} (input) \\ \hline
+  Hardware & CPU x86\_64, RAM 8+ GB \\ \hline
+  \hline
 \end{longtable}
 
 \customindent Proses instalasi dilakukan menggunakan \texttt{Makefile} yang mengotomasi pembuatan virtual environment dan instalasi dependensi dari berkas \texttt{requirements.txt} dan \texttt{setup.cfg}.
@@ -193,22 +193,22 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 
 \customindent Seluruh interaksi selama pengujian direkam oleh sistem log yang secara otomatis menyertakan penanda waktu (\textit{timestamp}) pada setiap operasi. Skenario yang diuji dirangkum dalam Tabel~\ref{tab:skenario-uji}.
 
-\begin{longtable}{@{}p{0.17\textwidth}>{\hyphenpenalty=50\tolerance=1000}p{0.62\textwidth}p{0.17\textwidth}@{}}
+\begin{longtable}{|p{0.17\textwidth}|>{\hyphenpenalty=50\tolerance=1000}p{0.62\textwidth}|p{0.17\textwidth}|}
   \caption{Skenario Pengujian Fungsional}\label{tab:skenario-uji}\\
-  \toprule
+  \hline
   \textbf{Skenario} & \textbf{Deskripsi Aktivitas} & \textbf{Metode Validasi} \\
-  \midrule
+  \hline
   \endfirsthead
-  \toprule
+  \hline
   \textbf{Skenario} & \textbf{Deskripsi Aktivitas} & \textbf{Metode Validasi} \\
-  \midrule
+  \hline
   \endhead
-  1. Pembuatan Proyek & Membuat skrip kalkulator sederhana. & Cek keberadaan file. \\
-  2. Modifikasi Fitur & Menambahkan fungsi baru pada kode yang sudah ada. & Review kode + diff. \\
-  3. Eksplorasi & Menggunakan perintah TREE dan LIST\_PATH. & Visualisasi output. \\
-  4. Debugging & Meminta agen memperbaiki error sintaks sengaja. & Eksekusi ulang sukses. \\
-  5. Keamanan Path & Meminta agen membaca/menghapus file di luar proyek. & Pesan error ditolak. \\
-  \bottomrule
+  1. Pembuatan Proyek & Membuat skrip kalkulator sederhana. & Cek keberadaan file. \\ \hline
+  2. Modifikasi Fitur & Menambahkan fungsi baru pada kode yang sudah ada. & Review kode + diff. \\ \hline
+  3. Eksplorasi & Menggunakan perintah TREE dan LIST\_PATH. & Visualisasi output. \\ \hline
+  4. Debugging & Meminta agen memperbaiki error sintaks sengaja. & Eksekusi ulang sukses. \\ \hline
+  5. Keamanan Path & Meminta agen membaca/menghapus file di luar proyek. & Pesan error ditolak. \\ \hline
+  \hline
 \end{longtable}
 
 \subsection{Hasil Uji Coba}
@@ -552,42 +552,42 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \subsubsection{Hasil Pengujian Menyeluruh (3 Percobaan)}
 \customindent Seluruh hasil pengukuran waktu dari ketiga percobaan untuk setiap skenario dirangkum dalam Tabel~\ref{tab:hasil-komprehensif}. Data ini menunjukkan sebaran waktu yang realistis mengingat ketergantungan sistem pada layanan API eksternal.
 
-\begin{longtable}{@{}p{0.05\textwidth}p{0.32\textwidth}>{\raggedright\arraybackslash}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.14\textwidth}@{}}
+\begin{longtable}{|p{0.05\textwidth}|p{0.32\textwidth}|>{\raggedright\arraybackslash}p{0.13\textwidth}|>{\raggedright\arraybackslash}p{0.13\textwidth}|>{\raggedright\arraybackslash}p{0.13\textwidth}|>{\raggedright\arraybackslash}p{0.14\textwidth}|}
   \caption{Hasil Pengukuran Waktu Eksekusi (3 Percobaan)}\label{tab:hasil-komprehensif}\\
-  \toprule
+  \hline
   \textbf{No} & \textbf{Skenario} & \textbf{Perc. 1 (s)} & \textbf{Perc. 2 (s)} & \textbf{Perc. 3 (s)} & \textbf{Rata-rata ($\lambda$)} \\
-  \midrule
+  \hline
   \endfirsthead
-  \toprule
+  \hline
   \textbf{No} & \textbf{Skenario} & \textbf{Perc. 1 (s)} & \textbf{Perc. 2 (s)} & \textbf{Perc. 3 (s)} & \textbf{Rata-rata ($\lambda$)} \\
-  \midrule
+  \hline
   \endhead
-  1 & Pembuatan Proyek & 7 & 9 & 7 & 7.67 \\
-  2 & Modifikasi Fitur & 20 & 22 & 20 & 20.66 \\
-  3 & Eksplorasi & 8 & 8 & 9 & 8.33 \\
-  4 & Debugging Otomatis & 18 & 19 & 18 & 18.33 \\
-  5 & Keamanan Path & 6 & 6 & 6 & 6.00 \\
-  \bottomrule
+  1 & Pembuatan Proyek & 7 & 9 & 7 & 7.67 \\ \hline
+  2 & Modifikasi Fitur & 20 & 22 & 20 & 20.66 \\ \hline
+  3 & Eksplorasi & 8 & 8 & 9 & 8.33 \\ \hline
+  4 & Debugging Otomatis & 18 & 19 & 18 & 18.33 \\ \hline
+  5 & Keamanan Path & 6 & 6 & 6 & 6.00 \\ \hline
+  \hline
 \end{longtable}
 
 \customindent Berdasarkan Tabel~\ref{tab:hasil-komprehensif}, terlihat bahwa deviasi waktu antar percobaan masih dalam batas wajar (< 15\%). Faktor jaringan internet memegang peranan utama dalam fluktuasi ini. Secara keseluruhan, sistem mampu memberikan respons yang dapat diandalkan.
 
 \customindent Selain performa waktu, indikator keberhasilan kualitatif lainnya dirangkum dalam Tabel~\ref{tab:metrik-hasil-summary}.
 
-\begin{longtable}{@{}p{0.26\textwidth}p{0.23\textwidth}>{\hyphenpenalty=50\tolerance=1000}p{0.47\textwidth}@{}}
+\begin{longtable}{|p{0.26\textwidth}|p{0.23\textwidth}|>{\hyphenpenalty=50\tolerance=1000}p{0.47\textwidth}|}
   \caption{Ringkasan Indikator Keberhasilan Setelah 3 Percobaan}\label{tab:metrik-hasil-summary}\\
-  \toprule
+  \hline
   \textbf{Metrik} & \textbf{Nilai Capaian} & \textbf{Keterangan} \\
-  \midrule
+  \hline
   \endfirsthead
-  \toprule
+  \hline
   \textbf{Metrik} & \textbf{Nilai Capaian} & \textbf{Keterangan} \\
-  \midrule
+  \hline
   \endhead
-  Tingkat Keberhasilan Eksekusi & 100\% (15/15) & Semua percobaan berhasil sesuai intensi. \\
-  Kepatuhan Keamanan & 100\% & Blokir akses ilegal berfungsi konsisten. \\
-  Kejelasan Rencana (\textit{Planner}) & Sangat Baik & Rencana langkah selalu valid. \\
-  \bottomrule
+  Tingkat Keberhasilan Eksekusi & 100\% (15/15) & Semua percobaan berhasil sesuai intensi. \\ \hline
+  Kepatuhan Keamanan & 100\% & Blokir akses ilegal berfungsi konsisten. \\ \hline
+  Kejelasan Rencana (\textit{Planner}) & Sangat Baik & Rencana langkah selalu valid. \\ \hline
+  \hline
 \end{longtable}
 
 \section{Pembahasan}
@@ -611,27 +611,27 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \subsubsection{Analisis Efisiensi Langkah (Step Efficiency)}
 \customindent Tabel~\ref{tab:perbandingan-langkah} menguraikan dekomposisi langkah kerja yang diperlukan untuk menyelesaikan \textit{Skenario 1 (Pembuatan Proyek)} secara manual dibandingkan dengan menggunakan Paicode.
 
-\begin{longtable}{@{}p{0.05\textwidth}p{0.45\textwidth}p{0.46\textwidth}@{}}
+\begin{longtable}{|p{0.05\textwidth}|p{0.45\textwidth}|p{0.46\textwidth}|}
   \caption{Perbandingan Jumlah Langkah Kerja (Skenario 1)}\label{tab:perbandingan-langkah}\\
-  \toprule
+  \hline
   \textbf{No} & \textbf{Metode Manual (Konvensional)} & \textbf{Metode Paicode (Agentic)} \\
-  \midrule
+  \hline
   \endfirsthead
-  \toprule
+  \hline
   \textbf{No} & \textbf{Metode Manual (Konvensional)} & \textbf{Metode Paicode (Agentic)} \\
-  \midrule
+  \hline
   \endhead
-  1 & Membuka terminal dan membuat direktori (\texttt{mkdir}). & Membuka terminal. \\
-  2 & Membuat virtual environment (\texttt{python -m venv}). & Mengetik instruksi lengkap dalam satu baris kalimat. \\
-  3 & Mengaktifkan virtual environment (\texttt{source activate}). & Menunggu agen memproses dan mengeksekusi (otomatis). \\
-  4 & Membuat file \texttt{requirements.txt} (\texttt{touch}). & - \\
-  5 & Membuka text editor/IDE. & - \\
-  6 & Mengetik/copy-paste dependensi ke file. & - \\
-  7 & Menyimpan file. & - \\
-  8 & Menjalankan instalasi (\texttt{pip install}). & - \\
-  \midrule
-  \textbf{Total} & \textbf{8 Langkah Eksplisit} & \textbf{2 Langkah (Instruksi + Konfirmasi)} \\
-  \bottomrule
+  1 & Membuka terminal dan membuat direktori (\texttt{mkdir}). & Membuka terminal. \\ \hline
+  2 & Membuat virtual environment (\texttt{python -m venv}). & Mengetik instruksi lengkap dalam satu baris kalimat. \\ \hline
+  3 & Mengaktifkan virtual environment (\texttt{source activate}). & Menunggu agen memproses dan mengeksekusi (otomatis). \\ \hline
+  4 & Membuat file \texttt{requirements.txt} (\texttt{touch}). & - \\ \hline
+  5 & Membuka text editor/IDE. & - \\ \hline
+  6 & Mengetik/copy-paste dependensi ke file. & - \\ \hline
+  7 & Menyimpan file. & - \\ \hline
+  8 & Menjalankan instalasi (\texttt{pip install}). & - \\ \hline
+  \hline
+  \textbf{Total} & \textbf{8 Langkah Eksplisit} & \textbf{2 Langkah (Instruksi + Konfirmasi)} \\ \hline
+  \hline
 \end{longtable}
 
 \customindent Dari Tabel~\ref{tab:perbandingan-langkah} terlihat bahwa Paicode mereduksi jumlah interaksi fisik hingga 75\%. Eliminasi langkah-langkah mekanis ini menghilangkan potensi kesalahan pengetikan (\textit{typo}) yang sering terjadi pada proses manual.
@@ -639,21 +639,21 @@ pai config validate       # Memvalidasi koneksi ke Gemini
 \subsubsection{Analisis Efisiensi Waktu (Time Efficiency)}
 \customindent Selain jumlah langkah, pengukuran waktu eksekusi juga dilakukan untuk memvalidasi klaim efisiensi. Tabel~\ref{tab:perbandingan-waktu} menyajikan rata-rata waktu penyelesaian tugas berdasarkan 5 kali percobaan.
 
-\begin{longtable}{@{}p{0.29\textwidth}p{0.27\textwidth}p{0.27\textwidth}p{0.11\textwidth}@{}}
+\begin{longtable}{|p{0.29\textwidth}|p{0.27\textwidth}|p{0.27\textwidth}|p{0.11\textwidth}|}
   \caption{Perbandingan Rata-rata Waktu Penyelesaian Tugas}\label{tab:perbandingan-waktu}\\
-  \toprule
+  \hline
   \textbf{Jenis Tugas} & \textbf{Waktu Manual (Detik)} & \textbf{Waktu Paicode (Detik)} & \textbf{Speedup} \\
-  \midrule
+  \hline
   \endfirsthead
-  \toprule
+  \hline
   \textbf{Jenis Tugas} & \textbf{Waktu Manual (Detik)} & \textbf{Waktu Paicode (Detik)} & \textbf{Speedup} \\
-  \midrule
+  \hline
   \endhead
-  Setup Proyek Awal & $180 \pm 15$ & $7 \pm 1$ & 25.7x \\
-  Refactoring Kode & $120 \pm 10$ & $20 \pm 2$ & 6.0x \\
+  Setup Proyek Awal & $180 \pm 15$ & $7 \pm 1$ & 25.7x \\ \hline
+  Refactoring Kode & $120 \pm 10$ & $20 \pm 2$ & 6.0x \\ \hline
   
-  Penelusuran File & $15 \pm 2$ & $8 \pm 1$ & 1.8x \\
-  \bottomrule
+  Penelusuran File & $15 \pm 2$ & $8 \pm 1$ & 1.8x \\ \hline
+  \hline
 \end{longtable}
 
 \customindent Peningkatan kecepatan paling teramati terjadi pada tugas-tugas generatif (seperti setup proyek awal), di mana kecepatan mengetik manusia menjadi hambatan utama (\textit{bottleneck}) dibandingkan kecepatan generasi teks oleh LLM.
